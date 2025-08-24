@@ -1,0 +1,143 @@
+<!-- Memories panel -->
+<div id="panel-memories" class="flex-1 flex flex-col hidden app-panel">
+  <div class="p-6 max-w-6xl mx-auto w-full overflow-y-auto min-h-screen">
+    <!-- Panel Header -->
+    <div class="panel-section-header">
+      <div class="section-title">
+        <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+        </svg>
+        Memories
+        <span class="section-count">6</span>
+      </div>
+    </div>
+    <div class="memory-grid" id="memories-container">
+      <!-- Sample Memory Cards -->
+      
+      <!-- Insight Memory Card -->
+      <div class="memory-card" data-type="insight" data-date="2025-08-23">
+        <div class="memory-card-header">
+          <div class="memory-icon">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+            </svg>
+          </div>
+          <div class="memory-meta">
+            <div class="memory-date">2 hours ago</div>
+            <div class="memory-tags">
+              <span class="memory-tag">Insight</span>
+            </div>
+          </div>
+        </div>
+        <div class="memory-content">
+          <h3 class="memory-title">Breathing Pattern Discovery</h3>
+          <p class="memory-excerpt">You've noticed that 4-7-8 breathing works particularly well for you in the morning when anxiety peaks. This technique helps reset your nervous system before starting the day.</p>
+        </div>
+      </div>
+
+      <!-- Pattern Memory Card -->
+      <div class="memory-card" data-type="pattern" data-date="2025-08-22">
+        <div class="memory-card-header">
+          <div class="memory-icon">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+            </svg>
+          </div>
+          <div class="memory-meta">
+            <div class="memory-date">Yesterday</div>
+            <div class="memory-tags">
+              <span class="memory-tag insight-tag">Pattern</span>
+            </div>
+          </div>
+        </div>
+        <div class="memory-content">
+          <h3 class="memory-title">Evening Motivation Patterns</h3>
+          <p class="memory-excerpt">Your motivation tends to be highest in the evening between 7-9 PM. This is when you set the most achievable goals and feel most optimistic about tomorrow.</p>
+        </div>
+      </div>
+
+      <!-- Breakthrough Memory Card -->
+      <div class="memory-card" data-type="breakthrough" data-date="2025-08-20">
+        <div class="memory-card-header">
+          <div class="memory-icon">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+            </svg>
+          </div>
+          <div class="memory-meta">
+            <div class="memory-date">3 days ago</div>
+            <div class="memory-tags">
+              <span class="memory-tag insight-tag">Breakthrough</span>
+            </div>
+          </div>
+        </div>
+        <div class="memory-content">
+          <h3 class="memory-title">Work Boundary Realization</h3>
+          <p class="memory-excerpt">You recognized that saying "no" to extra work requests isn't selfish—it's necessary for maintaining your mental health and doing quality work on your main responsibilities.</p>
+        </div>
+      </div>
+
+      <!-- Progress Memory Card -->
+      <div class="memory-card" data-type="progress" data-date="2025-08-18">
+        <div class="memory-card-header">
+          <div class="memory-icon">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l2-2m0 0l2 2m-2-2v6m0-13a9 9 0 110 18 9 9 0 010-18z"/>
+            </svg>
+          </div>
+          <div class="memory-meta">
+            <div class="memory-date">5 days ago</div>
+            <div class="memory-tags">
+              <span class="memory-tag insight-tag">Progress</span>
+            </div>
+          </div>
+        </div>
+        <div class="memory-content">
+          <h3 class="memory-title">Sleep Quality Improvement</h3>
+          <p class="memory-excerpt">After implementing the evening routine we discussed, you've been falling asleep 30 minutes faster and waking up feeling more refreshed. Great progress!</p>
+        </div>
+      </div>
+
+      <!-- Additional sample cards -->
+      <div class="memory-card" data-type="insight" data-date="2025-08-15">
+        <div class="memory-card-header">
+          <div class="memory-icon">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+            </svg>
+          </div>
+          <div class="memory-meta">
+            <div class="memory-date">1 week ago</div>
+            <div class="memory-tags">
+              <span class="memory-tag">Insight</span>
+            </div>
+          </div>
+        </div>
+        <div class="memory-content">
+          <h3 class="memory-title">Perfectionism Awareness</h3>
+          <p class="memory-excerpt">You identified that perfectionism is often a mask for fear of judgment. Recognizing this has helped you be more compassionate with yourself when making mistakes.</p>
+        </div>
+      </div>
+
+      <div class="memory-card" data-type="pattern" data-date="2025-08-12">
+        <div class="memory-card-header">
+          <div class="memory-icon">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+            </svg>
+          </div>
+          <div class="memory-meta">
+            <div class="memory-date">11 days ago</div>
+            <div class="memory-tags">
+              <span class="memory-tag insight-tag">Pattern</span>
+            </div>
+          </div>
+        </div>
+        <div class="memory-content">
+          <h3 class="memory-title">Social Energy Patterns</h3>
+          <p class="memory-excerpt">You feel most socially energized after spending time in nature. Weekend hikes consistently improve your mood and make social interactions feel more natural.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

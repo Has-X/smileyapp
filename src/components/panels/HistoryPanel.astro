@@ -1,0 +1,92 @@
+---
+// HistoryPanel component for displaying conversation history
+---
+
+<div class="panel-card">
+  <!-- Panel Header -->
+  <div class="panel-section-header">
+    <h3 class="panel-title">Chat History</h3>
+    <p class="panel-subtitle">Your recent conversations</p>
+  </div>
+
+  <div class="panel-divider"></div>
+
+  <!-- History Content -->
+  <div class="journal-entries-container" id="history-container">
+    <!-- Sample conversations -->
+    <div class="journal-entry-card conversation-item" data-date="2025-08-23" data-keywords="anxiety morning breathing meditation">
+      <div class="journal-entry-header">
+        <div class="journal-entry-date">
+          <div class="journal-date-day">23</div>
+          <div class="journal-date-month">Aug</div>
+        </div>
+        <div class="journal-entry-meta">
+          <h4 class="journal-entry-title">Morning Anxiety & Breathing</h4>
+          <div class="journal-entry-info">
+            <span class="journal-entry-time">Today, 2:30 PM</span>
+            <span class="section-count">18 messages</span>
+            <span class="section-count">22 min</span>
+          </div>
+        </div>
+      </div>
+      <div class="journal-entry-content">
+        We discussed your morning anxiety patterns and explored breathing techniques. You mentioned feeling overwhelmed when waking up, and we worked through a 4-7-8 breathing exercise that seemed to help calm your nervous system.
+        <div class="mt-3 flex gap-2">
+          <span class="filter-chip">anxiety</span>
+          <span class="filter-chip">morning routine</span>
+          <span class="filter-chip">breathing</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="journal-entry-card conversation-item" data-date="2025-08-22" data-keywords="goals motivation productivity sleep">
+      <div class="journal-entry-header">
+        <div class="journal-entry-date">
+          <div class="journal-date-day">22</div>
+          <div class="journal-date-month">Aug</div>
+        </div>
+        <div class="journal-entry-meta">
+          <h4 class="journal-entry-title">Goals & Evening Routine</h4>
+          <div class="journal-entry-info">
+            <span class="journal-entry-time">Yesterday, 7:45 PM</span>
+            <span class="section-count">31 messages</span>
+            <span class="section-count">38 min</span>
+          </div>
+        </div>
+      </div>
+      <div class="journal-entry-content">
+        Long conversation about setting realistic goals and improving productivity. We created a personalized evening routine to help with sleep quality and discussed strategies for maintaining motivation during challenging periods.
+        <div class="mt-3 flex gap-2">
+          <span class="filter-chip">goal setting</span>
+          <span class="filter-chip">motivation</span>
+          <span class="filter-chip">sleep routine</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="journal-entry-card conversation-item" data-date="2025-08-20" data-keywords="stress work boundaries mindfulness">
+      <div class="journal-entry-header">
+        <div class="journal-entry-date">
+          <div class="journal-date-day">20</div>
+          <div class="journal-date-month">Aug</div>
+        </div>
+        <div class="journal-entry-meta">
+          <h4 class="journal-entry-title">Work Stress & Boundaries</h4>
+          <div class="journal-entry-info">
+            <span class="journal-entry-time">August 20, 4:15 PM</span>
+            <span class="section-count">24 messages</span>
+            <span class="section-count">29 min</span>
+          </div>
+        </div>
+      </div>
+      <div class="journal-entry-content">
+        Discussion about work stress and setting healthy boundaries. We explored mindfulness techniques for managing overwhelming workdays and practiced a brief body scan meditation together.
+        <div class="mt-3 flex gap-2">
+          <span class="filter-chip">work stress</span>
+          <span class="filter-chip">boundaries</span>
+          <span class="filter-chip">mindfulness</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,14 @@
+---
+import NavigationSidebar from './NavigationSidebar.astro';
+import PanelContainer from './panels/PanelContainer.astro';
+---
+
+<div id="app-shell" class="min-h-screen flex bg-surface">
+  <!-- Navigation Sidebar (Fixed) -->
+  <NavigationSidebar />
+  
+  <!-- Main content area with left margin for fixed sidebar -->
+  <div class="flex-1 ml-20">
+    <PanelContainer />
+  </div>
+</div>

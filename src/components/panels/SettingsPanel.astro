@@ -1,0 +1,134 @@
+<div id="panel-settings" class="flex-1 flex flex-col hidden app-panel">
+  <div class="p-6 max-w-4xl mx-auto w-full overflow-y-auto min-h-screen">
+    <h2 class="text-2xl font-medium text-on-surface mb-8">Settings</h2>
+    
+    <!-- Settings Tabs -->
+    <div class="settings-tabs mb-8">
+      <div class="tabs-nav">
+        <button class="tab-button active" data-tab="ai">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+          </svg>
+          AI & Chat
+        </button>
+        <button class="tab-button" data-tab="appearance">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v12a4 4 0 004 4h4a2 2 0 002-2V5z"/>
+          </svg>
+          Appearance
+        </button>
+        <button class="tab-button" data-tab="privacy">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+          </svg>
+          Privacy
+        </button>
+      </div>
+    </div>
+
+    <!-- AI & Conversation Tab -->
+    <div class="tab-content active" data-tab-content="ai">
+      <div class="space-y-6">
+        <div class="setting-group">
+          <h4 class="setting-title">AI Model</h4>
+          <div class="custom-select-wrapper">
+            <select id="model-select" class="custom-select">
+              <option>Loading models...</option>
+            </select>
+            <svg class="select-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </div>
+          <p class="setting-description">Choose which AI model to use for conversations</p>
+        </div>
+
+        <div class="setting-group">
+          <h4 class="setting-title">Response Style</h4>
+          <div class="custom-select-wrapper">
+            <select id="response-style" class="custom-select">
+              <option value="supportive">Supportive & Encouraging</option>
+              <option value="professional">Professional & Clinical</option>
+              <option value="casual">Casual & Friendly</option>
+              <option value="empathetic">Deeply Empathetic</option>
+            </select>
+            <svg class="select-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </div>
+          <p class="setting-description">Set the tone for AI responses</p>
+        </div>
+
+        <div class="setting-group">
+          <h4 class="setting-title">Voice Responses</h4>
+          <div class="material-switch">
+            <input type="checkbox" id="tts-enabled" />
+            <div class="switch-track">
+              <div class="switch-thumb"></div>
+            </div>
+            <label for="tts-enabled" class="switch-label">Enable text-to-speech responses</label>
+          </div>
+          <p class="setting-description">Hear AI responses spoken aloud</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Appearance Tab -->
+    <div class="tab-content" data-tab-content="appearance">
+      <div class="space-y-8">
+        <div class="setting-group">
+          <h4 class="setting-title">Display Mode</h4>
+          <div class="custom-select-wrapper">
+            <select id="theme-mode-select" class="custom-select">
+              <option value="auto">Auto (Follow System)</option>
+              <option value="light">Light Mode</option>
+              <option value="dark">Dark Mode</option>
+            </select>
+            <svg class="select-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </div>
+          <p class="setting-description">Choose between light, dark, or automatic theme</p>
+        </div>
+
+        <div class="setting-group">
+          <h4 class="setting-title">Accent Color</h4>
+          <div class="color-theme-grid">
+            <button class="color-theme-card active" data-theme="smile">
+              <div class="color-preview" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8);"></div>
+              <span>Ocean Blue</span>
+            </button>
+            <button class="color-theme-card" data-theme="forest">
+              <div class="color-preview" style="background: linear-gradient(135deg, #10b981, #059669);"></div>
+              <span>Forest Green</span>
+            </button>
+            <button class="color-theme-card" data-theme="sunset">
+              <div class="color-preview" style="background: linear-gradient(135deg, #f59e0b, #d97706);"></div>
+              <span>Sunset Orange</span>
+            </button>
+            <button class="color-theme-card" data-theme="lavender">
+              <div class="color-preview" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);"></div>
+              <span>Lavender Purple</span>
+            </button>
+          </div>
+          <p class="setting-description">Choose your preferred accent color</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Privacy Tab -->
+    <div class="tab-content" data-tab-content="privacy">
+      <div class="space-y-6">
+        <div class="setting-group">
+          <h4 class="setting-title">Clear All Data</h4>
+          <button id="clear-data-btn" class="btn-outlined">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+            </svg>
+            Clear All Data
+          </button>
+          <p class="setting-description">Remove all chat history and preferences from local storage</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
