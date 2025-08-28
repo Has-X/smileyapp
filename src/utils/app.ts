@@ -95,8 +95,8 @@ class SmileApp {
   }
 
   private setupEventListeners() {
-    // Navigation buttons
-    const navButtons = document.querySelectorAll('[data-panel]');
+  // Navigation buttons (only top-level sidebar buttons)
+  const navButtons = document.querySelectorAll('.nav-button[data-panel]');
     
     navButtons.forEach(button => {
       button.addEventListener('click', (e) => {
@@ -107,6 +107,9 @@ class SmileApp {
         }
       });
     });
+
+    // Initialize view toggles
+    this.initViewToggles();
 
     // Message input
     const messageInput = document.getElementById('message-input') as HTMLTextAreaElement;
@@ -136,6 +139,9 @@ class SmileApp {
 
     // Onboarding event listeners
     this.setupOnboardingListeners();
+
+    // History search functionality
+    this.initHistorySearch();
   }
 
   private setupSettingsListeners() {
@@ -324,7 +330,173 @@ class SmileApp {
     }
   }
 
+  private initViewToggles() {
+    try {
+      // Initialize all view toggles
+  const toggles = document.querySelectorAll('.view-toggle');
+      
+      toggles.forEach(toggle => {
+  // Use data-panel-id to avoid collision with nav buttons' data-panel attr
+  const panelId = toggle.getAttribute('data-panel-id');
+        if (panelId) {
+          this.initializeViewToggle(toggle as HTMLElement, panelId);
+        }
+      });
+    } catch (error) {
+      console.warn('Error initializing view toggles:', error);
+    }
+  }
+
+  private initializeViewToggle(toggle: HTMLElement, panelId: string) {
+    try {
+      const buttons = toggle.querySelectorAll('.view-toggle-btn');
+      const panel = document.getElementById(panelId);
+      
+      if (!panel) {
+        console.warn(`Panel not found: ${panelId}`);
+        return;
+      }
+      
+      // Load saved preference or default to tiles
+      const savedView = localStorage.getItem(`view-${panelId}`) || 'tiles';
+
+      // Direct initialization - set styles immediately
+      this.setView(panel, savedView, buttons);
+      
+      // Remove existing event listeners to prevent duplicates
+      buttons.forEach(btn => {
+        const newBtn = btn.cloneNode(true);
+        btn.parentNode?.replaceChild(newBtn, btn);
+      });
+      
+      // Add click handlers to the new buttons
+      const newButtons = toggle.querySelectorAll('.view-toggle-btn');
+      newButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const view = btn.getAttribute('data-view');
+          if (view) {
+            this.setView(panel, view, newButtons);
+            localStorage.setItem(`view-${panelId}`, view);
+          }
+        });
+      });
+    } catch (error) {
+      console.warn(`Error initializing view toggle for panel ${panelId}:`, error);
+    }
+  }
+
+  private setView(panel: HTMLElement, view: string, buttons: NodeListOf<Element>) {
+    try {
+      console.log('=== VIEW TOGGLE DEBUG ===');
+      console.log('Setting view:', view, 'on panel:', panel.id);
+
+      // Find all possible content containers that support view switching
+      const contentSelectors = [
+        '.memory-grid',
+        '.journal-entries-container', 
+        '.exercise-grid',
+        '.history-container',
+        '.content-grid',
+        '.entries-container'
+      ];
+      
+      let targetContainer: HTMLElement | null = null;
+      
+      // Find the first available container
+      for (const selector of contentSelectors) {
+        const container = panel.querySelector(selector) as HTMLElement;
+        if (container) {
+          targetContainer = container;
+          console.log('Found target container:', selector);
+          break;
+        }
+      }
+
+      // Fallback: look for any container with data-view-container attribute
+      if (!targetContainer) {
+        targetContainer = panel.querySelector('[data-view-container]') as HTMLElement;
+        if (targetContainer) {
+          console.log('Found fallback container with data-view-container');
+        }
+      }
+
+      // Apply smooth transition animation
+      this.animateViewTransition(targetContainer, () => {
+        // Apply layout changes to the found container
+        if (targetContainer) {
+          this.applyViewLayout(targetContainer, view);
+        }
+      });
+
+      // Update button states with transition
+      buttons.forEach(btn => {
+        const btnView = btn.getAttribute('data-view');
+        btn.classList.toggle('active', btnView === view);
+      });
+
+      // Save the view preference to localStorage
+      const panelId = panel.getAttribute('id');
+      if (panelId) {
+        localStorage.setItem(`view-${panelId}`, view);
+      }
+
+      console.log('=== VIEW TOGGLE COMPLETE ===');
+    } catch (error) {
+      console.error('Error setting view:', error);
+      if (error instanceof Error) {
+        console.error('Stack trace:', error.stack);
+      }
+    }
+  }
+
+  private applyViewLayout(container: HTMLElement, view: string) {
+    if (view === 'tiles') {
+      // Tiles view: vertical stack layout
+      container.style.display = 'flex';
+      container.style.flexDirection = 'column';
+      container.style.gap = '1.25rem';
+      container.style.gridTemplateColumns = '';
+    } else {
+      // Grid view: responsive grid layout  
+      container.style.display = 'grid';
+      container.style.gridTemplateColumns = 'repeat(auto-fill, minmax(280px, 1fr))';
+      container.style.gap = '1rem';
+      container.style.flexDirection = '';
+    }
+    console.log('Applied', view, 'layout to container:', container.className);
+  }
+
+  private animateViewTransition(container: HTMLElement | null, layoutChange: () => void) {
+    if (!container) {
+      layoutChange();
+      return;
+    }
+
+    // Add transition class for smooth animation
+    container.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+    container.style.opacity = '0.6';
+    container.style.transform = 'translateY(8px) scale(0.98)';
+
+    // Apply layout changes after a short delay
+    setTimeout(() => {
+      layoutChange();
+      
+      // Animate back to normal state
+      requestAnimationFrame(() => {
+        container.style.opacity = '1';
+        container.style.transform = 'translateY(0) scale(1)';
+        
+        // Remove transition styles after animation completes
+        setTimeout(() => {
+          container.style.transition = '';
+          container.style.transform = '';
+        }, 300);
+      });
+    }, 50);
+  }
+
   private switchPanel(panelId: string) {
+  console.log('[switchPanel] switching to', panelId);
     // Hide all panels
     const panels = document.querySelectorAll('[id^="panel-"]');
     
@@ -337,10 +509,24 @@ class SmileApp {
     
     if (targetPanel) {
       targetPanel.classList.remove('hidden');
+      console.log('[switchPanel] showed', targetPanel.id);
+    } else {
+      console.warn('[switchPanel] target panel not found', panelId);
+    }
+
+    // Safety: if somehow all panels remain hidden, show chat
+    const anyVisible = Array.from(panels).some(p => !p.classList.contains('hidden'));
+    if (!anyVisible) {
+      const fallback = document.getElementById('panel-chat');
+      if (fallback) {
+        fallback.classList.remove('hidden');
+        console.warn('[switchPanel] all panels hidden; forcing chat visible');
+      }
     }
 
     // Update navigation buttons
-    const navButtons = document.querySelectorAll('[data-panel]');
+  // Only affect actual navigation buttons
+  const navButtons = document.querySelectorAll('.nav-button[data-panel]');
     navButtons.forEach(button => {
       button.classList.remove('nav-button-active');
       const buttonPanelId = button.getAttribute('data-panel');
@@ -368,6 +554,9 @@ class SmileApp {
     if (panelId === 'profile') {
       this.initProfilePanel();
     }
+
+    // Reinitialize view toggles for the current panel
+    this.initViewToggles();
   }
 
   private switchSettingsTab(tabId: string) {
@@ -1821,6 +2010,143 @@ class SmileApp {
     }
 
     // Could also update other personalized elements based on profile data
+  }
+
+  private initHistorySearch() {
+    const searchInput = document.getElementById('history-search') as HTMLInputElement;
+    const clearButton = document.getElementById('clear-search') as HTMLButtonElement;
+    const historyContainer = document.getElementById('history-container') as HTMLElement;
+
+    if (!searchInput || !clearButton || !historyContainer) {
+      return;
+    }
+
+    // Search functionality
+    const performSearch = (query: string) => {
+      const conversations = historyContainer.querySelectorAll('.conversation-item');
+      let visibleCount = 0;
+
+      conversations.forEach(conversation => {
+        const element = conversation as HTMLElement;
+        const title = element.querySelector('.journal-entry-title')?.textContent?.toLowerCase() || '';
+        const content = element.querySelector('.journal-entry-content')?.textContent?.toLowerCase() || '';
+        const keywords = element.getAttribute('data-keywords')?.toLowerCase() || '';
+        const chips = Array.from(element.querySelectorAll('.filter-chip'))
+          .map(chip => chip.textContent?.toLowerCase() || '')
+          .join(' ');
+
+        const searchText = `${title} ${content} ${keywords} ${chips}`;
+        const isMatch = query === '' || searchText.includes(query.toLowerCase());
+
+        if (isMatch) {
+          element.style.display = 'block';
+          visibleCount++;
+          
+          // Highlight search terms if query exists
+          if (query) {
+            this.highlightSearchTerms(element, query);
+          } else {
+            this.removeHighlights(element);
+          }
+        } else {
+          element.style.display = 'none';
+        }
+      });
+
+      // Update results count
+      const countElement = document.querySelector('#panel-history .section-count');
+      if (countElement) {
+        countElement.textContent = visibleCount.toString();
+      }
+
+      // Show/hide clear button
+      clearButton.classList.toggle('hidden', query === '');
+    };
+
+    // Event listeners
+    searchInput.addEventListener('input', (e) => {
+      const query = (e.target as HTMLInputElement).value.trim();
+      performSearch(query);
+    });
+
+    clearButton.addEventListener('click', () => {
+      searchInput.value = '';
+      performSearch('');
+      searchInput.focus();
+    });
+
+    // Clear search when switching panels
+    document.addEventListener('panelSwitch', () => {
+      if (searchInput.value) {
+        searchInput.value = '';
+        performSearch('');
+      }
+    });
+  }
+
+  private highlightSearchTerms(element: HTMLElement, query: string) {
+    // Remove existing highlights
+    this.removeHighlights(element);
+
+    const terms = query.toLowerCase().split(/\s+/).filter(term => term.length > 0);
+    if (terms.length === 0) return;
+
+    const textNodes = this.getTextNodes(element);
+    
+    textNodes.forEach(node => {
+      const text = node.textContent || '';
+      let newText = text;
+      
+      terms.forEach(term => {
+        const regex = new RegExp(`(${this.escapeRegExp(term)})`, 'gi');
+        newText = newText.replace(regex, '<mark class="search-highlight">$1</mark>');
+      });
+
+      if (newText !== text) {
+        const wrapper = document.createElement('span');
+        wrapper.innerHTML = newText;
+        node.parentNode?.replaceChild(wrapper, node);
+      }
+    });
+  }
+
+  private removeHighlights(element: HTMLElement) {
+    const highlights = element.querySelectorAll('.search-highlight');
+    highlights.forEach(highlight => {
+      const parent = highlight.parentNode;
+      if (parent) {
+        parent.replaceChild(document.createTextNode(highlight.textContent || ''), highlight);
+        parent.normalize();
+      }
+    });
+  }
+
+  private getTextNodes(element: HTMLElement): Text[] {
+    const textNodes: Text[] = [];
+    const walker = document.createTreeWalker(
+      element,
+      NodeFilter.SHOW_TEXT,
+      {
+        acceptNode: (node) => {
+          // Skip highlighting inside input elements, buttons, etc.
+          const parent = node.parentElement;
+          if (parent && (parent.tagName === 'INPUT' || parent.tagName === 'BUTTON' || parent.tagName === 'SCRIPT')) {
+            return NodeFilter.FILTER_REJECT;
+          }
+          return node.textContent?.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+        }
+      }
+    );
+
+    let node;
+    while (node = walker.nextNode()) {
+      textNodes.push(node as Text);
+    }
+    return textNodes;
+  }
+
+  private escapeRegExp(string: string): string {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
 }
 

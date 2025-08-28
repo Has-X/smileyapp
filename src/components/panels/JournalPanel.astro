@@ -1,29 +1,38 @@
+---
+import ViewToggle from '../ViewToggle.astro';
+---
+
 <div id="panel-journal" class="flex-1 flex flex-col hidden app-panel">
-  <div class="p-6 max-w-4xl mx-auto w-full overflow-y-auto min-h-screen">
+  <div class="p-6 max-w-4xl mx-auto w-full">
     <!-- Panel Header -->
     <div class="panel-section-header">
-      <div class="section-title">
-        <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-        </svg>
-        Personal Journal
-        <span class="section-count">3</span>
+      <div class="header-left-section">
+        <div class="section-title">
+          <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+          </svg>
+          Personal Journal
+        </div>
+        <div class="section-count-island">
+          <span class="section-count">3</span>
+        </div>
       </div>
+      <ViewToggle panelId="panel-journal" />
     </div>
 
     <!-- Journal Entries -->
-    <div class="journal-entries-container" id="journal-entries">
+    <div class="journal-entries-container" id="journal-entries" data-view-container>
       <!-- Sample entries -->
-      <div class="journal-entry-card" data-date="2025-08-23">
+      <div class="journal-entry-card-enhanced" data-date="2025-08-23">
         <div class="journal-entry-header">
-          <div class="journal-entry-date">
+          <div class="journal-entry-date-bg">
             <div class="journal-date-day">23</div>
             <div class="journal-date-month">Aug</div>
           </div>
           <div class="journal-entry-meta">
             <h4 class="journal-entry-title">Morning Reflections</h4>
             <div class="journal-entry-info">
-              <span class="journal-entry-time">Today, 8:30 AM</span>
+              <span class="journal-entry-time">8:30 AM</span>
               <span class="journal-entry-mood">😊</span>
             </div>
           </div>
@@ -33,16 +42,16 @@
         </div>
       </div>
 
-      <div class="journal-entry-card" data-date="2025-08-22">
+      <div class="journal-entry-card-enhanced" data-date="2025-08-22">
         <div class="journal-entry-header">
-          <div class="journal-entry-date">
+          <div class="journal-entry-date-bg">
             <div class="journal-date-day">22</div>
             <div class="journal-date-month">Aug</div>
           </div>
           <div class="journal-entry-meta">
             <h4 class="journal-entry-title">Evening Wind Down</h4>
             <div class="journal-entry-info">
-              <span class="journal-entry-time">Yesterday, 9:15 PM</span>
+              <span class="journal-entry-time">9:15 PM</span>
               <span class="journal-entry-mood">😐</span>
             </div>
           </div>
@@ -52,16 +61,16 @@
         </div>
       </div>
 
-      <div class="journal-entry-card" data-date="2025-08-21">
+      <div class="journal-entry-card-enhanced" data-date="2025-08-21">
         <div class="journal-entry-header">
-          <div class="journal-entry-date">
+          <div class="journal-entry-date-bg">
             <div class="journal-date-day">21</div>
             <div class="journal-date-month">Aug</div>
           </div>
           <div class="journal-entry-meta">
             <h4 class="journal-entry-title">Breakthrough Moment</h4>
             <div class="journal-entry-info">
-              <span class="journal-entry-time">2 days ago, 7:45 PM</span>
+              <span class="journal-entry-time">7:45 PM</span>
               <span class="journal-entry-mood">😊</span>
             </div>
           </div>
@@ -69,7 +78,7 @@
         <div class="journal-entry-content">
           Finally understood what my therapist meant about mindful breathing. The afternoon anxiety episode was much more manageable using the techniques we discussed. This feels like real progress in managing my stress responses.
         </div>
-      </div>
+        </div>
     </div>
   </div>
 </div>

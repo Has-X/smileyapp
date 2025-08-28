@@ -12,7 +12,8 @@ export const GET: APIRoute = async () => {
     if (!response.ok) {
       return new Response(
         JSON.stringify({ 
-          healthy: false, 
+          available: false, 
+          healthy: false,
           error: `Ollama API returned status ${response.status}` 
         }),
         { 
@@ -23,12 +24,15 @@ export const GET: APIRoute = async () => {
     }
 
     const data = await response.json();
+    const models = data.models || [];
+    const modelNames = models.map((model: any) => model.name);
     
     return new Response(
       JSON.stringify({ 
+        available: true,
         healthy: true, 
-        models: data.models || [],
-        modelCount: data.models?.length || 0
+        models: modelNames,
+        modelCount: modelNames.length
       }),
       { 
         status: 200,
@@ -41,6 +45,7 @@ export const GET: APIRoute = async () => {
     
     return new Response(
       JSON.stringify({ 
+        available: false,
         healthy: false, 
         error: 'Could not connect to Ollama on localhost:11434'
       }),

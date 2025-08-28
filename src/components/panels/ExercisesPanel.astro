@@ -1,122 +1,514 @@
+---
+import ViewToggle from '../ViewToggle.astro';
+---
+
 <div id="panel-exercises" class="flex-1 flex flex-col hidden app-panel">
-  <div class="p-6 max-w-4xl mx-auto w-full overflow-y-auto min-h-screen">
+  <div class="p-6 max-w-4xl mx-auto w-full">
     <!-- Panel Header -->
-    <div class="glass-panel p-6 rounded-xl mb-6">
-      <div class="flex items-center justify-between">
-        <div>
-          <h2 class="text-2xl font-medium text-on-surface mb-3 flex items-center">
-            <svg class="w-6 h-6 mr-3 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
-            </svg>
-            Mindfulness & Exercises
-          </h2>
-          <p class="text-on-surface-variant text-sm opacity-80">Guided meditations and breathing exercises for mental wellness</p>
+    <div class="panel-section-header">
+      <div class="header-left-section">
+        <div class="section-title">
+          <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+          </svg>
+          Mindfulness Studio
         </div>
-        <div class="text-right">
-          <div class="text-2xl font-bold text-primary" id="exercises-count">8</div>
-          <div class="text-sm text-on-surface-variant">Available exercises</div>
+        <div class="section-count-island">
+          <span class="section-count" id="exercises-count">8</span>
         </div>
       </div>
+      <ViewToggle panelId="panel-exercises" />
     </div>
     
-    <!-- Exercise Categories -->
-    <div class="glass-panel-secondary p-4 rounded-lg mb-6">
-      <div class="tabs-nav">
-        <button class="tab-button active" data-category="breathing">
-          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-          </svg>
-          Breathing
-        </button>
-        <button class="tab-button" data-category="meditation">
-          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 0v4l3 3m-3-8a9 9 0 11-18 0 9 9 0 0118 0z"/>
-          </svg>
-          Meditation
-        </button>
-        <button class="tab-button" data-category="grounding">
-          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
-          </svg>
-          Grounding
-        </button>
-      </div>
-    </div>
-
-    <!-- Exercise Content -->
-    <div class="space-y-4" id="exercises-container">
+    <!-- Exercise Entries -->
+    <div class="journal-entries-container" id="exercises-container" data-view-container>
       <!-- Breathing Exercises -->
-      <div class="glass-panel-interactive p-6 rounded-lg">
-        <div class="flex items-center justify-between mb-4">
-          <div>
-            <h3 class="text-lg font-medium text-on-surface">4-7-8 Breathing</h3>
-            <p class="text-on-surface-variant text-sm">Calm your nervous system with controlled breathing</p>
+      <div class="journal-entry-card-enhanced exercise-card" data-exercise="4-7-8">
+        <div class="journal-entry-header">
+          <div class="journal-entry-date-bg">
+            <div class="journal-date-day">4-7-8</div>
+            <div class="journal-date-month">Breathing</div>
           </div>
-          <div class="flex items-center gap-3">
-            <div class="text-xs text-on-surface-variant">5 min</div>
-            <button class="btn-outlined px-4 py-2">
-              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M15 14h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-              </svg>
-              Start
-            </button>
+          <div class="journal-entry-meta">
+            <h4 class="journal-entry-title">4-7-8 Breathing</h4>
+            <div class="journal-entry-info">
+              <span class="journal-entry-time">5 min</span>
+              <span class="exercise-difficulty">Beginner</span>
+            </div>
           </div>
         </div>
-        <div class="text-sm text-on-surface-variant">
-          Inhale for 4, hold for 7, exhale for 8. Repeat this cycle to activate your parasympathetic nervous system.
+        <div class="journal-entry-content">
+          A powerful technique to activate your parasympathetic nervous system. Inhale for 4, hold for 7, exhale for 8 counts. Perfect for reducing anxiety and promoting relaxation.
+          <div class="mt-4">
+            <button class="meditation-start-btn" data-exercise="4-7-8">
+              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M15 14h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              Start Session
+            </button>
+          </div>
         </div>
       </div>
 
-      <div class="glass-panel-interactive p-6 rounded-lg">
-        <div class="flex items-center justify-between mb-4">
-          <div>
-            <h3 class="text-lg font-medium text-on-surface">Box Breathing</h3>
-            <p class="text-on-surface-variant text-sm">Square breathing pattern for focus and calm</p>
+      <div class="journal-entry-card-enhanced exercise-card" data-exercise="box">
+        <div class="journal-entry-header">
+          <div class="journal-entry-date-bg">
+            <div class="journal-date-day">Box</div>
+            <div class="journal-date-month">Breathing</div>
           </div>
-          <div class="flex items-center gap-3">
-            <div class="text-xs text-on-surface-variant">3 min</div>
-            <button class="btn-outlined px-4 py-2">
-              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M15 14h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-              </svg>
-              Start
-            </button>
+          <div class="journal-entry-meta">
+            <h4 class="journal-entry-title">Box Breathing</h4>
+            <div class="journal-entry-info">
+              <span class="journal-entry-time">3 min</span>
+              <span class="exercise-difficulty">Intermediate</span>
+            </div>
           </div>
         </div>
-        <div class="text-sm text-on-surface-variant">
-          Equal counts for inhale, hold, exhale, and hold. Perfect for building concentration and reducing stress.
+        <div class="journal-entry-content">
+          Equal counts for inhale, hold, exhale, and hold. Perfect for building concentration and reducing stress. Used by military and first responders.
+          <div class="mt-4">
+            <button class="meditation-start-btn" data-exercise="box">
+              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M15 14h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              Start Session
+            </button>
+          </div>
         </div>
       </div>
 
-      <div class="glass-panel-interactive p-6 rounded-lg">
-        <div class="flex items-center justify-between mb-4">
-          <div>
-            <h3 class="text-lg font-medium text-on-surface">5-4-3-2-1 Grounding</h3>
-            <p class="text-on-surface-variant text-sm">Sensory grounding technique for anxiety relief</p>
+      <div class="journal-entry-card-enhanced exercise-card" data-exercise="5-4-3-2-1">
+        <div class="journal-entry-header">
+          <div class="journal-entry-date-bg">
+            <div class="journal-date-day">5-4-3</div>
+            <div class="journal-date-month">Grounding</div>
           </div>
-          <div class="flex items-center gap-3">
-            <div class="text-xs text-on-surface-variant">3 min</div>
-            <button class="btn-outlined px-4 py-2">
-              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="journal-entry-meta">
+            <h4 class="journal-entry-title">5-4-3-2-1 Grounding</h4>
+            <div class="journal-entry-info">
+              <span class="journal-entry-time">3 min</span>
+              <span class="exercise-difficulty">Anxiety Relief</span>
+            </div>
+          </div>
+        </div>
+        <div class="journal-entry-content">
+          Sensory grounding technique for anxiety relief. Notice 5 things you see, 4 you touch, 3 you hear, 2 you smell, 1 you taste. Anchor yourself in the present moment.
+          <div class="mt-4">
+            <button class="meditation-start-btn" data-exercise="5-4-3-2-1">
+              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M15 14h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
               </svg>
-              Start
+              Start Session
             </button>
           </div>
         </div>
-        <div class="text-sm text-on-surface-variant">
-          Notice 5 things you see, 4 you touch, 3 you hear, 2 you smell, 1 you taste. Anchor yourself in the present.
+      </div>
+
+      <!-- Progress Summary Card -->
+      <div class="journal-entry-card-enhanced">
+        <div class="journal-entry-header">
+          <div class="journal-entry-date-bg">
+            <div class="journal-date-day">📊</div>
+            <div class="journal-date-month">Progress</div>
+          </div>
+          <div class="journal-entry-meta">
+            <h4 class="journal-entry-title">Your Mindfulness Journey</h4>
+            <div class="journal-entry-info">
+              <span class="journal-entry-time">Track Progress</span>
+            </div>
+          </div>
+        </div>
+        <div class="journal-entry-content">
+          <div class="grid grid-cols-3 gap-4 mt-2">
+            <div class="text-center">
+              <div class="text-xl font-bold text-primary mb-1" id="total-sessions">0</div>
+              <div class="text-xs text-on-surface-variant">Sessions</div>
+            </div>
+            <div class="text-center">
+              <div class="text-xl font-bold text-secondary mb-1" id="total-minutes">0</div>
+              <div class="text-xs text-on-surface-variant">Minutes</div>
+            </div>
+            <div class="text-center">
+              <div class="text-xl font-bold text-on-surface mb-1" id="streak-days">0</div>
+              <div class="text-xs text-on-surface-variant">Day Streak</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-
-    <!-- Coming Soon Section -->
-    <div class="glass-panel-secondary p-8 rounded-lg text-center mt-6">
-      <svg class="w-12 h-12 text-on-surface-variant mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+  </div>
+</div><!-- Meditation Session Modal -->
+<div id="meditation-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+  <div class="glass-panel max-w-2xl w-full rounded-3xl p-8 relative overflow-hidden">
+    <!-- Close button -->
+    <button id="close-meditation" class="absolute top-6 right-6 w-10 h-10 rounded-full glass-panel-secondary flex items-center justify-center hover:bg-error/20 transition-all">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
       </svg>
-      <h3 class="text-lg font-medium text-on-surface mb-2">More exercises coming soon</h3>
-      <p class="text-on-surface-variant text-sm">Progressive muscle relaxation, body scan meditations, and guided visualizations are being prepared</p>
+    </button>
+    
+    <!-- Meditation content -->
+    <div id="meditation-content" class="text-center">
+      <div id="meditation-title" class="text-2xl font-bold text-on-surface mb-4"></div>
+      <div id="meditation-subtitle" class="text-on-surface-variant mb-8"></div>
+      
+      <!-- Breathing animation circle -->
+      <div class="flex justify-center mb-8">
+        <div id="breathing-circle" class="w-48 h-48 rounded-full border-4 border-primary/30 flex items-center justify-center relative overflow-hidden">
+          <div id="breathing-inner" class="w-32 h-32 rounded-full bg-primary/20 flex items-center justify-center">
+            <div id="breathing-center" class="w-16 h-16 rounded-full bg-primary/40"></div>
+          </div>
+          <!-- Ripple effects -->
+          <div id="breathing-ripple1" class="absolute inset-0 rounded-full border-2 border-primary/20 opacity-0"></div>
+          <div id="breathing-ripple2" class="absolute inset-0 rounded-full border-2 border-primary/20 opacity-0"></div>
+        </div>
+      </div>
+      
+      <!-- Instructions and timer -->
+      <div id="meditation-instruction" class="text-xl font-medium text-on-surface mb-6">Click Start to begin</div>
+      <div id="meditation-timer" class="text-3xl font-bold text-primary mb-8">00:00</div>
+      <div id="meditation-phase" class="text-on-surface-variant mb-8"></div>
+      
+      <!-- Controls -->
+      <div class="flex justify-center gap-4">
+        <button id="start-meditation" class="btn-primary px-8 py-3">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M15 14h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          Start Session
+        </button>
+        <button id="pause-meditation" class="btn-outlined px-8 py-3 hidden">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          Pause
+        </button>
+        <button id="reset-meditation" class="btn-outlined px-8 py-3 hidden">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+          </svg>
+          Reset
+        </button>
+      </div>
     </div>
   </div>
 </div>
+
+<script lang="ts">
+// @ts-nocheck
+// Meditation functionality
+class MeditationSession {
+  constructor() {
+    this.isActive = false;
+    this.isPaused = false;
+    this.currentExercise = null;
+    this.timer = null;
+    this.timeElapsed = 0;
+    this.totalDuration = 0;
+    this.breathingTimer = null;
+    this.phase = 'prepare';
+    this.cycle = 0;
+    
+    this.exercises = {
+      '4-7-8': {
+        title: '4-7-8 Breathing',
+        subtitle: 'Calming breath technique for relaxation',
+        duration: 300, // 5 minutes
+        phases: [
+          { name: 'Inhale', duration: 4, instruction: 'Breathe in slowly through your nose' },
+          { name: 'Hold', duration: 7, instruction: 'Hold your breath gently' },
+          { name: 'Exhale', duration: 8, instruction: 'Exhale completely through your mouth' },
+          { name: 'Rest', duration: 2, instruction: 'Rest before the next cycle' }
+        ]
+      },
+      'box': {
+        title: 'Box Breathing',
+        subtitle: 'Equal breathing for focus and calm',
+        duration: 180, // 3 minutes
+        phases: [
+          { name: 'Inhale', duration: 4, instruction: 'Breathe in slowly and deeply' },
+          { name: 'Hold', duration: 4, instruction: 'Hold your breath steadily' },
+          { name: 'Exhale', duration: 4, instruction: 'Breathe out slowly and completely' },
+          { name: 'Hold', duration: 4, instruction: 'Hold empty before next breath' }
+        ]
+      },
+      '5-4-3-2-1': {
+        title: '5-4-3-2-1 Grounding',
+        subtitle: 'Sensory awareness for present moment',
+        duration: 180, // 3 minutes
+        phases: [
+          { name: 'See', duration: 36, instruction: 'Notice 5 things you can see around you' },
+          { name: 'Touch', duration: 36, instruction: 'Notice 4 things you can touch' },
+          { name: 'Hear', duration: 36, instruction: 'Notice 3 things you can hear' },
+          { name: 'Smell', duration: 36, instruction: 'Notice 2 things you can smell' },
+          { name: 'Taste', duration: 36, instruction: 'Notice 1 thing you can taste' }
+        ]
+      }
+    };
+    
+    this.initializeEventListeners();
+    this.loadProgress();
+  }
+  
+  initializeEventListeners() {
+    // Category selection
+    document.querySelectorAll('.meditation-category-card').forEach(card => {
+      card.addEventListener('click', (e) => {
+        document.querySelectorAll('.meditation-category-card').forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+      });
+    });
+    
+    // Exercise start buttons
+    document.querySelectorAll('.meditation-start-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const exerciseType = btn.getAttribute('data-exercise');
+        this.startExercise(exerciseType);
+      });
+    });
+    
+    // Modal controls
+    document.getElementById('close-meditation')?.addEventListener('click', () => this.closeModal());
+    document.getElementById('start-meditation')?.addEventListener('click', () => this.startSession());
+    document.getElementById('pause-meditation')?.addEventListener('click', () => this.togglePause());
+    document.getElementById('reset-meditation')?.addEventListener('click', () => this.resetSession());
+  }
+  
+  startExercise(exerciseType) {
+    this.currentExercise = this.exercises[exerciseType];
+    this.totalDuration = this.currentExercise.duration;
+    this.showModal();
+    this.updateModalContent();
+  }
+  
+  showModal() {
+    document.getElementById('meditation-modal').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  }
+  
+  closeModal() {
+    document.getElementById('meditation-modal').classList.add('hidden');
+    document.body.style.overflow = '';
+    this.resetSession();
+  }
+  
+  updateModalContent() {
+    document.getElementById('meditation-title').textContent = this.currentExercise.title;
+    document.getElementById('meditation-subtitle').textContent = this.currentExercise.subtitle;
+    document.getElementById('meditation-instruction').textContent = 'Click Start to begin';
+    document.getElementById('meditation-timer').textContent = this.formatTime(this.totalDuration);
+    document.getElementById('meditation-phase').textContent = '';
+  }
+  
+  startSession() {
+    if (this.isPaused) {
+      this.isPaused = false;
+      document.getElementById('pause-meditation').textContent = 'Pause';
+    } else {
+      this.isActive = true;
+      this.timeElapsed = 0;
+      this.cycle = 0;
+      this.phase = 'prepare';
+    }
+    
+    document.getElementById('start-meditation').classList.add('hidden');
+    document.getElementById('pause-meditation').classList.remove('hidden');
+    document.getElementById('reset-meditation').classList.remove('hidden');
+    
+    this.startTimer();
+    this.startBreathingAnimation();
+  }
+  
+  togglePause() {
+    this.isPaused = !this.isPaused;
+    const pauseBtn = document.getElementById('pause-meditation');
+    
+    if (this.isPaused) {
+      clearInterval(this.timer);
+      clearInterval(this.breathingTimer);
+      pauseBtn.textContent = 'Resume';
+      document.getElementById('meditation-instruction').textContent = 'Session paused';
+    } else {
+      this.startTimer();
+      this.startBreathingAnimation();
+      pauseBtn.textContent = 'Pause';
+    }
+  }
+  
+  resetSession() {
+    this.isActive = false;
+    this.isPaused = false;
+    this.timeElapsed = 0;
+    this.cycle = 0;
+    this.phase = 'prepare';
+    
+    clearInterval(this.timer);
+    clearInterval(this.breathingTimer);
+    
+    document.getElementById('start-meditation').classList.remove('hidden');
+    document.getElementById('pause-meditation').classList.add('hidden');
+    document.getElementById('reset-meditation').classList.add('hidden');
+    
+    if (this.currentExercise) {
+      this.updateModalContent();
+    }
+    
+    this.resetBreathingAnimation();
+  }
+  
+  startTimer() {
+    this.timer = setInterval(() => {
+      if (!this.isPaused) {
+        this.timeElapsed++;
+        const remainingTime = this.totalDuration - this.timeElapsed;
+        document.getElementById('meditation-timer').textContent = this.formatTime(remainingTime);
+        
+        if (remainingTime <= 0) {
+          this.completeSession();
+        }
+      }
+    }, 1000);
+  }
+  
+  startBreathingAnimation() {
+    if (!this.currentExercise.phases) return;
+    
+    let phaseIndex = 0;
+    let phaseTime = 0;
+    
+    this.breathingTimer = setInterval(() => {
+      if (!this.isPaused) {
+        const currentPhase = this.currentExercise.phases[phaseIndex];
+        
+        document.getElementById('meditation-instruction').textContent = currentPhase.instruction;
+        document.getElementById('meditation-phase').textContent = `${currentPhase.name} (${currentPhase.duration - phaseTime}s)`;
+        
+        this.animateBreathingCircle(currentPhase.name, phaseTime / currentPhase.duration);
+        
+        phaseTime++;
+        
+        if (phaseTime >= currentPhase.duration) {
+          phaseIndex = (phaseIndex + 1) % this.currentExercise.phases.length;
+          phaseTime = 0;
+          
+          if (phaseIndex === 0) {
+            this.cycle++;
+          }
+        }
+      }
+    }, 1000);
+  }
+  
+  animateBreathingCircle(phase, progress) {
+    const circle = document.getElementById('breathing-circle');
+    const inner = document.getElementById('breathing-inner');
+    const center = document.getElementById('breathing-center');
+    
+    if (!circle) return;
+    
+    let scale = 1;
+    let opacity = 0.2;
+    
+    switch (phase) {
+      case 'Inhale':
+        scale = 1 + (progress * 0.3);
+        opacity = 0.2 + (progress * 0.3);
+        break;
+      case 'Hold':
+        scale = 1.3;
+        opacity = 0.5;
+        break;
+      case 'Exhale':
+        scale = 1.3 - (progress * 0.3);
+        opacity = 0.5 - (progress * 0.3);
+        break;
+      case 'Rest':
+        scale = 1;
+        opacity = 0.2;
+        break;
+    }
+    
+    inner.style.transform = `scale(${scale})`;
+    inner.style.opacity = opacity;
+    center.style.transform = `scale(${scale * 0.8})`;
+  }
+  
+  resetBreathingAnimation() {
+    const inner = document.getElementById('breathing-inner');
+    const center = document.getElementById('breathing-center');
+    
+    if (inner) {
+      inner.style.transform = 'scale(1)';
+      inner.style.opacity = '0.2';
+    }
+    if (center) {
+      center.style.transform = 'scale(1)';
+    }
+  }
+  
+  completeSession() {
+    this.isActive = false;
+    clearInterval(this.timer);
+    clearInterval(this.breathingTimer);
+    
+    // Update progress
+    this.updateProgress();
+    
+    // Show completion message
+    document.getElementById('meditation-instruction').textContent = 'Session completed! Well done.';
+    document.getElementById('meditation-phase').textContent = `You completed ${this.cycle} cycles`;
+    document.getElementById('meditation-timer').textContent = '00:00';
+    
+    document.getElementById('start-meditation').classList.remove('hidden');
+    document.getElementById('pause-meditation').classList.add('hidden');
+    document.getElementById('reset-meditation').classList.add('hidden');
+    
+    setTimeout(() => {
+      this.closeModal();
+    }, 3000);
+  }
+  
+  updateProgress() {
+    const progress = JSON.parse(localStorage.getItem('meditationProgress') || '{"sessions": 0, "minutes": 0, "lastSession": null}');
+    
+    progress.sessions += 1;
+    progress.minutes += Math.floor(this.totalDuration / 60);
+    progress.lastSession = new Date().toISOString().split('T')[0];
+    
+    localStorage.setItem('meditationProgress', JSON.stringify(progress));
+    this.displayProgress(progress);
+  }
+  
+  loadProgress() {
+    const progress = JSON.parse(localStorage.getItem('meditationProgress') || '{"sessions": 0, "minutes": 0, "lastSession": null}');
+    this.displayProgress(progress);
+  }
+  
+  displayProgress(progress) {
+    document.getElementById('total-sessions').textContent = progress.sessions;
+    document.getElementById('total-minutes').textContent = progress.minutes;
+    
+    // Calculate streak
+    const today = new Date().toISOString().split('T')[0];
+    const lastSession = progress.lastSession;
+    let streak = 0;
+    
+    if (lastSession === today) {
+      streak = 1; // Simplified streak calculation
+    }
+    
+    document.getElementById('streak-days').textContent = streak;
+  }
+  
+  formatTime(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  }
+}
+
+// Initialize meditation when page loads
+document.addEventListener('DOMContentLoaded', () => {
+  new MeditationSession();
+});
+</script>
