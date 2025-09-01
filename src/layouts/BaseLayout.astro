@@ -59,7 +59,7 @@ import '../styles/global.css';
     
     <script>
       const savedOnboarded = localStorage.getItem('smile-onboarding');
-      window.SmileApp = {
+      (window as any).SmileApp = {
         onboarded: savedOnboarded === 'complete',
         showOnboardingModal: savedOnboarded !== 'complete'
       };

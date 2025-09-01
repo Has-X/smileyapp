@@ -14,139 +14,122 @@ import ViewToggle from '../ViewToggle.astro';
           Memories
         </div>
         <div class="section-count-island">
-          <span class="section-count">6</span>
+          <span class="section-count">9</span>
         </div>
       </div>
       <ViewToggle panelId="panel-memories" />
     </div>
     
     <div class="memory-grid" id="memories-container">
-      <!-- Sample Memory Cards -->
+      <!-- Compact memory cards -->
       
-      <!-- Insight Memory Card -->
-      <div class="memory-card" data-type="insight" data-date="2025-08-23">
-        <div class="memory-card-header">
-          <div class="memory-icon">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+      <div class="memory-card" data-date="2025-08-23">
+        <div class="memory-card-actions">
+          <button class="memory-delete-btn" data-memory-id="mem-1" title="Delete memory">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H8a1 1 0 00-1 1v3M4 7h16"/>
             </svg>
-          </div>
-          <div class="memory-meta">
-            <div class="memory-date">2 hours ago</div>
-            <div class="memory-tags">
-              <span class="memory-tag">Insight</span>
-            </div>
-          </div>
+          </button>
         </div>
-        <div class="memory-content">
-          <h3 class="memory-title">Breathing Pattern Discovery</h3>
-          <p class="memory-excerpt">You've noticed that 4-7-8 breathing works particularly well for you in the morning when anxiety peaks. This technique helps reset your nervous system before starting the day.</p>
-        </div>
+        <div class="memory-date">2 hours ago</div>
+        <p class="memory-excerpt">We talked about your morning anxiety and how 4-7-8 breathing has been helping you start the day more calmly. You mentioned it works especially well when you do it before getting out of bed.</p>
       </div>
 
-      <!-- Pattern Memory Card -->
-      <div class="memory-card" data-type="pattern" data-date="2025-08-22">
-        <div class="memory-card-header">
-          <div class="memory-icon">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+      <div class="memory-card" data-date="2025-08-22">
+        <div class="memory-card-actions">
+          <button class="memory-delete-btn" data-memory-id="mem-2" title="Delete memory">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H8a1 1 0 00-1 1v3M4 7h16"/>
             </svg>
-          </div>
-          <div class="memory-meta">
-            <div class="memory-date">Yesterday</div>
-            <div class="memory-tags">
-              <span class="memory-tag insight-tag">Pattern</span>
-            </div>
-          </div>
+          </button>
         </div>
-        <div class="memory-content">
-          <h3 class="memory-title">Evening Motivation Patterns</h3>
-          <p class="memory-excerpt">Your motivation tends to be highest in the evening between 7-9 PM. This is when you set the most achievable goals and feel most optimistic about tomorrow.</p>
-        </div>
+        <div class="memory-date">Yesterday</div>
+        <p class="memory-excerpt">You shared that your new evening routine is working well - reading for 20 minutes and doing light stretches has helped you fall asleep faster. You're sleeping about 30 minutes earlier now.</p>
       </div>
 
-      <!-- Breakthrough Memory Card -->
-      <div class="memory-card" data-type="breakthrough" data-date="2025-08-20">
-        <div class="memory-card-header">
-          <div class="memory-icon">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+      <div class="memory-card" data-date="2025-08-20">
+        <div class="memory-card-actions">
+          <button class="memory-delete-btn" data-memory-id="mem-3" title="Delete memory">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H8a1 1 0 00-1 1v3M4 7h16"/>
             </svg>
-          </div>
-          <div class="memory-meta">
-            <div class="memory-date">3 days ago</div>
-            <div class="memory-tags">
-              <span class="memory-tag insight-tag">Breakthrough</span>
-            </div>
-          </div>
+          </button>
         </div>
-        <div class="memory-content">
-          <h3 class="memory-title">Work Boundary Realization</h3>
-          <p class="memory-excerpt">You recognized that saying "no" to extra work requests isn't selfish—it's necessary for maintaining your mental health and doing quality work on your main responsibilities.</p>
-        </div>
+        <div class="memory-date">3 days ago</div>
+        <p class="memory-excerpt">You mentioned feeling guilty about saying no to extra work requests, even though it's affecting your mental health. We discussed strategies for setting clearer boundaries without feeling selfish.</p>
       </div>
 
-      <!-- Progress Memory Card -->
-      <div class="memory-card" data-type="progress" data-date="2025-08-18">
-        <div class="memory-card-header">
-          <div class="memory-icon">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l2-2m0 0l2 2m-2-2v6m0-13a9 9 0 110 18 9 9 0 010-18z"/>
+      <div class="memory-card" data-date="2025-08-18">
+        <div class="memory-card-actions">
+          <button class="memory-delete-btn" data-memory-id="mem-4" title="Delete memory">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H8a1 1 0 00-1 1v3M4 7h16"/>
             </svg>
-          </div>
-          <div class="memory-meta">
-            <div class="memory-date">5 days ago</div>
-            <div class="memory-tags">
-              <span class="memory-tag insight-tag">Progress</span>
-            </div>
-          </div>
+          </button>
         </div>
-        <div class="memory-content">
-          <h3 class="memory-title">Sleep Quality Improvement</h3>
-          <p class="memory-excerpt">After implementing the evening routine we discussed, you've been falling asleep 30 minutes faster and waking up feeling more refreshed. Great progress!</p>
-        </div>
+        <div class="memory-date">5 days ago</div>
+        <p class="memory-excerpt">You were excited to share that you completed your first full 10-minute meditation session without getting distracted. You said it felt like a real accomplishment after weeks of practice.</p>
       </div>
 
-      <!-- Additional sample cards -->
-      <div class="memory-card" data-type="insight" data-date="2025-08-15">
-        <div class="memory-card-header">
-          <div class="memory-icon">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+      <div class="memory-card" data-date="2025-08-15">
+        <div class="memory-card-actions">
+          <button class="memory-delete-btn" data-memory-id="mem-5" title="Delete memory">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H8a1 1 0 00-1 1v3M4 7h16"/>
             </svg>
-          </div>
-          <div class="memory-meta">
-            <div class="memory-date">1 week ago</div>
-            <div class="memory-tags">
-              <span class="memory-tag">Insight</span>
-            </div>
-          </div>
+          </button>
         </div>
-        <div class="memory-content">
-          <h3 class="memory-title">Perfectionism Awareness</h3>
-          <p class="memory-excerpt">You identified that perfectionism is often a mask for fear of judgment. Recognizing this has helped you be more compassionate with yourself when making mistakes.</p>
-        </div>
+        <div class="memory-date">1 week ago</div>
+        <p class="memory-excerpt">You told me about your weekend visit with family and how you practiced the grounding techniques we discussed when feeling overwhelmed during dinner conversations.</p>
       </div>
 
-      <div class="memory-card" data-type="pattern" data-date="2025-08-12">
-        <div class="memory-card-header">
-          <div class="memory-icon">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+      <div class="memory-card" data-date="2025-08-12">
+        <div class="memory-card-actions">
+          <button class="memory-delete-btn" data-memory-id="mem-6" title="Delete memory">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H8a1 1 0 00-1 1v3M4 7h16"/>
             </svg>
-          </div>
-          <div class="memory-meta">
-            <div class="memory-date">11 days ago</div>
-            <div class="memory-tags">
-              <span class="memory-tag insight-tag">Pattern</span>
-            </div>
-          </div>
+          </button>
         </div>
-        <div class="memory-content">
-          <h3 class="memory-title">Social Energy Patterns</h3>
-          <p class="memory-excerpt">You feel most socially energized after spending time in nature. Weekend hikes consistently improve your mood and make social interactions feel more natural.</p>
+        <div class="memory-date">11 days ago</div>
+        <p class="memory-excerpt">You noticed that your weekend hikes consistently improve your mood and energy levels. You said being in nature makes you feel more like yourself and less anxious about social situations.</p>
+      </div>
+
+      <div class="memory-card" data-date="2025-08-10">
+        <div class="memory-card-actions">
+          <button class="memory-delete-btn" data-memory-id="mem-7" title="Delete memory">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H8a1 1 0 00-1 1v3M4 7h16"/>
+            </svg>
+          </button>
         </div>
+        <div class="memory-date">2 weeks ago</div>
+        <p class="memory-excerpt">You shared your frustration about procrastination and we explored how perfectionism might be the root cause. You realized that "done is better than perfect" resonates with you.</p>
+      </div>
+
+      <div class="memory-card" data-date="2025-08-05">
+        <div class="memory-card-actions">
+          <button class="memory-delete-btn" data-memory-id="mem-8" title="Delete memory">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H8a1 1 0 00-1 1v3M4 7h16"/>
+            </svg>
+          </button>
         </div>
+        <div class="memory-date">3 weeks ago</div>
+        <p class="memory-excerpt">We discussed your social anxiety before the team meeting. You tried the visualization technique and said it helped you feel more confident speaking up during discussions.</p>
+      </div>
+
+      <div class="memory-card" data-date="2025-08-01">
+        <div class="memory-card-actions">
+          <button class="memory-delete-btn" data-memory-id="mem-9" title="Delete memory">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H8a1 1 0 00-1 1v3M4 7h16"/>
+            </svg>
+          </button>
+        </div>
+        <div class="memory-date">4 weeks ago</div>
+        <p class="memory-excerpt">You mentioned starting a gratitude journal after our conversation about mindfulness. You were surprised how focusing on small positive moments shifted your daily perspective.</p>
+      </div>
     </div>
   </div>
 </div>

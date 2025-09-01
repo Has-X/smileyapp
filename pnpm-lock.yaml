@@ -23,18 +23,9 @@ importers:
       astro:
         specifier: ^5.0.0
         version: 5.13.2(@types/node@22.17.2)(jiti@1.21.7)(rollup@2.79.2)(terser@5.43.1)(typescript@5.9.2)(yaml@2.8.1)
-      class-variance-authority:
-        specifier: ^0.7.1
-        version: 0.7.1
-      clsx:
-        specifier: ^2.1.1
-        version: 2.1.1
       daisyui:
         specifier: ^4.12.10
         version: 4.12.24(postcss@8.5.6)
-      idb:
-        specifier: ^8.0.0
-        version: 8.0.3
       preact:
         specifier: ^10.24.3
         version: 10.27.1
@@ -44,9 +35,6 @@ importers:
       typescript:
         specifier: ^5.7.2
         version: 5.9.2
-      zod:
-        specifier: ^3.23.8
-        version: 3.25.76
     devDependencies:
       '@astrojs/tailwind':
         specifier: ^5.1.2
@@ -1462,9 +1450,6 @@ packages:
     resolution: {integrity: sha512-l+2bNRMiQgcfILUi33labAZYIWlH1kWDp+ecNo5iisRKrbm0xcRyCww71/YU0Fkw0mAFpz9bJayXPjey6vkmaQ==}
     engines: {node: '>=8'}
 
-  class-variance-authority@0.7.1:
-    resolution: {integrity: sha512-Ka+9Trutv7G8M6WT6SeiRWz792K5qEqIGEGzXKhAE6xOWAY6pPH8U+9IY3oCMv6kqTmLsv7Xh/2w2RigkePMsg==}
-
   cli-boxes@3.0.0:
     resolution: {integrity: sha512-/lzGpEWL/8PfI0BmBOPRwp0c/wFNX1RdUML3jK/RcSBA9T8mZDdQpqYBKtCFTOfQbwPqWEOpjqW+Fnayc0969g==}
     engines: {node: '>=10'}
@@ -1985,9 +1970,6 @@ packages:
 
   idb@7.1.1:
     resolution: {integrity: sha512-gchesWBzyvGHRO9W8tzUWFDycow5gwjvFKfyV9FF32Y7F50yZMp7mP+T2mJIWFx49zicqyC4uefHM17o6xKIVQ==}
-
-  idb@8.0.3:
-    resolution: {integrity: sha512-LtwtVyVYO5BqRvcsKuB2iUMnHwPVByPCXFXOpuU96IZPPoPN6xjOGxZQ74pgSVVLQWtUOYgyeL4GE98BY5D3wg==}
 
   import-meta-resolve@4.1.0:
     resolution: {integrity: sha512-I6fiaX09Xivtk+THaMfAwnA3MVA5Big1WHF1Dfx9hFuvNIWpXnorlkzhcQf6ehrqQiiZECRt1poOAkPmer3ruw==}
@@ -5263,10 +5245,6 @@ snapshots:
 
   ci-info@4.3.0: {}
 
-  class-variance-authority@0.7.1:
-    dependencies:
-      clsx: 2.1.1
-
   cli-boxes@3.0.0: {}
 
   cliui@8.0.1:
@@ -5917,8 +5895,6 @@ snapshots:
       toidentifier: 1.0.1
 
   idb@7.1.1: {}
-
-  idb@8.0.3: {}
 
   import-meta-resolve@4.1.0: {}
 

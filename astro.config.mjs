@@ -49,7 +49,10 @@ export default defineConfig({
       }
     })
   ],
-  output: 'static',
+  output: 'server',
+  adapter: node({
+    mode: 'middleware'
+  }),
   server: {
     port: 3000
   }

@@ -1,0 +1,484 @@
+---
+// Security Unlock Modal - Password entry for encrypted storage
+---
+
+<!-- Security Unlock Modal -->
+<div id="security-unlock-modal" class="confirm-modal hidden">
+  <div class="confirm-modal-backdrop"></div>
+  <div class="confirm-modal-container">
+    <div class="confirm-modal-content security-modal-content">
+      
+      <!-- Modal Header -->
+      <div class="confirm-modal-header">
+        <div class="confirm-modal-icon">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+          </svg>
+        </div>
+        <div class="confirm-modal-text">
+          <h3 class="confirm-modal-title">Enter Password</h3>
+          <p class="confirm-modal-message">Your data is encrypted. Please enter your password to unlock.</p>
+        </div>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="security-modal-body">
+        <form id="unlock-form" class="security-form">
+          <div class="form-field">
+            <label for="unlock-password" class="form-label">Password</label>
+            <div class="password-input-container">
+              <input 
+                type="password" 
+                id="unlock-password" 
+                name="password" 
+                class="form-input password-input" 
+                placeholder="Enter your password"
+                required
+                autocomplete="current-password"
+              />
+              <button type="button" class="password-toggle-btn" id="unlock-password-toggle">
+                <svg class="w-5 h-5 password-icon-hide" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                </svg>
+                <svg class="w-5 h-5 password-icon-show hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"/>
+                </svg>
+              </button>
+            </div>
+            <div id="unlock-error" class="form-error hidden"></div>
+          </div>
+
+          <div class="security-options">
+            <label class="security-checkbox">
+              <input type="checkbox" id="remember-session" />
+              <span class="checkbox-mark"></span>
+              <span class="checkbox-label">Keep unlocked during this session</span>
+            </label>
+          </div>
+        </form>
+      </div>
+
+      <!-- Modal Actions -->
+      <div class="confirm-modal-actions">
+        <button type="button" id="unlock-cancel" class="confirm-btn confirm-btn-secondary">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+          <span>Cancel</span>
+        </button>
+        <button type="submit" id="unlock-submit" class="confirm-btn confirm-btn-primary" form="unlock-form">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"/>
+          </svg>
+          <span>Unlock</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+/* Security Modal Styles */
+.security-modal-content {
+  width: 100%;
+  max-width: 420px;
+  padding: 2rem;
+}
+
+.security-modal-body {
+  margin: 1.5rem 0;
+}
+
+.security-form {
+  width: 100%;
+}
+
+.password-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input {
+  padding-right: 3rem;
+}
+
+.password-toggle-btn {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: hsl(var(--on-surface-variant));
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  transition: all 0.2s ease;
+}
+
+.password-toggle-btn:hover {
+  color: hsl(var(--on-surface));
+  background: hsl(var(--surface-variant) / 0.1);
+}
+
+.password-toggle-btn:focus {
+  outline: 2px solid hsl(var(--primary));
+  outline-offset: 2px;
+}
+
+.security-options {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid hsl(var(--outline-variant));
+}
+
+.security-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.security-checkbox input[type="checkbox"] {
+  display: none;
+}
+
+.checkbox-mark {
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2px solid hsl(var(--outline));
+  border-radius: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.checkbox-mark::after {
+  content: '✓';
+  color: hsl(var(--on-primary));
+  font-size: 0.875rem;
+  font-weight: 600;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: all 0.2s ease;
+}
+
+.security-checkbox input[type="checkbox"]:checked + .checkbox-mark {
+  background: hsl(var(--primary));
+  border-color: hsl(var(--primary));
+}
+
+.security-checkbox input[type="checkbox"]:checked + .checkbox-mark::after {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.checkbox-label {
+  font-size: 0.875rem;
+  color: hsl(var(--on-surface));
+}
+
+.form-error {
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  background: hsl(var(--error-container));
+  color: hsl(var(--on-error-container));
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  border-left: 3px solid hsl(var(--error));
+}
+
+.form-error.hidden {
+  display: none;
+}
+
+/* Loading state */
+.confirm-btn.loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.confirm-btn.loading svg {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Dark theme adjustments */
+[data-theme="dark"] .security-modal-content,
+[data-theme$="-dark"] .security-modal-content {
+  background: hsl(var(--surface-container));
+  border: 1px solid hsl(var(--outline-variant));
+}
+
+[data-theme="dark"] .checkbox-mark,
+[data-theme$="-dark"] .checkbox-mark {
+  border-color: hsl(var(--outline));
+}
+
+[data-theme="dark"] .password-toggle-btn:hover,
+[data-theme$="-dark"] .password-toggle-btn:hover {
+  background: hsl(var(--surface-variant) / 0.2);
+}
+</style>
+
+<script>
+// Security Unlock Modal - Provides password entry interface for unlocking encrypted storage
+
+  class SecurityUnlockModal {
+    private modal: HTMLElement | null = null;
+    private passwordInput: HTMLInputElement | null = null;
+    private toggleBtn: HTMLElement | null = null;
+    private errorDiv: HTMLElement | null = null;
+    private submitBtn: HTMLElement | null = null;
+    private form: HTMLFormElement | null = null;
+    private secureStorage: any;
+    private onUnlockCallback: (() => void) | null = null;
+
+    constructor() {
+      this.init();
+    }
+
+    private async init() {
+      this.modal = document.getElementById('security-unlock-modal');
+      this.passwordInput = document.getElementById('unlock-password') as HTMLInputElement;
+      this.toggleBtn = document.getElementById('unlock-password-toggle');
+      this.errorDiv = document.getElementById('unlock-error');
+      this.submitBtn = document.getElementById('unlock-submit');
+      this.form = document.getElementById('unlock-form') as HTMLFormElement;
+
+      if (!this.modal || !this.passwordInput || !this.form) return;
+
+      // Import and initialize secure storage
+      const SecureStorageModule = await import('../utils/secure-storage.ts');
+      this.secureStorage = SecureStorageModule.default.getInstance();
+
+      this.bindEvents();
+      this.checkIfUnlockNeeded();
+    }
+
+    private bindEvents() {
+      if (!this.modal || !this.passwordInput || !this.toggleBtn || !this.form) return;
+
+      // Password toggle
+      this.toggleBtn.addEventListener('click', () => this.togglePasswordVisibility());
+
+      // Form submission
+      this.form.addEventListener('submit', (e) => this.handleUnlock(e));
+
+      // Cancel button
+      const cancelBtn = document.getElementById('unlock-cancel');
+      cancelBtn?.addEventListener('click', () => this.hide());
+
+      // Enter key in password field
+      this.passwordInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          this.handleUnlock(e);
+        }
+      });
+
+      // Auto-focus password input when modal shows
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+            const target = mutation.target as HTMLElement;
+            if (target === this.modal && !target.classList.contains('hidden')) {
+              setTimeout(() => this.passwordInput?.focus(), 100);
+            }
+          }
+        });
+      });
+
+      observer.observe(this.modal, { attributes: true });
+
+      // Listen for storage lock events
+      window.addEventListener('smile:storage-locked', () => {
+        this.show();
+      });
+    }
+
+    private async checkIfUnlockNeeded() {
+      if (!this.secureStorage) return;
+
+      if (this.secureStorage.isEncryptionEnabled() && !this.secureStorage.isStorageUnlocked()) {
+        this.show();
+      }
+    }
+
+    public show(onUnlock?: () => void) {
+      if (!this.modal) return;
+
+      this.onUnlockCallback = onUnlock || null;
+      this.modal.classList.remove('hidden');
+      this.modal.classList.add('show');
+      this.clearError();
+      this.resetForm();
+      
+      // Focus password input
+      setTimeout(() => this.passwordInput?.focus(), 100);
+    }
+
+    public hide() {
+      if (!this.modal) return;
+
+      this.modal.classList.add('hidden');
+      this.modal.classList.remove('show');
+      this.clearError();
+      this.resetForm();
+    }
+
+    private togglePasswordVisibility() {
+      if (!this.passwordInput || !this.toggleBtn) return;
+
+      const isPassword = this.passwordInput.type === 'password';
+      this.passwordInput.type = isPassword ? 'text' : 'password';
+
+      const hideIcon = this.toggleBtn.querySelector('.password-icon-hide');
+      const showIcon = this.toggleBtn.querySelector('.password-icon-show');
+
+      if (hideIcon && showIcon) {
+        hideIcon.classList.toggle('hidden', !isPassword);
+        showIcon.classList.toggle('hidden', isPassword);
+      }
+    }
+
+    private async handleUnlock(e: Event) {
+      e.preventDefault();
+      
+      if (!this.passwordInput || !this.submitBtn || !this.secureStorage) return;
+
+      const password = this.passwordInput.value.trim();
+      if (!password) {
+        this.showError('Please enter your password');
+        return;
+      }
+
+      this.setLoading(true);
+      this.clearError();
+
+      try {
+        const success = await this.secureStorage.unlock(password);
+        
+        if (success) {
+          this.hide();
+          if (this.onUnlockCallback) {
+            this.onUnlockCallback();
+          }
+          
+          // Dispatch unlock event
+          window.dispatchEvent(new CustomEvent('smile:storage-unlocked'));
+          
+          // Show success notification
+          this.showNotification('Storage unlocked successfully', 'success');
+        } else {
+          this.showError('Incorrect password. Please try again.');
+          this.passwordInput.focus();
+          this.passwordInput.select();
+        }
+      } catch (error) {
+        console.error('Unlock error:', error);
+        this.showError('Failed to unlock storage. Please try again.');
+      } finally {
+        this.setLoading(false);
+      }
+    }
+
+    private showError(message: string) {
+      if (!this.errorDiv) return;
+
+      this.errorDiv.textContent = message;
+      this.errorDiv.classList.remove('hidden');
+      
+      // Auto-hide error after 5 seconds
+      setTimeout(() => this.clearError(), 5000);
+    }
+
+    private clearError() {
+      if (!this.errorDiv) return;
+
+      this.errorDiv.classList.add('hidden');
+      this.errorDiv.textContent = '';
+    }
+
+    private resetForm() {
+      if (!this.passwordInput) return;
+
+      this.passwordInput.value = '';
+      this.passwordInput.type = 'password';
+      
+      // Reset toggle button
+      if (this.toggleBtn) {
+        const hideIcon = this.toggleBtn.querySelector('.password-icon-hide');
+        const showIcon = this.toggleBtn.querySelector('.password-icon-show');
+        hideIcon?.classList.remove('hidden');
+        showIcon?.classList.add('hidden');
+      }
+    }
+
+    private setLoading(loading: boolean) {
+      if (!this.submitBtn) return;
+
+      const submitButton = this.submitBtn as HTMLButtonElement;
+      if (loading) {
+        submitButton.classList.add('loading');
+        submitButton.disabled = true;
+      } else {
+        submitButton.classList.remove('loading');
+        submitButton.disabled = false;
+      }
+    }
+
+    private showNotification(message: string, type: 'success' | 'error' | 'info' = 'info') {
+      // Create temporary notification
+      const notification = document.createElement('div');
+      notification.className = `security-notification security-notification-${type}`;
+      notification.textContent = message;
+      
+      Object.assign(notification.style, {
+        position: 'fixed',
+        top: '2rem',
+        right: '2rem',
+        background: type === 'success' ? 'hsl(var(--success-container))' : 
+                   type === 'error' ? 'hsl(var(--error-container))' : 'hsl(var(--primary-container))',
+        color: type === 'success' ? 'hsl(var(--on-success-container))' : 
+               type === 'error' ? 'hsl(var(--on-error-container))' : 'hsl(var(--on-primary-container))',
+        padding: '1rem 1.5rem',
+        borderRadius: '0.5rem',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+        zIndex: '10000',
+        maxWidth: '400px',
+        fontSize: '0.875rem',
+        fontWeight: '500',
+        transform: 'translateX(100%)',
+        transition: 'transform 0.3s ease'
+      });
+
+      document.body.appendChild(notification);
+      
+      // Animate in
+      setTimeout(() => {
+        notification.style.transform = 'translateX(0)';
+      }, 10);
+      
+      // Remove after 3 seconds
+      setTimeout(() => {
+        notification.style.transform = 'translateX(100%)';
+        setTimeout(() => notification.remove(), 300);
+      }, 3000);
+    }
+  }
+
+  // Initialize when DOM is loaded
+  document.addEventListener('DOMContentLoaded', () => {
+    new SecurityUnlockModal();
+  });
+</script>

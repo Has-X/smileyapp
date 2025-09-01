@@ -1,6 +1,9 @@
 ---
 import NavigationSidebar from './NavigationSidebar.astro';
 import PanelContainer from './panels/PanelContainer.astro';
+import ConfirmModal from './ConfirmModal.astro';
+import JournalModal from './JournalModal.astro';
+import SecurityUnlockModal from './SecurityUnlockModal.astro';
 ---
 
 <div id="app-shell" class="min-h-screen flex bg-surface">
@@ -11,4 +14,13 @@ import PanelContainer from './panels/PanelContainer.astro';
   <div class="flex-1 ml-20">
     <PanelContainer />
   </div>
+  
+  <!-- Global Confirmation Modal -->
+  <ConfirmModal />
+  
+  <!-- Global Journal Modal -->
+  <JournalModal />
+  
+  <!-- Global Security Unlock Modal -->
+  <SecurityUnlockModal />
 </div>

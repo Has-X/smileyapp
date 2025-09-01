@@ -1,5 +1,10 @@
-<!DOCTYPE html><html lang="en" data-theme="smile" data-astro-cid-37fxchfa> <head><meta charset="UTF-8"><meta name="description" content="Smile AI - Chat with local open-weight AI models"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="generator" content="Astro v5.13.2"><title>Setup Guide - Smile AI</title><!-- PWA meta tags --><meta name="theme-color" content="#3b82f6"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="Smile AI"><!-- Font preload --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"><style>html,body{height:100%;font-family:Inter,system-ui,sans-serif}:focus-visible[data-astro-cid-37fxchfa]{outline:2px solid hsl(var(--p));outline-offset:2px}@media (prefers-reduced-motion: reduce){[data-astro-cid-37fxchfa],[data-astro-cid-37fxchfa]:before,[data-astro-cid-37fxchfa]:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}::-webkit-scrollbar [data-astro-cid-37fxchfa]{width:8px}::-webkit-scrollbar-track [data-astro-cid-37fxchfa]{background:hsl(var(--b2))}::-webkit-scrollbar-thumb [data-astro-cid-37fxchfa]{background:hsl(var(--b3));border-radius:4px}::-webkit-scrollbar-thumb:hover [data-astro-cid-37fxchfa]{background:hsl(var(--bc) / .3)}
-</style></head> <body data-astro-cid-37fxchfa>  <div class="min-h-screen bg-base-100"> <div class="container mx-auto px-4 py-8 max-w-4xl"> <div class="prose prose-lg max-w-none"> <h1 class="text-4xl font-bold text-center mb-8">Ollama & GPT-OSS Setup</h1> <div class="alert alert-info mb-8"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path> </svg> <span> <strong>Smile AI runs completely local</strong> - no cloud API keys needed! 
+/* empty css                                 */
+import { e as createComponent, k as renderComponent, r as renderTemplate, m as maybeRenderHead } from '../chunks/astro/server_BTqpNUbh.mjs';
+import { $ as $$BaseLayout } from '../chunks/BaseLayout_CzJVywaj.mjs';
+export { renderers } from '../renderers.mjs';
+
+const $$Setup = createComponent(($$result, $$props, $$slots) => {
+  return renderTemplate`${renderComponent($$result, "BaseLayout", $$BaseLayout, { "title": "Setup Guide - Smile AI" }, { "default": ($$result2) => renderTemplate` ${maybeRenderHead()}<div class="min-h-screen bg-base-100"> <div class="container mx-auto px-4 py-8 max-w-4xl"> <div class="prose prose-lg max-w-none"> <h1 class="text-4xl font-bold text-center mb-8">Ollama & GPT-OSS Setup</h1> <div class="alert alert-info mb-8"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path> </svg> <span> <strong>Smile AI runs completely local</strong> - no cloud API keys needed! 
             Just install Ollama and download the GPT-OSS model.
 </span> </div> <h2>Step 1: Install Ollama</h2> <div class="steps mb-8"> <div class="step step-primary">Download</div> <div class="step step-primary">Install</div> <div class="step step-primary">Verify</div> </div> <ol> <li> <strong>Download Ollama:</strong> Visit <a href="https://ollama.com" target="_blank" rel="noopener">ollama.com</a>
 and download for your operating system.
@@ -11,4 +16,19 @@ GPT-OSS represents a breakthrough in open-weight language models, offering
             performance comparable to proprietary models while maintaining full transparency 
             and local control. Released as part of OpenAI's commitment to open research, 
             these models can be inspected, modified, and run entirely offline.
-</p> </div> <div class="text-center mt-8"> <a href="/" class="btn btn-primary btn-lg">Start Chatting</a> </div> </div> </div> </div>  <script type="module">const e=localStorage.getItem("smile-theme"),t=localStorage.getItem("smile-onboarded");e&&document.documentElement.setAttribute("data-theme",e);if(!e){const o=window.matchMedia("(prefers-color-scheme: dark)").matches;document.documentElement.setAttribute("data-theme",o?"dark":"smile")}window.SmileApp={onboarded:t==="true",showOnboardingModal:t!=="true"};</script> </body> </html>
+</p> </div> <div class="text-center mt-8"> <a href="/" class="btn btn-primary btn-lg">Start Chatting</a> </div> </div> </div> </div> ` })}`;
+}, "E:/smileyapp/src/pages/setup.astro", void 0);
+
+const $$file = "E:/smileyapp/src/pages/setup.astro";
+const $$url = "/setup";
+
+const _page = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  default: $$Setup,
+  file: $$file,
+  url: $$url
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const page = () => _page;
+
+export { page };

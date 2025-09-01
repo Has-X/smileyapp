@@ -1,5 +1,4 @@
 ---
-// HistoryPanel component for displaying conversation history
 import ViewToggle from '../ViewToggle.astro';
 ---
 
@@ -42,91 +41,68 @@ import ViewToggle from '../ViewToggle.astro';
       </div>
     </div>
 
-    <!-- History Content -->
+    <!-- History Content - Compact conversation cards -->
     <div class="memory-grid" id="history-container" data-view-container>
-      <!-- Sample conversations -->
-      <div class="memory-card conversation-item" data-date="2025-08-23" data-keywords="anxiety morning breathing meditation">
-        <div class="memory-card-header">
-          <div class="memory-icon">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      <!-- Conversation history cards -->
+      
+      <div class="memory-card" data-date="2025-08-23">
+        <div class="memory-card-actions">
+          <button class="memory-delete-btn" data-conversation-id="conv-1" title="Delete conversation">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H8a1 1 0 00-1 1v3M4 7h16"/>
             </svg>
-          </div>
-          <div class="memory-meta">
-            <div class="memory-date">2:30 PM • Aug 23</div>
-            <div class="memory-tags">
-              <span class="memory-tag">18 messages</span>
-              <span class="memory-tag">22 min</span>
-            </div>
+          </button>
+        </div>
+        <div class="conversation-header">
+          <span class="memory-date">2 hours ago</span>
+          <div class="conversation-stats">
+            <span class="conversation-stat">18 messages</span>
+            <span class="conversation-stat">22 min</span>
           </div>
         </div>
-        <div class="memory-content">
-          <h3 class="memory-title">Morning Anxiety & Breathing</h3>
-          <p class="memory-excerpt">
-            We discussed your morning anxiety patterns and explored breathing techniques. You mentioned feeling overwhelmed when waking up, and we worked through a 4-7-8 breathing exercise that seemed to help calm your nervous system.
-          </p>
-          <div class="memory-tags">
-            <span class="memory-tag">anxiety</span>
-            <span class="memory-tag">morning routine</span>
-            <span class="memory-tag">breathing</span>
-          </div>
-        </div>
+        <p class="memory-excerpt">
+          We discussed your morning anxiety patterns and explored breathing techniques. You mentioned feeling overwhelmed when waking up, and we worked through a 4-7-8 breathing exercise that seemed to help calm your nervous system.
+        </p>
       </div>
 
-      <div class="memory-card conversation-item" data-date="2025-08-22" data-keywords="goals motivation productivity sleep">
-        <div class="memory-card-header">
-          <div class="memory-icon">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
+      <div class="memory-card" data-date="2025-08-22">
+        <div class="memory-card-actions">
+          <button class="memory-delete-btn" data-conversation-id="conv-2" title="Delete conversation">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H8a1 1 0 00-1 1v3M4 7h16"/>
             </svg>
-          </div>
-          <div class="memory-meta">
-            <div class="memory-date">7:45 PM • Aug 22</div>
-            <div class="memory-tags">
-              <span class="memory-tag">31 messages</span>
-              <span class="memory-tag">38 min</span>
-            </div>
+          </button>
+        </div>
+        <div class="conversation-header">
+          <span class="memory-date">Yesterday</span>
+          <div class="conversation-stats">
+            <span class="conversation-stat">31 messages</span>
+            <span class="conversation-stat">38 min</span>
           </div>
         </div>
-        <div class="memory-content">
-          <h3 class="memory-title">Goals & Evening Routine</h3>
-          <p class="memory-excerpt">
-            Long conversation about setting realistic goals and improving productivity. We created a personalized evening routine to help with sleep quality and discussed strategies for maintaining motivation during challenging periods.
-          </p>
-          <div class="memory-tags">
-            <span class="memory-tag">goal setting</span>
-            <span class="memory-tag">motivation</span>
-            <span class="memory-tag">sleep routine</span>
-          </div>
-        </div>
+        <p class="memory-excerpt">
+          Long conversation about setting realistic goals and improving productivity. We created a personalized evening routine to help with sleep quality and discussed strategies for maintaining motivation during challenging periods.
+        </p>
       </div>
 
-      <div class="memory-card conversation-item" data-date="2025-08-20" data-keywords="stress work boundaries mindfulness">
-        <div class="memory-card-header">
-          <div class="memory-icon">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2h8z"/>
+      <div class="memory-card" data-date="2025-08-20">
+        <div class="memory-card-actions">
+          <button class="memory-delete-btn" data-conversation-id="conv-3" title="Delete conversation">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H8a1 1 0 00-1 1v3M4 7h16"/>
             </svg>
-          </div>
-          <div class="memory-meta">
-            <div class="memory-date">4:15 PM • Aug 20</div>
-            <div class="memory-tags">
-              <span class="memory-tag">24 messages</span>
-              <span class="memory-tag">29 min</span>
-            </div>
+          </button>
+        </div>
+        <div class="conversation-header">
+          <span class="memory-date">3 days ago</span>
+          <div class="conversation-stats">
+            <span class="conversation-stat">24 messages</span>
+            <span class="conversation-stat">29 min</span>
           </div>
         </div>
-        <div class="memory-content">
-          <h3 class="memory-title">Work Stress & Boundaries</h3>
-          <p class="memory-excerpt">
-            Discussion about work stress and setting healthy boundaries. We explored mindfulness techniques for managing overwhelming workdays and practiced a brief body scan meditation together.
-          </p>
-          <div class="memory-tags">
-            <span class="memory-tag">work stress</span>
-            <span class="memory-tag">boundaries</span>
-            <span class="memory-tag">mindfulness</span>
-          </div>
-        </div>
+        <p class="memory-excerpt">
+          Discussion about work stress and setting healthy boundaries. We explored mindfulness techniques for managing overwhelming workdays and practiced a brief body scan meditation together.
+        </p>
       </div>
     </div>
   </div>

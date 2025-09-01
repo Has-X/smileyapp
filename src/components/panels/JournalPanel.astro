@@ -3,7 +3,7 @@ import ViewToggle from '../ViewToggle.astro';
 ---
 
 <div id="panel-journal" class="flex-1 flex flex-col hidden app-panel">
-  <div class="p-6 max-w-4xl mx-auto w-full">
+  <div class="p-4 max-w-4xl mx-auto w-full">
     <!-- Panel Header -->
     <div class="panel-section-header">
       <div class="header-left-section">
@@ -17,13 +17,33 @@ import ViewToggle from '../ViewToggle.astro';
           <span class="section-count">3</span>
         </div>
       </div>
-      <ViewToggle panelId="panel-journal" />
+      <div class="header-actions">
+        <button id="new-journal-btn" class="journal-compose-btn" title="Write new entry">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+          </svg>
+          New Entry
+        </button>
+        <ViewToggle panelId="panel-journal" />
+      </div>
     </div>
 
     <!-- Journal Entries -->
     <div class="journal-entries-container" id="journal-entries" data-view-container>
       <!-- Sample entries -->
       <div class="journal-entry-card-enhanced" data-date="2025-08-23">
+        <div class="journal-entry-actions">
+          <button class="journal-edit-btn" data-journal-id="journal-1" title="Edit entry">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+            </svg>
+          </button>
+          <button class="journal-delete-btn" data-journal-id="journal-1" title="Delete entry">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H8a1 1 0 00-1 1v3M4 7h16"/>
+            </svg>
+          </button>
+        </div>
         <div class="journal-entry-header">
           <div class="journal-entry-date-bg">
             <div class="journal-date-day">23</div>
@@ -34,6 +54,9 @@ import ViewToggle from '../ViewToggle.astro';
             <div class="journal-entry-info">
               <span class="journal-entry-time">8:30 AM</span>
               <span class="journal-entry-mood">😊</span>
+              <span class="journal-entry-privacy private">
+                Private
+              </span>
             </div>
           </div>
         </div>
@@ -43,6 +66,18 @@ import ViewToggle from '../ViewToggle.astro';
       </div>
 
       <div class="journal-entry-card-enhanced" data-date="2025-08-22">
+        <div class="journal-entry-actions">
+          <button class="journal-edit-btn" data-journal-id="journal-2" title="Edit entry">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+            </svg>
+          </button>
+          <button class="journal-delete-btn" data-journal-id="journal-2" title="Delete entry">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H8a1 1 0 00-1 1v3M4 7h16"/>
+            </svg>
+          </button>
+        </div>
         <div class="journal-entry-header">
           <div class="journal-entry-date-bg">
             <div class="journal-date-day">22</div>
@@ -53,6 +88,9 @@ import ViewToggle from '../ViewToggle.astro';
             <div class="journal-entry-info">
               <span class="journal-entry-time">9:15 PM</span>
               <span class="journal-entry-mood">😐</span>
+              <span class="journal-entry-privacy shared">
+                Shared
+              </span>
             </div>
           </div>
         </div>
@@ -61,7 +99,19 @@ import ViewToggle from '../ViewToggle.astro';
         </div>
       </div>
 
-      <div class="journal-entry-card-enhanced" data-date="2025-08-21">
+  <div class="journal-entry-card-enhanced" data-date="2025-08-21">
+        <div class="journal-entry-actions">
+          <button class="journal-edit-btn" data-journal-id="journal-3" title="Edit entry">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+            </svg>
+          </button>
+          <button class="journal-delete-btn" data-journal-id="journal-3" title="Delete entry">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H8a1 1 0 00-1 1v3M4 7h16"/>
+            </svg>
+          </button>
+        </div>
         <div class="journal-entry-header">
           <div class="journal-entry-date-bg">
             <div class="journal-date-day">21</div>
@@ -72,13 +122,20 @@ import ViewToggle from '../ViewToggle.astro';
             <div class="journal-entry-info">
               <span class="journal-entry-time">7:45 PM</span>
               <span class="journal-entry-mood">😊</span>
+              <span class="journal-entry-privacy private">
+                Private
+              </span>
             </div>
           </div>
         </div>
         <div class="journal-entry-content">
           Finally understood what my therapist meant about mindful breathing. The afternoon anxiety episode was much more manageable using the techniques we discussed. This feels like real progress in managing my stress responses.
         </div>
-        </div>
+      </div>
     </div>
   </div>
 </div>
+
+<script>
+  // Journal functionality handled by the dedicated JournalModal component instance
+</script>

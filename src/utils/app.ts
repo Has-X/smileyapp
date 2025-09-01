@@ -223,6 +223,53 @@ class SmileApp {
         this.showClearDataModal();
       });
     }
+
+    // Security Settings
+    this.setupSecurityListeners();
+  }
+
+  private setupSecurityListeners() {
+    // Encryption toggle
+    const encryptionToggle = document.getElementById('encryption-enabled') as HTMLInputElement;
+    if (encryptionToggle) {
+      encryptionToggle.addEventListener('change', (e) => {
+        const target = e.target as HTMLInputElement;
+        this.toggleEncryption(target.checked);
+      });
+    }
+
+    // Auto-lock select
+    const autoLockSelect = document.getElementById('auto-lock-select') as HTMLSelectElement;
+    if (autoLockSelect) {
+      autoLockSelect.addEventListener('change', (e) => {
+        const target = e.target as HTMLSelectElement;
+        this.updateAutoLock(parseInt(target.value));
+      });
+    }
+
+    // Set Password button
+    const setPasswordBtn = document.getElementById('set-password-btn') as HTMLButtonElement;
+    if (setPasswordBtn) {
+      setPasswordBtn.addEventListener('click', () => {
+        this.showPasswordModal();
+      });
+    }
+
+    // Change Password button
+    const changePasswordBtn = document.getElementById('change-password-btn') as HTMLButtonElement;
+    if (changePasswordBtn) {
+      changePasswordBtn.addEventListener('click', () => {
+        this.showPasswordModal('change');
+      });
+    }
+
+    // Test Unlock button
+    const testUnlockBtn = document.getElementById('test-unlock-btn') as HTMLButtonElement;
+    if (testUnlockBtn) {
+      testUnlockBtn.addEventListener('click', () => {
+        this.testUnlock();
+      });
+    }
   }
 
   private setupOnboardingListeners() {
@@ -739,7 +786,7 @@ class SmileApp {
     const messagesContainer = document.getElementById('messages-container');
     if (!messagesContainer) return '';
 
-    const messageId = `message-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    const messageId = `message-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
     const messageDiv = document.createElement('div');
     messageDiv.id = messageId;
     messageDiv.className = `message ${role === 'user' ? 'message-user' : ''}`;
@@ -2148,11 +2195,99 @@ class SmileApp {
   private escapeRegExp(string: string): string {
     return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
+
+  // Security Settings Methods
+  private toggleEncryption(enabled: boolean) {
+    if (enabled) {
+      this.showPasswordModal();
+    } else {
+      // Disable encryption
+      localStorage.setItem('smile-encryption-enabled', 'false');
+      this.showCustomNotification('Encryption disabled', 'info');
+    }
+  }
+
+  private updateAutoLock(minutes: number) {
+    localStorage.setItem('smile-auto-lock-minutes', minutes.toString());
+    this.showCustomNotification(`Auto-lock set to ${minutes === 0 ? 'never' : minutes + ' minutes'}`, 'success');
+  }
+
+  private showPasswordModal(mode: 'set' | 'change' = 'set') {
+    const modal = document.getElementById('password-setup-modal');
+    if (modal) {
+      modal.classList.remove('hidden');
+      // Add modal-active class for animation
+      requestAnimationFrame(() => {
+        modal.classList.add('modal-active');
+      });
+
+      // Update modal title based on mode
+      const title = modal.querySelector('.confirm-modal-title');
+      if (title) {
+        title.textContent = mode === 'set' ? 'Set Encryption Password' : 'Change Encryption Password';
+      }
+    }
+  }
+
+  private testUnlock() {
+    this.showCustomNotification('Test unlock functionality - Implementation pending', 'info');
+  }
 }
+
+// Global functions for Security Modal
+(window as any).closePasswordModal = function() {
+  const modal = document.getElementById('password-setup-modal');
+  if (modal) {
+    modal.classList.remove('modal-active');
+    setTimeout(() => modal.classList.add('hidden'), 300);
+  }
+};
+
+(window as any).savePassword = function() {
+  const newPassword = (document.getElementById('new-password') as HTMLInputElement)?.value;
+  const confirmPassword = (document.getElementById('confirm-password') as HTMLInputElement)?.value;
+  
+  if (!newPassword || !confirmPassword) {
+    alert('Please fill in both password fields');
+    return;
+  }
+  
+  if (newPassword !== confirmPassword) {
+    alert('Passwords do not match');
+    return;
+  }
+  
+  if (newPassword.length < 6) {
+    alert('Password must be at least 6 characters');
+    return;
+  }
+  
+  // Save encryption enabled state
+  localStorage.setItem('smile-encryption-enabled', 'true');
+  
+  // Enable the encryption toggle
+  const encryptionToggle = document.getElementById('encryption-enabled') as HTMLInputElement;
+  if (encryptionToggle) {
+    encryptionToggle.checked = true;
+  }
+  
+  // Close modal
+  (window as any).closePasswordModal();
+  
+  // Show success message
+  const app = (window as any).smileApp;
+  if (app && app.showCustomNotification) {
+    app.showCustomNotification('Encryption password set successfully! 🔒', 'success');
+  }
+};
 
 // Initialize the app when DOM is loaded
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => new SmileApp());
+  document.addEventListener('DOMContentLoaded', () => {
+    const app = new SmileApp();
+    (window as any).smileApp = app;
+  });
 } else {
-  new SmileApp();
+  const app = new SmileApp();
+  (window as any).smileApp = app;
 }

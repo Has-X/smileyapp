@@ -1,0 +1,1784 @@
+---
+// RelaxationModal.astro - Immersive Meditation Experience
+---
+
+<!-- Fullscreen Relaxation Modal -->
+<div id="relaxation-modal" class="relaxation-modal hidden">
+  <!-- Background with animated gradient -->
+  <div class="relaxation-backdrop">
+    <div class="relaxation-bg-gradient"></div>
+    <div class="relaxation-particles">
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+    </div>
+  </div>
+
+  <!-- Main Content Container -->
+  <div class="relaxation-container">
+    <!-- Header with close button -->
+    <div class="relaxation-header">
+      <button id="close-relaxation" class="relaxation-close-btn">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Central Breathing Animation -->
+    <div class="relaxation-content">
+      <!-- Top Section: Session Info -->
+      <div class="top-section">
+        <div class="session-info">
+          <h2 id="relaxation-title" class="session-title">4-7-8 Breathing</h2>
+          <p id="relaxation-subtitle" class="session-subtitle">Calming breath technique for deep relaxation</p>
+        </div>
+      </div>
+
+      <!-- Middle Section: Breathing Circle -->
+      <div class="middle-section">
+        <div class="breathing-container">
+          <!-- Outer rings with ripple effects -->
+          <div class="breathing-ring ring-1"></div>
+          <div class="breathing-ring ring-2"></div>
+          <div class="breathing-ring ring-3"></div>
+          
+          <!-- Main breathing orb -->
+          <div id="breathing-orb" class="breathing-orb">
+            <div class="orb-inner">
+              <div class="orb-center">
+                <div class="orb-pulse"></div>
+              </div>
+            </div>
+            
+            <!-- Breathing guides -->
+            <div class="breathing-guides">
+              <div class="guide-line guide-top"></div>
+              <div class="guide-line guide-right"></div>
+              <div class="guide-line guide-bottom"></div>
+              <div class="guide-line guide-left"></div>
+            </div>
+          </div>
+
+          <!-- Progress arc -->
+          <div class="progress-arc">
+            <svg class="progress-circle" viewBox="0 0 200 200">
+              <circle cx="100" cy="100" r="90" class="progress-track"/>
+              <circle id="progress-path" cx="100" cy="100" r="90" class="progress-fill"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Section: Instructions and Controls -->
+      <div class="bottom-section">
+        <!-- Instructions and Phase Display -->
+        <div class="instruction-panel">
+          <div id="current-phase" class="current-phase">Prepare to begin</div>
+          <div id="breathing-instruction" class="breathing-instruction">Click start when you're ready</div>
+          <div id="phase-counter" class="phase-counter"></div>
+        </div>
+
+        <!-- Timer and Progress -->
+        <div class="session-progress">
+          <div class="timer-display">
+            <span id="session-timer" class="timer-text">05:00</span>
+            <span class="timer-label">remaining</span>
+          </div>
+          <div class="session-stats">
+            <div class="stat-item">
+              <span id="breath-count" class="stat-value">0</span>
+              <span class="stat-label">breaths</span>
+            </div>
+            <div class="stat-item">
+            <span id="cycle-count" class="stat-value">0</span>
+            <span class="stat-label">cycles</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Control Panel -->
+      <div class="control-panel">
+        <button id="start-relaxation" class="control-btn primary">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M15 14h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          Start Session
+        </button>
+        <button id="pause-relaxation" class="control-btn secondary hidden">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          Pause
+        </button>
+        <button id="reset-relaxation" class="control-btn outlined hidden">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+          </svg>
+          Reset
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+/* ================================================================
+   RELAXATION MODAL - IMMERSIVE MEDITATION EXPERIENCE
+   ================================================================ */
+
+.relaxation-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.relaxation-modal.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Animated Background */
+.relaxation-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+}
+
+.relaxation-bg-gradient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    45deg,
+    hsl(var(--primary-hsl) / 0.15) 0%,
+    hsl(var(--secondary-hsl) / 0.1) 25%,
+    hsl(var(--tertiary-hsl) / 0.05) 50%,
+    hsl(var(--primary-hsl) / 0.1) 75%,
+    hsl(var(--secondary-hsl) / 0.15) 100%
+  );
+  animation: gradientShift 12s ease-in-out infinite;
+  opacity: 0;
+  transition: opacity 0.8s ease-out;
+}
+
+.relaxation-modal.show .relaxation-bg-gradient {
+  opacity: 1;
+}
+
+@keyframes gradientShift {
+  0%, 100% { 
+    background-position: 0% 50%;
+    filter: hue-rotate(0deg);
+  }
+  25% { 
+    background-position: 100% 50%;
+    filter: hue-rotate(15deg);
+  }
+  50% { 
+    background-position: 100% 100%;
+    filter: hue-rotate(30deg);
+  }
+  75% { 
+    background-position: 0% 100%;
+    filter: hue-rotate(15deg);
+  }
+}
+
+/* Floating Particles */
+.relaxation-particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1s ease-out 0.3s;
+}
+
+.relaxation-modal.show .relaxation-particles {
+  opacity: 1;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: hsl(var(--primary-hsl) / 0.3);
+  border-radius: 50%;
+  animation: float 20s linear infinite;
+}
+
+.particle:nth-child(1) {
+  left: 10%;
+  animation-delay: 0s;
+  animation-duration: 18s;
+}
+
+.particle:nth-child(2) {
+  left: 20%;
+  animation-delay: 2s;
+  animation-duration: 22s;
+}
+
+.particle:nth-child(3) {
+  left: 40%;
+  animation-delay: 4s;
+  animation-duration: 16s;
+}
+
+.particle:nth-child(4) {
+  left: 60%;
+  animation-delay: 6s;
+  animation-duration: 24s;
+}
+
+.particle:nth-child(5) {
+  left: 80%;
+  animation-delay: 8s;
+  animation-duration: 20s;
+}
+
+.particle:nth-child(6) {
+  left: 90%;
+  animation-delay: 10s;
+  animation-duration: 19s;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(100vh) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.6;
+  }
+  90% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(-100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* Main Container */
+.relaxation-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: rgba(var(--surface), 0.05);
+  backdrop-filter: blur(0px);
+  border: 1px solid rgba(var(--outline-variant), 0.1);
+  z-index: 10;
+  transition: backdrop-filter 0.8s ease-out;
+}
+
+.relaxation-modal.show .relaxation-container {
+  backdrop-filter: blur(20px);
+}
+
+/* Header */
+.relaxation-header {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  z-index: 10;
+  opacity: 0;
+  transform: translateX(20px);
+  transition: all 0.6s ease-out 0.6s;
+}
+
+.relaxation-modal.show .relaxation-header {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.relaxation-close-btn {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: rgba(var(--surface-container), 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(var(--outline-variant), 0.2);
+  color: hsl(var(--on-surface-hsl));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.relaxation-close-btn:hover {
+  background: rgba(var(--error), 0.15);
+  color: hsl(var(--error-hsl));
+  transform: scale(1.1);
+}
+
+/* Content Layout */
+.relaxation-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 1rem;
+  min-height: 100vh;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s ease-out 0.2s;
+}
+
+.relaxation-modal.show .relaxation-content {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Section Layout */
+.top-section {
+  flex-shrink: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 15vh;
+  max-height: 15vh;
+}
+
+.middle-section {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 50vh;
+  max-height: 50vh;
+  position: relative;
+}
+
+.bottom-section {
+  flex-shrink: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1.5rem;
+  min-height: 25vh;
+  max-height: 25vh;
+}
+
+/* Session Info */
+.session-info {
+  text-align: center;
+  margin-bottom: 0;
+  z-index: 25;
+  position: relative;
+  max-width: 90vw;
+  flex-shrink: 0;
+  width: 100%;
+}
+
+.session-title {
+  font-size: 2.2rem;
+  font-weight: 300;
+  color: hsl(var(--on-surface-hsl));
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.02em;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.session-subtitle {
+  font-size: 1.1rem;
+  color: hsl(var(--on-surface-variant-hsl));
+  font-weight: 400;
+  opacity: 0.9;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Breathing Animation Container */
+.breathing-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(320px, 70vw);
+  height: min(320px, 70vw);
+  max-width: 320px;
+  max-height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 15;
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity 0.8s ease-out 0.4s;
+}
+
+.relaxation-modal.show .breathing-container {
+  opacity: 1;
+}
+
+/* Breathing Rings */
+.breathing-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  opacity: 0;
+  animation-play-state: running;
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: scale(0.9);
+}
+
+.breathing-container.paused .breathing-ring {
+  animation-play-state: paused;
+}
+
+.ring-1 {
+  width: 100%;
+  height: 100%;
+  border-color: hsl(var(--primary-hsl) / 0.2);
+  animation: ripple-adaptive 4s ease-in-out infinite;
+}
+
+.ring-2 {
+  width: 110%;
+  height: 110%;
+  border-color: hsl(var(--secondary-hsl) / 0.15);
+  animation: ripple-adaptive 4s ease-in-out infinite 1.5s;
+}
+
+.ring-3 {
+  width: 120%;
+  height: 120%;
+  border-color: hsl(var(--tertiary-hsl) / 0.1);
+  animation: ripple-adaptive 4s ease-in-out infinite 3s;
+}
+
+/* Ring States Synchronized with Breathing Phases */
+.breathing-orb.inhale ~ .breathing-ring {
+  transform: scale(1.3);
+  opacity: 0.9;
+  border-width: 4px;
+  transition: all 0.6s ease-out;
+  animation-play-state: running;
+}
+
+.breathing-orb.inhale ~ .ring-1 {
+  border-color: hsl(var(--primary-hsl) / 0.5);
+  transform: scale(1.4);
+}
+
+.breathing-orb.inhale ~ .ring-2 {
+  border-color: hsl(var(--primary-hsl) / 0.4);
+  transform: scale(1.35);
+}
+
+.breathing-orb.inhale ~ .ring-3 {
+  border-color: hsl(var(--primary-hsl) / 0.3);
+  transform: scale(1.3);
+}
+
+.breathing-orb.hold ~ .breathing-ring {
+  transform: scale(1.3);
+  opacity: 1;
+  border-width: 4px;
+  filter: brightness(1.3);
+  transition: all 0.2s ease-in-out;
+  animation-play-state: paused;
+}
+
+.breathing-orb.hold ~ .ring-1 {
+  border-color: hsl(var(--primary-hsl) / 0.6);
+  transform: scale(1.4);
+}
+
+.breathing-orb.hold ~ .ring-2 {
+  border-color: hsl(var(--primary-hsl) / 0.5);
+  transform: scale(1.35);
+}
+
+.breathing-orb.hold ~ .ring-3 {
+  border-color: hsl(var(--primary-hsl) / 0.4);
+  transform: scale(1.3);
+}
+
+.breathing-orb.exhale ~ .breathing-ring {
+  transform: scale(0.6);
+  opacity: 0.3;
+  border-width: 1px;
+  transition: all 1s ease-in;
+  animation-play-state: running;
+}
+
+.breathing-orb.exhale ~ .ring-1 {
+  border-color: hsl(var(--secondary-hsl) / 0.4);
+  transform: scale(0.7);
+}
+
+.breathing-orb.exhale ~ .ring-2 {
+  border-color: hsl(var(--secondary-hsl) / 0.3);
+  transform: scale(0.65);
+}
+
+.breathing-orb.exhale ~ .ring-3 {
+  border-color: hsl(var(--secondary-hsl) / 0.2);
+  transform: scale(0.6);
+}
+
+.breathing-orb.rest ~ .breathing-ring {
+  transform: scale(0.6);
+  opacity: 0.2;
+  border-width: 2px;
+  filter: brightness(0.7);
+  transition: all 0.3s ease-in-out;
+  animation-play-state: paused;
+}
+
+.breathing-orb.rest ~ .ring-1 {
+  border-color: hsl(var(--outline-variant) / 0.3);
+  transform: scale(0.7);
+}
+
+.breathing-orb.rest ~ .ring-2 {
+  border-color: hsl(var(--outline-variant) / 0.2);
+  transform: scale(0.65);
+}
+
+.breathing-orb.rest ~ .ring-3 {
+  border-color: hsl(var(--outline-variant) / 0.15);
+  transform: scale(0.6);
+}
+
+.breathing-orb.observe ~ .breathing-ring {
+  transform: scale(1.05);
+  opacity: 0.6;
+  border-width: 2px;
+  filter: brightness(1.1) hue-rotate(10deg);
+  transition: all 1s ease-in-out;
+  animation-play-state: running;
+}
+
+.breathing-orb.observe ~ .ring-1 {
+  border-color: hsl(var(--tertiary-hsl) / 0.3);
+  transform: scale(1.15);
+}
+
+.breathing-orb.observe ~ .ring-2 {
+  border-color: hsl(var(--tertiary-hsl) / 0.25);
+  transform: scale(1.1);
+}
+
+.breathing-orb.observe ~ .ring-3 {
+  border-color: hsl(var(--tertiary-hsl) / 0.2);
+  transform: scale(1.05);
+}
+
+/* Adaptive Ripple Animation with Variable Speed */
+@keyframes ripple-adaptive {
+  0%, 100% {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  25% {
+    transform: scale(1.0);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+  75% {
+    transform: scale(1.05);
+    opacity: 0.6;
+  }
+}
+
+/* Speed Control Classes */
+.breathing-container.speed-slow .ring-1 { animation-duration: 6s; }
+.breathing-container.speed-slow .ring-2 { animation-duration: 6s; }
+.breathing-container.speed-slow .ring-3 { animation-duration: 6s; }
+
+.breathing-container.speed-normal .ring-1 { animation-duration: 4s; }
+.breathing-container.speed-normal .ring-2 { animation-duration: 4s; }
+.breathing-container.speed-normal .ring-3 { animation-duration: 4s; }
+
+.breathing-container.speed-fast .ring-1 { animation-duration: 2.5s; }
+.breathing-container.speed-fast .ring-2 { animation-duration: 2.5s; }
+.breathing-container.speed-fast .ring-3 { animation-duration: 2.5s; }
+
+.breathing-container.speed-4-7-8 .ring-1 { animation-duration: 21s; }
+.breathing-container.speed-4-7-8 .ring-2 { animation-duration: 21s; }
+.breathing-container.speed-4-7-8 .ring-3 { animation-duration: 21s; }
+
+.breathing-container.speed-box .ring-1 { animation-duration: 16s; }
+.breathing-container.speed-box .ring-2 { animation-duration: 16s; }
+.breathing-container.speed-box .ring-3 { animation-duration: 16s; }
+
+.breathing-container.speed-grounding .ring-1 { animation-duration: 180s; }
+.breathing-container.speed-grounding .ring-2 { animation-duration: 180s; }
+.breathing-container.speed-grounding .ring-3 { animation-duration: 180s; }
+
+/* Main Breathing Orb */
+.breathing-orb {
+  position: relative;
+  width: min(180px, 50vw);
+  height: min(180px, 50vw);
+  max-width: 180px;
+  max-height: 180px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(
+    circle at center,
+    hsl(var(--primary-hsl) / 0.3) 0%,
+    hsl(var(--primary-hsl) / 0.15) 40%,
+    transparent 70%
+  );
+  backdrop-filter: blur(10px);
+  border: 1px solid hsl(var(--primary-hsl) / 0.3);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+  flex-shrink: 0;
+}
+
+.breathing-orb.paused {
+  animation-play-state: paused;
+}
+
+.orb-inner {
+  width: 85%;
+  height: 85%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 30% 30%,
+    hsl(var(--primary-hsl) / 0.4) 0%,
+    hsl(var(--primary-hsl) / 0.2) 60%,
+    transparent 100%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+}
+
+.orb-center {
+  width: 50%;
+  height: 50%;
+  border-radius: 50%;
+  background: hsl(var(--primary-hsl) / 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 
+    0 0 20px hsl(var(--primary-hsl) / 0.3),
+    inset 0 0 20px hsl(var(--primary-hsl) / 0.2);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+}
+
+.orb-pulse {
+  width: 60%;
+  height: 60%;
+  border-radius: 50%;
+  background: hsl(var(--primary-hsl));
+  animation: pulse-adaptive 2s ease-in-out infinite;
+  transform-origin: center;
+}
+
+.breathing-orb.paused .orb-pulse {
+  animation-play-state: paused;
+}
+
+@keyframes pulse-adaptive {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  25% {
+    transform: scale(1.1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 0.7;
+  }
+  75% {
+    transform: scale(1.15);
+    opacity: 0.8;
+  }
+}
+
+/* Breathing States with Enhanced Animations */
+.breathing-orb.inhale {
+  transform: scale(1.2);
+  background: radial-gradient(
+    circle at center,
+    hsl(var(--primary-hsl) / 0.5) 0%,
+    hsl(var(--primary-hsl) / 0.25) 40%,
+    transparent 70%
+  );
+  animation: inhale-glow 0.5s ease-out forwards;
+}
+
+.breathing-orb.inhale .orb-inner {
+  transform: scale(1.15);
+  background: radial-gradient(
+    circle at 30% 30%,
+    hsl(var(--primary-hsl) / 0.6) 0%,
+    hsl(var(--primary-hsl) / 0.3) 60%,
+    transparent 100%
+  );
+}
+
+.breathing-orb.inhale .orb-center {
+  transform: scale(1.3);
+  box-shadow: 
+    0 0 30px hsl(var(--primary-hsl) / 0.5),
+    inset 0 0 30px hsl(var(--primary-hsl) / 0.3);
+}
+
+.breathing-orb.hold {
+  transform: scale(1.2);
+  filter: brightness(1.3) saturate(1.2);
+  animation: hold-steady 0.3s ease-in-out forwards;
+  box-shadow: 0 0 40px hsl(var(--primary-hsl) / 0.4);
+}
+
+.breathing-orb.exhale {
+  transform: scale(0.6);
+  background: radial-gradient(
+    circle at center,
+    hsl(var(--secondary-hsl) / 0.4) 0%,
+    hsl(var(--secondary-hsl) / 0.2) 40%,
+    transparent 70%
+  );
+  animation: exhale-fade 0.8s ease-in forwards;
+}
+
+.breathing-orb.exhale .orb-inner {
+  transform: scale(0.7);
+  background: radial-gradient(
+    circle at 30% 30%,
+    hsl(var(--secondary-hsl) / 0.5) 0%,
+    hsl(var(--secondary-hsl) / 0.25) 60%,
+    transparent 100%
+  );
+}
+
+.breathing-orb.exhale .orb-center {
+  transform: scale(0.5);
+  background: hsl(var(--secondary-hsl) / 0.6);
+  box-shadow: 
+    0 0 15px hsl(var(--secondary-hsl) / 0.3),
+    inset 0 0 15px hsl(var(--secondary-hsl) / 0.2);
+}
+
+.breathing-orb.rest {
+  transform: scale(0.9);
+  filter: brightness(0.8) saturate(0.9);
+  animation: rest-gentle 0.5s ease-in-out forwards;
+}
+
+.breathing-orb.observe {
+  transform: scale(1.1);
+  background: radial-gradient(
+    circle at center,
+    hsl(var(--tertiary-hsl) / 0.4) 0%,
+    hsl(var(--tertiary-hsl) / 0.2) 40%,
+    transparent 70%
+  );
+  animation: observe-shimmer 1s ease-in-out infinite alternate;
+}
+
+/* Enhanced Animation Keyframes */
+@keyframes inhale-glow {
+  0% { 
+    filter: brightness(1) saturate(1);
+    box-shadow: 0 0 20px hsl(var(--primary-hsl) / 0.3);
+  }
+  100% { 
+    filter: brightness(1.2) saturate(1.1);
+    box-shadow: 0 0 40px hsl(var(--primary-hsl) / 0.5);
+  }
+}
+
+@keyframes hold-steady {
+  0% { 
+    filter: brightness(1.2) saturate(1.1);
+  }
+  100% { 
+    filter: brightness(1.3) saturate(1.2);
+  }
+}
+
+@keyframes exhale-fade {
+  0% { 
+    filter: brightness(1.3) saturate(1.2);
+    box-shadow: 0 0 40px hsl(var(--primary-hsl) / 0.4);
+  }
+  100% { 
+    filter: brightness(0.9) saturate(0.8);
+    box-shadow: 0 0 15px hsl(var(--secondary-hsl) / 0.3);
+  }
+}
+
+@keyframes rest-gentle {
+  0% { 
+    filter: brightness(0.9) saturate(0.8);
+  }
+  100% { 
+    filter: brightness(0.8) saturate(0.9);
+  }
+}
+
+@keyframes observe-shimmer {
+  0% { 
+    filter: brightness(1) saturate(1) hue-rotate(0deg);
+  }
+  100% { 
+    filter: brightness(1.1) saturate(1.1) hue-rotate(10deg);
+  }
+}
+
+/* Breathing Guides */
+.breathing-guides {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.3;
+}
+
+.guide-line {
+  position: absolute;
+  background: hsl(var(--outline));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.guide-top, .guide-bottom {
+  width: 2px;
+  height: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.guide-top { top: -35px; }
+.guide-bottom { bottom: -35px; }
+
+.guide-left, .guide-right {
+  width: 30px;
+  height: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.guide-left { left: -35px; }
+.guide-right { right: -35px; }
+
+.breathing-orb:hover .guide-line {
+  opacity: 0.6;
+}
+
+/* Progress Arc */
+.progress-arc {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.progress-circle {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.progress-track {
+  fill: none;
+  stroke: hsl(var(--outline-variant));
+  stroke-width: 2;
+  opacity: 0.3;
+}
+
+.progress-fill {
+  fill: none;
+  stroke: hsl(var(--primary));
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 565.48;
+  stroke-dashoffset: 565.48;
+  transition: stroke-dashoffset 0.3s ease;
+}
+
+/* Instruction Panel */
+.instruction-panel {
+  text-align: center;
+  max-width: min(500px, 90vw);
+  z-index: 30;
+  position: relative;
+  flex-shrink: 0;
+  width: 100%;
+  height: 8rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.current-phase {
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: hsl(var(--primary-hsl));
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  min-height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.current-phase.paused {
+  opacity: 0.7;
+  transform: scale(0.95);
+}
+
+.breathing-instruction {
+  font-size: 1.1rem;
+  color: hsl(var(--on-surface-hsl));
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  min-height: 3.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.breathing-instruction.paused {
+  opacity: 0.6;
+}
+
+.phase-counter {
+  font-size: 0.85rem;
+  color: hsl(var(--on-surface-variant-hsl));
+  opacity: 0.7;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', monospace;
+  transition: all 0.3s ease;
+  min-height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.phase-counter.paused {
+  opacity: 0.5;
+}
+
+/* Session Progress */
+.session-progress {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  z-index: 30;
+  position: relative;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 90vw;
+  flex-shrink: 0;
+  width: 100%;
+}
+
+.timer-display {
+  text-align: center;
+}
+
+.timer-text {
+  font-size: 2.8rem;
+  font-weight: 200;
+  color: hsl(var(--primary-hsl));
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', monospace;
+  letter-spacing: 0.05em;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.timer-text.paused {
+  opacity: 0.7;
+  transform: scale(0.95);
+}
+
+.timer-label {
+  display: block;
+  font-size: 0.85rem;
+  color: hsl(var(--on-surface-variant-hsl));
+  margin-top: 0.25rem;
+  opacity: 0.7;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+.session-stats {
+  display: flex;
+  gap: 2rem;
+}
+
+.stat-item {
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.stat-item.paused {
+  opacity: 0.6;
+  transform: scale(0.95);
+}
+
+.stat-value {
+  display: block;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: hsl(var(--on-surface-hsl));
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.75rem;
+  color: hsl(var(--on-surface-variant-hsl));
+  margin-top: 0.25rem;
+  opacity: 0.8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Control Panel */
+.control-panel {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.control-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  border-radius: 2rem;
+  font-weight: 500;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+  min-width: 140px;
+  justify-content: center;
+}
+
+.control-btn.primary {
+  background: hsl(var(--primary-hsl));
+  color: hsl(var(--on-primary-hsl));
+  box-shadow: 0 4px 12px hsl(var(--primary-hsl) / 0.3);
+}
+
+.control-btn.primary:hover {
+  background: hsl(var(--primary-hsl) / 0.9);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px hsl(var(--primary-hsl) / 0.4);
+}
+
+.control-btn.secondary {
+  background: rgba(var(--surface-container), 0.8);
+  color: hsl(var(--on-surface-hsl));
+  border: 1px solid hsl(var(--outline-variant));
+}
+
+.control-btn.secondary:hover {
+  background: rgba(var(--surface-container-high), 0.9);
+  transform: translateY(-1px);
+}
+
+.control-btn.outlined {
+  background: transparent;
+  color: hsl(var(--on-surface-hsl));
+  border: 2px solid hsl(var(--outline));
+}
+
+.control-btn.outlined:hover {
+  background: rgba(var(--surface-container), 0.5);
+  border-color: hsl(var(--primary));
+  color: hsl(var(--primary-hsl));
+}
+
+.control-btn.hidden {
+  display: none;
+}
+
+/* Dark Theme Adjustments */
+[data-theme="dark"] .relaxation-bg-gradient,
+[data-theme$="-dark"] .relaxation-bg-gradient {
+  background: linear-gradient(
+    45deg,
+    hsl(var(--primary-hsl) / 0.08) 0%,
+    hsl(var(--secondary-hsl) / 0.05) 25%,
+    hsl(var(--tertiary-hsl) / 0.03) 50%,
+    hsl(var(--primary-hsl) / 0.05) 75%,
+    hsl(var(--secondary-hsl) / 0.08) 100%
+  );
+}
+
+[data-theme="dark"] .particle,
+[data-theme$="-dark"] .particle {
+  background: hsl(var(--primary-hsl) / 0.4);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .relaxation-content {
+    padding: 1rem 0.5rem;
+  }
+  
+  .top-section {
+    min-height: 12vh;
+    max-height: 12vh;
+  }
+  
+  .middle-section {
+    min-height: 55vh;
+    max-height: 55vh;
+  }
+  
+  .bottom-section {
+    min-height: 23vh;
+    max-height: 23vh;
+    gap: 1rem;
+  }
+  
+  .instruction-panel {
+    height: 6rem;
+  }
+  
+  .session-title {
+    font-size: 1.6rem;
+  }
+  
+  .session-subtitle {
+    font-size: 0.9rem;
+  }
+  
+  .breathing-container {
+    width: min(260px, 65vw);
+    height: min(260px, 65vw);
+  }
+  
+  .breathing-orb {
+    width: min(150px, 45vw);
+    height: min(150px, 45vw);
+  }
+  
+  .orb-inner {
+    width: 85%;
+    height: 85%;
+  }
+  
+  .orb-center {
+    width: 50%;
+    height: 50%;
+  }
+  
+  .orb-pulse {
+    width: 60%;
+    height: 60%;
+  }
+  
+  .timer-text {
+    font-size: 2rem;
+  }
+  
+  .session-progress {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .control-panel {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.75rem;
+  }
+  
+  .control-btn {
+    width: 100%;
+    padding: 0.875rem 1.5rem;
+  }
+  
+  .current-phase {
+    font-size: 1.2rem;
+    min-height: 1.8rem;
+  }
+  
+  .breathing-instruction {
+    font-size: 1rem;
+    min-height: 2.8rem;
+  }
+  
+  .phase-counter {
+    min-height: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .relaxation-content {
+    padding: 0.5rem 0.25rem;
+  }
+  
+  .top-section {
+    min-height: 10vh;
+    max-height: 10vh;
+  }
+  
+  .middle-section {
+    min-height: 60vh;
+    max-height: 60vh;
+  }
+  
+  .bottom-section {
+    min-height: 20vh;
+    max-height: 20vh;
+    gap: 0.75rem;
+  }
+  
+  .instruction-panel {
+    height: 5rem;
+  }
+  
+  .breathing-container {
+    width: min(200px, 55vw);
+    height: min(200px, 55vw);
+  }
+  
+  .breathing-orb {
+    width: min(120px, 35vw);
+    height: min(120px, 35vw);
+  }
+  
+  .orb-inner {
+    width: 85%;
+    height: 85%;
+  }
+  
+  .orb-center {
+    width: 50%;
+    height: 50%;
+  }
+  
+  .orb-pulse {
+    width: 60%;
+    height: 60%;
+  }
+  
+  .session-title {
+    font-size: 1.4rem;
+  }
+  
+  .session-subtitle {
+    font-size: 0.8rem;
+  }
+  
+  .timer-text {
+    font-size: 1.6rem;
+  }
+  
+  .current-phase {
+    font-size: 1.1rem;
+    min-height: 1.5rem;
+  }
+  
+  .breathing-instruction {
+    font-size: 0.9rem;
+    min-height: 2.4rem;
+  }
+  
+  .phase-counter {
+    min-height: 1rem;
+  }
+  
+  .session-progress {
+    gap: 1rem;
+  }
+  
+  .session-stats {
+    gap: 1.5rem;
+  }
+}
+</style>
+
+<script is:inline>
+// @ts-nocheck
+// Relaxation Modal Controller
+class RelaxationController {
+  constructor() {
+    this.isActive = false;
+    this.isPaused = false;
+    this.currentExercise = null;
+    this.sessionTimer = null;
+    this.phaseTimer = null;
+    this.timeElapsed = 0;
+    this.totalDuration = 0;
+    this.currentPhaseIndex = 0;
+    this.phaseTimeElapsed = 0;
+    this.breathCount = 0;
+    this.cycleCount = 0;
+    
+    this.exercises = {
+      '4-7-8': {
+        title: '4-7-8 Breathing',
+        subtitle: 'Calming breath technique for deep relaxation',
+        duration: 300, // 5 minutes
+        phases: [
+          { name: 'Inhale', duration: 4, instruction: 'Breathe in slowly through your nose', class: 'inhale' },
+          { name: 'Hold', duration: 7, instruction: 'Hold your breath gently', class: 'hold' },
+          { name: 'Exhale', duration: 8, instruction: 'Exhale completely through your mouth', class: 'exhale' },
+          { name: 'Rest', duration: 2, instruction: 'Rest before the next cycle', class: 'rest' }
+        ]
+      },
+      'box': {
+        title: 'Box Breathing',
+        subtitle: 'Equal breathing for focus and calm',
+        duration: 180, // 3 minutes
+        phases: [
+          { name: 'Inhale', duration: 4, instruction: 'Breathe in slowly and deeply', class: 'inhale' },
+          { name: 'Hold', duration: 4, instruction: 'Hold your breath steadily', class: 'hold' },
+          { name: 'Exhale', duration: 4, instruction: 'Breathe out slowly and completely', class: 'exhale' },
+          { name: 'Hold', duration: 4, instruction: 'Hold empty before next breath', class: 'hold' }
+        ]
+      },
+      '5-4-3-2-1': {
+        title: '5-4-3-2-1 Grounding',
+        subtitle: 'Sensory awareness for present moment',
+        duration: 180, // 3 minutes
+        phases: [
+          { name: 'See', duration: 36, instruction: 'Notice 5 things you can see around you', class: 'observe' },
+          { name: 'Touch', duration: 36, instruction: 'Notice 4 things you can touch', class: 'observe' },
+          { name: 'Hear', duration: 36, instruction: 'Notice 3 things you can hear', class: 'observe' },
+          { name: 'Smell', duration: 36, instruction: 'Notice 2 things you can smell', class: 'observe' },
+          { name: 'Taste', duration: 36, instruction: 'Notice 1 thing you can taste', class: 'observe' }
+        ]
+      }
+    };
+    
+    this.initializeEventListeners();
+  }
+  
+  initializeEventListeners() {
+    // Close button
+    document.getElementById('close-relaxation')?.addEventListener('click', () => this.closeModal());
+    
+    // Control buttons
+    document.getElementById('start-relaxation')?.addEventListener('click', () => this.startSession());
+    document.getElementById('pause-relaxation')?.addEventListener('click', () => this.togglePause());
+    document.getElementById('reset-relaxation')?.addEventListener('click', () => this.resetSession());
+    
+    // Escape key to close
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && this.isModalOpen()) {
+        this.closeModal();
+      }
+    });
+  }
+  
+  openModal(exerciseType) {
+    console.log('Opening modal for exercise:', exerciseType);
+    this.currentExercise = this.exercises[exerciseType];
+    
+    if (!this.currentExercise) {
+      console.error('Exercise not found:', exerciseType, 'Available exercises:', Object.keys(this.exercises));
+      return;
+    }
+    
+    console.log('Exercise found:', this.currentExercise);
+    this.totalDuration = this.currentExercise.duration;
+    this.resetSession();
+    this.updateModalContent();
+    
+    const modal = document.getElementById('relaxation-modal');
+    modal.classList.remove('hidden');
+    setTimeout(() => modal.classList.add('show'), 50);
+    
+    document.body.style.overflow = 'hidden';
+  }
+  
+  closeModal() {
+    const modal = document.getElementById('relaxation-modal');
+    modal.classList.remove('show');
+    setTimeout(() => {
+      modal.classList.add('hidden');
+      document.body.style.overflow = '';
+    }, 800);
+    
+    this.resetSession();
+  }
+  
+  isModalOpen() {
+    return !document.getElementById('relaxation-modal').classList.contains('hidden');
+  }
+  
+  updateModalContent() {
+    document.getElementById('relaxation-title').textContent = this.currentExercise.title;
+    document.getElementById('relaxation-subtitle').textContent = this.currentExercise.subtitle;
+    document.getElementById('session-timer').textContent = this.formatTime(this.totalDuration);
+    document.getElementById('current-phase').textContent = 'Prepare to begin';
+    document.getElementById('breathing-instruction').textContent = 'Click start when you\'re ready';
+    document.getElementById('phase-counter').textContent = '';
+    document.getElementById('breath-count').textContent = '0';
+    document.getElementById('cycle-count').textContent = '0';
+  }
+  
+  startSession() {
+    if (this.isPaused) {
+      this.isPaused = false;
+      document.getElementById('pause-relaxation').innerHTML = `
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        Pause
+      `;
+    } else {
+      this.isActive = true;
+      this.timeElapsed = 0;
+      this.currentPhaseIndex = 0;
+      this.phaseTimeElapsed = 0;
+      this.breathCount = 0;
+      this.cycleCount = 0;
+    }
+    
+    this.showControlButtons();
+    this.startSessionTimer();
+    this.startPhaseTimer();
+    
+    // Initialize adaptive speed
+    const breathingContainer = document.querySelector('.breathing-container');
+    this.setAdaptiveSpeed(breathingContainer);
+    
+    // Remove any paused states
+    this.setBreathingAnimationPaused(false);
+  }
+  
+  togglePause() {
+    this.isPaused = !this.isPaused;
+    const pauseBtn = document.getElementById('pause-relaxation');
+    const breathingContainer = document.querySelector('.breathing-container');
+    const currentPhaseEl = document.getElementById('current-phase');
+    const instructionEl = document.getElementById('breathing-instruction');
+    const timerEl = document.getElementById('session-timer');
+    const statsItems = document.querySelectorAll('.stat-item');
+    
+    if (this.isPaused) {
+      clearInterval(this.sessionTimer);
+      clearInterval(this.phaseTimer);
+      
+      // Add paused classes for visual feedback
+      breathingContainer?.classList.add('paused');
+      currentPhaseEl?.classList.add('paused');
+      instructionEl?.classList.add('paused');
+      timerEl?.classList.add('paused');
+      statsItems.forEach(item => item.classList.add('paused'));
+      
+      pauseBtn.innerHTML = `
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M15 14h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        Resume
+      `;
+      document.getElementById('current-phase').textContent = 'Paused';
+      document.getElementById('breathing-instruction').textContent = 'Session paused - click resume to continue';
+      this.setBreathingAnimationPaused(true);
+    } else {
+      // Remove paused classes
+      breathingContainer?.classList.remove('paused');
+      currentPhaseEl?.classList.remove('paused');
+      instructionEl?.classList.remove('paused');
+      timerEl?.classList.remove('paused');
+      statsItems.forEach(item => item.classList.remove('paused'));
+      
+      this.startSessionTimer();
+      this.startPhaseTimer();
+      this.setBreathingAnimationPaused(false);
+      pauseBtn.innerHTML = `
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        Pause
+      `;
+    }
+  }
+  
+  resetSession() {
+    this.isActive = false;
+    this.isPaused = false;
+    this.timeElapsed = 0;
+    this.currentPhaseIndex = 0;
+    this.phaseTimeElapsed = 0;
+    this.breathCount = 0;
+    this.cycleCount = 0;
+    
+    clearInterval(this.sessionTimer);
+    clearInterval(this.phaseTimer);
+    
+    this.hideControlButtons();
+    this.resetBreathingAnimation();
+    this.resetProgressArc();
+    
+    if (this.currentExercise) {
+      this.updateModalContent();
+    }
+  }
+  
+  showControlButtons() {
+    document.getElementById('start-relaxation').classList.add('hidden');
+    document.getElementById('pause-relaxation').classList.remove('hidden');
+    document.getElementById('reset-relaxation').classList.remove('hidden');
+  }
+  
+  hideControlButtons() {
+    document.getElementById('start-relaxation').classList.remove('hidden');
+    document.getElementById('pause-relaxation').classList.add('hidden');
+    document.getElementById('reset-relaxation').classList.add('hidden');
+  }
+  
+  startSessionTimer() {
+    this.sessionTimer = setInterval(() => {
+      if (!this.isPaused) {
+        this.timeElapsed++;
+        const remainingTime = this.totalDuration - this.timeElapsed;
+        document.getElementById('session-timer').textContent = this.formatTime(remainingTime);
+        
+        // Update progress arc
+        const progress = (this.timeElapsed / this.totalDuration) * 565.48;
+        document.getElementById('progress-path').style.strokeDashoffset = 565.48 - progress;
+        
+        if (remainingTime <= 0) {
+          this.completeSession();
+        }
+      }
+    }, 1000);
+  }
+  
+  startPhaseTimer() {
+    this.phaseTimer = setInterval(() => {
+      if (!this.isPaused) {
+        const currentPhase = this.currentExercise.phases[this.currentPhaseIndex];
+        
+        this.updatePhaseDisplay(currentPhase);
+        this.updateBreathingAnimation(currentPhase);
+        
+        this.phaseTimeElapsed++;
+        
+        if (this.phaseTimeElapsed >= currentPhase.duration) {
+          this.nextPhase();
+        }
+      }
+    }, 1000);
+  }
+  
+  nextPhase() {
+    this.phaseTimeElapsed = 0;
+    
+    // Check if we completed a full breathing cycle
+    if (this.currentPhaseIndex === this.currentExercise.phases.length - 1) {
+      this.cycleCount++;
+      this.breathCount++;
+      document.getElementById('cycle-count').textContent = this.cycleCount.toString();
+      document.getElementById('breath-count').textContent = this.breathCount.toString();
+    }
+    
+    this.currentPhaseIndex = (this.currentPhaseIndex + 1) % this.currentExercise.phases.length;
+  }
+  
+  updatePhaseDisplay(phase) {
+    const remainingTime = phase.duration - this.phaseTimeElapsed;
+    
+    document.getElementById('current-phase').textContent = phase.name;
+    document.getElementById('breathing-instruction').textContent = phase.instruction;
+    document.getElementById('phase-counter').textContent = `${remainingTime}s remaining`;
+  }
+  
+  updateBreathingAnimation(phase) {
+    const orb = document.getElementById('breathing-orb');
+    const breathingContainer = document.querySelector('.breathing-container');
+    const rings = document.querySelectorAll('.breathing-ring');
+    
+    // Remove all phase classes from orb
+    orb.classList.remove('inhale', 'hold', 'exhale', 'rest', 'observe');
+    
+    // Remove phase classes from rings as well
+    rings.forEach(ring => {
+      ring.classList.remove('inhale', 'hold', 'exhale', 'rest', 'observe');
+    });
+    
+    // Add current phase class to orb (rings will respond via CSS sibling selectors)
+    if (phase.class) {
+      orb.classList.add(phase.class);
+      
+      // Also add to rings for additional control if needed
+      rings.forEach(ring => {
+        ring.classList.add(phase.class);
+      });
+    }
+    
+    // Set adaptive speed based on exercise type
+    this.setAdaptiveSpeed(breathingContainer);
+  }
+  
+  setAdaptiveSpeed(container) {
+    if (!container) return;
+    
+    // Remove all speed classes
+    container.classList.remove('speed-slow', 'speed-normal', 'speed-fast', 'speed-4-7-8', 'speed-box', 'speed-grounding');
+    
+    // Add speed class based on current exercise
+    if (this.currentExercise) {
+      const exerciseKey = Object.keys(this.exercises).find(key => 
+        this.exercises[key] === this.currentExercise
+      );
+      
+      switch (exerciseKey) {
+        case '4-7-8':
+          container.classList.add('speed-4-7-8');
+          break;
+        case 'box':
+          container.classList.add('speed-box');
+          break;
+        case '5-4-3-2-1':
+          container.classList.add('speed-grounding');
+          break;
+        default:
+          container.classList.add('speed-normal');
+      }
+    }
+  }
+  
+  setBreathingAnimationPaused(isPaused) {
+    const orb = document.getElementById('breathing-orb');
+    const breathingContainer = document.querySelector('.breathing-container');
+    
+    if (isPaused) {
+      orb?.classList.add('paused');
+      breathingContainer?.classList.add('paused');
+    } else {
+      orb?.classList.remove('paused');
+      breathingContainer?.classList.remove('paused');
+    }
+  }
+  
+  resetBreathingAnimation() {
+    const orb = document.getElementById('breathing-orb');
+    const breathingContainer = document.querySelector('.breathing-container');
+    const rings = document.querySelectorAll('.breathing-ring');
+    
+    orb?.classList.remove('inhale', 'hold', 'exhale', 'rest', 'observe', 'paused');
+    breathingContainer?.classList.remove('paused');
+    
+    // Reset rings as well
+    rings.forEach(ring => {
+      ring.classList.remove('inhale', 'hold', 'exhale', 'rest', 'observe', 'paused');
+    });
+    
+    // Remove all visual pause states
+    document.getElementById('current-phase')?.classList.remove('paused');
+    document.getElementById('breathing-instruction')?.classList.remove('paused');
+    document.getElementById('session-timer')?.classList.remove('paused');
+    document.querySelectorAll('.stat-item').forEach(item => item.classList.remove('paused'));
+  }
+  
+  resetProgressArc() {
+    document.getElementById('progress-path').style.strokeDashoffset = '565.48';
+  }
+  
+  completeSession() {
+    this.isActive = false;
+    clearInterval(this.sessionTimer);
+    clearInterval(this.phaseTimer);
+    
+    // Show completion state
+    document.getElementById('current-phase').textContent = 'Complete';
+    document.getElementById('breathing-instruction').textContent = 'Session completed! Well done.';
+    document.getElementById('phase-counter').textContent = `${this.cycleCount} cycles completed`;
+    document.getElementById('session-timer').textContent = '00:00';
+    
+    this.hideControlButtons();
+    this.resetBreathingAnimation();
+    
+    // Auto-close after delay
+    setTimeout(() => {
+      this.closeModal();
+    }, 3000);
+    
+    // Update progress in localStorage
+    this.updateProgress();
+  }
+  
+  updateProgress() {
+    const progress = JSON.parse(localStorage.getItem('meditationProgress') || '{"sessions": 0, "minutes": 0, "lastSession": null}');
+    
+    progress.sessions += 1;
+    progress.minutes += Math.floor(this.totalDuration / 60);
+    progress.lastSession = new Date().toISOString().split('T')[0];
+    
+    localStorage.setItem('meditationProgress', JSON.stringify(progress));
+    
+    // Trigger progress update in exercises panel if visible
+    if (typeof window.updateExerciseProgress === 'function') {
+      window.updateExerciseProgress(progress);
+    }
+  }
+  
+  formatTime(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  }
+}
+
+// Create global instance
+window.relaxationController = new RelaxationController();
+
+// Global function to open relaxation modal
+window.openRelaxationModal = function(exerciseType) {
+  window.relaxationController.openModal(exerciseType);
+};
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('Relaxation Modal initialized');
+});
+</script>

@@ -1,0 +1,112 @@
+---
+// Journal Modal component for creating and editing journal entries
+---
+
+<!-- Journal Entry Modal -->
+<div id="journal-modal" class="confirm-modal hidden" data-journal-modal>
+  <div class="confirm-modal-backdrop"></div>
+  <div class="confirm-modal-container">
+    <div class="confirm-modal-content journal-modal-content">
+      
+      <!-- Modal Header -->
+      <div class="confirm-modal-header">
+        <div class="confirm-modal-icon">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+          </svg>
+        </div>
+        <div class="confirm-modal-text">
+          <h3 id="journal-modal-title" class="confirm-modal-title">New Journal Entry</h3>
+          <p class="confirm-modal-message">Capture your thoughts and reflections</p>
+        </div>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="journal-modal-body">
+        <form id="journal-entry-form" class="journal-form">
+          <div class="journal-form-field">
+            <label for="journal-title" class="journal-form-label">Title</label>
+            <input 
+              type="text" 
+              id="journal-title" 
+              name="journal-title" 
+              class="journal-form-input" 
+              placeholder="What's on your mind?"
+              required
+            />
+          </div>
+
+          <div class="journal-form-field">
+            <label for="journal-content" class="journal-form-label">Content</label>
+            <textarea 
+              id="journal-content" 
+              name="journal-content" 
+              class="journal-form-textarea" 
+              placeholder="Start writing your thoughts..."
+              rows="8"
+              maxlength="2000"
+              required
+            ></textarea>
+            <div class="journal-char-counter">
+              <span id="journal-char-count" class="journal-char-text">0</span> / 2000
+            </div>
+          </div>
+
+          <div class="journal-form-row">
+            <div class="journal-form-field journal-form-field-half">
+              <label for="journal-mood" class="journal-form-label">Mood</label>
+              <select id="journal-mood" name="journal-mood" class="journal-form-select">
+                <option value="😊">😊 Happy</option>
+                <option value="😐">😐 Neutral</option>
+                <option value="😔">😔 Sad</option>
+                <option value="😤">😤 Frustrated</option>
+                <option value="😎">😎 Confident</option>
+                <option value="😴">😴 Tired</option>
+                <option value="🤔">🤔 Thoughtful</option>
+                <option value="😁">😁 Excited</option>
+              </select>
+            </div>
+            <div class="journal-form-field journal-form-field-half">
+              <label for="journal-privacy" class="journal-form-label">Privacy</label>
+              <select id="journal-privacy" name="journal-privacy" class="journal-form-select">
+                <option value="private">🔒 Private</option>
+                <option value="shared">🌐 Shared</option>
+              </select>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Modal Actions -->
+      <div class="confirm-modal-actions">
+        <button type="button" id="journal-save-draft" class="confirm-btn confirm-btn-secondary">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/>
+          </svg>
+          <span>Save Draft</span>
+        </button>
+        <button type="button" id="journal-cancel" class="confirm-btn confirm-btn-secondary">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+          <span>Cancel</span>
+        </button>
+        <button type="submit" id="journal-save" class="confirm-btn confirm-btn-primary">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+          </svg>
+          <span id="journal-save-text">Save Entry</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import JournalModal from '../utils/journal-modal.ts';
+  
+  // Initialize journal modal when component loads
+  if (typeof window !== 'undefined') {
+    new JournalModal();
+  }
+</script>
