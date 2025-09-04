@@ -1,65 +1,68 @@
-<!-- Onboarding Modal -->
-<div id="onboarding-modal" class="modal-overlay">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h3 class="modal-title">Welcome to Smile AI</h3>
-      <p class="modal-subtitle">Let's set up your experience</p>
-    </div>
-    
-    <div class="modal-body">
-      <div class="onboarding-step">
-        <h4 class="step-title">Choose your AI model</h4>
-        <select id="onboarding-model-select" class="material-select">
-          <option>Loading available models...</option>
-        </select>
-        <p class="step-description">GPT-OSS 20B recommended for most conversations</p>
+<!-- Onboarding Modal (unified with confirm modal backdrop) -->
+<div id="onboarding-modal" class="confirm-modal hidden">
+  <div class="confirm-modal-backdrop"></div>
+  <div class="confirm-modal-container">
+    <div class="confirm-modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Welcome to Smile AI</h3>
+        <p class="modal-subtitle">Let's set up your experience</p>
       </div>
+      
+      <div class="modal-body">
+        <div class="onboarding-step">
+          <h4 class="step-title">Choose your AI model</h4>
+          <select id="onboarding-model-select" class="material-select">
+            <option>Loading available models...</option>
+          </select>
+          <p class="step-description">GPT-OSS 20B recommended for most conversations</p>
+        </div>
 
-      <div class="onboarding-step">
-        <h4 class="step-title">Select a theme</h4>
-        <div class="theme-grid">
-          <button class="theme-card theme-card-active" data-theme="smile">
-            <div class="theme-preview bg-gradient-to-br from-blue-500 to-blue-600"></div>
-            <span>Ocean Blue</span>
-          </button>
-          <button class="theme-card" data-theme="forest">
-            <div class="theme-preview bg-gradient-to-br from-green-500 to-green-600"></div>
-            <span>Forest</span>
-          </button>
-          <button class="theme-card" data-theme="sunset">
-            <div class="theme-preview bg-gradient-to-br from-orange-500 to-red-500"></div>
-            <span>Sunset</span>
-          </button>
-          <button class="theme-card" data-theme="lavender">
-            <div class="theme-preview bg-gradient-to-br from-purple-500 to-pink-500"></div>
-            <span>Lavender</span>
-          </button>
+        <div class="onboarding-step">
+          <h4 class="step-title">Select a theme</h4>
+          <div class="theme-grid">
+            <button class="theme-card theme-card-active" data-theme="smile">
+              <div class="theme-preview bg-gradient-to-br from-blue-500 to-blue-600"></div>
+              <span>Ocean Blue</span>
+            </button>
+            <button class="theme-card" data-theme="forest">
+              <div class="theme-preview bg-gradient-to-br from-green-500 to-green-600"></div>
+              <span>Forest</span>
+            </button>
+            <button class="theme-card" data-theme="sunset">
+              <div class="theme-preview bg-gradient-to-br from-orange-500 to-red-500"></div>
+              <span>Sunset</span>
+            </button>
+            <button class="theme-card" data-theme="lavender">
+              <div class="theme-preview bg-gradient-to-br from-purple-500 to-pink-500"></div>
+              <span>Lavender</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="onboarding-step">
+          <label class="material-switch">
+            <input id="onboarding-tts" type="checkbox" />
+            <span class="switch-track">
+              <span class="switch-thumb"></span>
+            </span>
+            <span class="switch-label">Enable voice responses</span>
+          </label>
+        </div>
+
+        <div class="privacy-notice">
+          <svg class="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M10,17L6,13L7.41,11.59L10,14.17L16.59,7.58L18,9L10,17Z"/>
+          </svg>
+          <div>
+            <p class="notice-title">Privacy First</p>
+            <p class="notice-text">Your conversations stay on your device. No data is sent to external servers.</p>
+          </div>
         </div>
       </div>
 
-      <div class="onboarding-step">
-        <label class="material-switch">
-          <input id="onboarding-tts" type="checkbox" />
-          <span class="switch-track">
-            <span class="switch-thumb"></span>
-          </span>
-          <span class="switch-label">Enable voice responses</span>
-        </label>
+      <div class="confirm-modal-actions">
+        <button id="onboarding-complete" class="btn-primary w-full">Get Started</button>
       </div>
-
-      <div class="privacy-notice">
-        <svg class="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M10,17L6,13L7.41,11.59L10,14.17L16.59,7.58L18,9L10,17Z"/>
-        </svg>
-        <div>
-          <p class="notice-title">Privacy First</p>
-          <p class="notice-text">Your conversations stay on your device. No data is sent to external servers.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="modal-actions">
-      <button id="onboarding-complete" class="btn-primary w-full">Get Started</button>
     </div>
   </div>
 </div>

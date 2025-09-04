@@ -302,12 +302,13 @@ class SmileApp {
   private showOnboarding() {
     const modal = document.getElementById('onboarding-modal');
     if (modal) {
-      modal.style.display = 'flex';
-      // Add a small delay for smooth animation
+      // Use unified confirm-modal show pattern
+      modal.classList.remove('hidden');
+      // Allow layout to apply before adding show for transition
       requestAnimationFrame(() => {
-        modal.classList.add('modal-active');
+        modal.classList.add('show');
       });
-      
+
       // Load models in onboarding select
       const onboardingModelSelect = document.getElementById('onboarding-model-select') as HTMLSelectElement;
       if (onboardingModelSelect && this.models.length > 0) {
@@ -321,7 +322,7 @@ class SmileApp {
           onboardingModelSelect.value = this.models[0];
           this.selectedModel = this.models[0];
         }
-      } else {
+      } else if (onboardingModelSelect) {
         // Show placeholder for no models
         onboardingModelSelect.innerHTML = '<option>No models available - Install Ollama first</option>';
       }
@@ -349,9 +350,10 @@ class SmileApp {
     // Hide modal with animation
     const modal = document.getElementById('onboarding-modal');
     if (modal) {
-      modal.classList.remove('modal-active');
+      // Use unified confirm-modal hide pattern
+      modal.classList.remove('show');
       setTimeout(() => {
-        modal.style.display = 'none';
+        modal.classList.add('hidden');
       }, 300);
     }
 
