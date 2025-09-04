@@ -302,12 +302,8 @@ class SmileApp {
   private showOnboarding() {
     const modal = document.getElementById('onboarding-modal');
     if (modal) {
-      // Use unified confirm-modal show pattern
-      modal.classList.remove('hidden');
-      // Allow layout to apply before adding show for transition
-      requestAnimationFrame(() => {
-        modal.classList.add('show');
-      });
+      // Use unified manager to show modal
+      (window as any).modalManager?.show(modal);
 
       // Load models in onboarding select
       const onboardingModelSelect = document.getElementById('onboarding-model-select') as HTMLSelectElement;
@@ -350,11 +346,7 @@ class SmileApp {
     // Hide modal with animation
     const modal = document.getElementById('onboarding-modal');
     if (modal) {
-      // Use unified confirm-modal hide pattern
-      modal.classList.remove('show');
-      setTimeout(() => {
-        modal.classList.add('hidden');
-      }, 300);
+      (window as any).modalManager?.hide(modal);
     }
 
     // Update main selects
@@ -2217,31 +2209,11 @@ class SmileApp {
   private showPasswordModal(mode: 'set' | 'change' = 'set') {
     const modal = document.getElementById('password-setup-modal');
     if (modal) {
-      // Ensure modal is visible and uses confirm-modal show state
-      modal.classList.remove('hidden');
-      (modal as HTMLElement).style.display = 'flex';
-      // Force reflow before adding show for transition
-      void (modal as HTMLElement).offsetWidth;
-      modal.classList.add('show');
-      modal.setAttribute('aria-hidden', 'false');
-      // Lock body scroll while modal is open
-      document.body.style.overflow = 'hidden';
-
       // Update modal title based on mode
       const title = modal.querySelector('.confirm-modal-title');
-      if (title) {
-        title.textContent = mode === 'set' ? 'Set Encryption Password' : 'Change Encryption Password';
-      }
-
-      // Bind backdrop click to close, once
-      const backdrop = modal.querySelector('.confirm-modal-backdrop');
-      if (backdrop && !(backdrop as HTMLElement).dataset.bound) {
-        (backdrop as HTMLElement).dataset.bound = 'true';
-        backdrop.addEventListener('click', (e) => {
-          e.preventDefault();
-          (window as any).closePasswordModal();
-        });
-      }
+      if (title) title.textContent = mode === 'set' ? 'Set Encryption Password' : 'Change Encryption Password';
+      // Show via unified manager
+      (window as any).modalManager?.show(modal);
     }
   }
 
@@ -2253,16 +2225,7 @@ class SmileApp {
 // Global functions for Security Modal
 (window as any).closePasswordModal = function() {
   const modal = document.getElementById('password-setup-modal');
-  if (modal) {
-    // Transition out
-    modal.classList.remove('show');
-    modal.setAttribute('aria-hidden', 'true');
-    // Immediately hide to ensure overlay is gone
-    modal.classList.add('hidden');
-    (modal as HTMLElement).style.display = 'none';
-  }
-  // Restore body scroll
-  document.body.style.overflow = '';
+  (window as any).modalManager?.hide(modal);
 };
 
 (window as any).savePassword = async function() {
