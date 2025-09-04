@@ -1,6 +1,6 @@
 /* empty css                                 */
 import { e as createComponent, k as renderComponent, r as renderTemplate, m as maybeRenderHead } from '../chunks/astro/server_BTqpNUbh.mjs';
-import { $ as $$BaseLayout } from '../chunks/BaseLayout_CzJVywaj.mjs';
+import { $ as $$BaseLayout } from '../chunks/BaseLayout_DUjdDrjv.mjs';
 export { renderers } from '../renderers.mjs';
 
 const $$Setup = createComponent(($$result, $$props, $$slots) => {
@@ -17,9 +17,9 @@ GPT-OSS represents a breakthrough in open-weight language models, offering
             and local control. Released as part of OpenAI's commitment to open research, 
             these models can be inspected, modified, and run entirely offline.
 </p> </div> <div class="text-center mt-8"> <a href="/" class="btn btn-primary btn-lg">Start Chatting</a> </div> </div> </div> </div> ` })}`;
-}, "E:/smileyapp/src/pages/setup.astro", void 0);
+}, "/workspaces/smileyapp/src/pages/setup.astro", void 0);
 
-const $$file = "E:/smileyapp/src/pages/setup.astro";
+const $$file = "/workspaces/smileyapp/src/pages/setup.astro";
 const $$url = "/setup";
 
 const _page = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({

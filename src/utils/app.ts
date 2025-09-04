@@ -2215,16 +2215,30 @@ class SmileApp {
   private showPasswordModal(mode: 'set' | 'change' = 'set') {
     const modal = document.getElementById('password-setup-modal');
     if (modal) {
+      // Ensure modal is visible and uses confirm-modal show state
       modal.classList.remove('hidden');
-      // Add modal-active class for animation
-      requestAnimationFrame(() => {
-        modal.classList.add('modal-active');
-      });
+      (modal as HTMLElement).style.display = 'flex';
+      // Force reflow before adding show for transition
+      void (modal as HTMLElement).offsetWidth;
+      modal.classList.add('show');
+      modal.setAttribute('aria-hidden', 'false');
+      // Lock body scroll while modal is open
+      document.body.style.overflow = 'hidden';
 
       // Update modal title based on mode
       const title = modal.querySelector('.confirm-modal-title');
       if (title) {
         title.textContent = mode === 'set' ? 'Set Encryption Password' : 'Change Encryption Password';
+      }
+
+      // Bind backdrop click to close, once
+      const backdrop = modal.querySelector('.confirm-modal-backdrop');
+      if (backdrop && !(backdrop as HTMLElement).dataset.bound) {
+        (backdrop as HTMLElement).dataset.bound = 'true';
+        backdrop.addEventListener('click', (e) => {
+          e.preventDefault();
+          (window as any).closePasswordModal();
+        });
       }
     }
   }
@@ -2238,12 +2252,18 @@ class SmileApp {
 (window as any).closePasswordModal = function() {
   const modal = document.getElementById('password-setup-modal');
   if (modal) {
-    modal.classList.remove('modal-active');
-    setTimeout(() => modal.classList.add('hidden'), 300);
+    // Transition out
+    modal.classList.remove('show');
+    modal.setAttribute('aria-hidden', 'true');
+    // Immediately hide to ensure overlay is gone
+    modal.classList.add('hidden');
+    (modal as HTMLElement).style.display = 'none';
   }
+  // Restore body scroll
+  document.body.style.overflow = '';
 };
 
-(window as any).savePassword = function() {
+(window as any).savePassword = async function() {
   const newPassword = (document.getElementById('new-password') as HTMLInputElement)?.value;
   const confirmPassword = (document.getElementById('confirm-password') as HTMLInputElement)?.value;
   
@@ -2261,23 +2281,39 @@ class SmileApp {
     alert('Password must be at least 6 characters');
     return;
   }
-  
-  // Save encryption enabled state
-  localStorage.setItem('smile-encryption-enabled', 'true');
-  
-  // Enable the encryption toggle
-  const encryptionToggle = document.getElementById('encryption-enabled') as HTMLInputElement;
-  if (encryptionToggle) {
-    encryptionToggle.checked = true;
-  }
-  
-  // Close modal
-  (window as any).closePasswordModal();
-  
-  // Show success message
-  const app = (window as any).smileApp;
-  if (app && app.showCustomNotification) {
-    app.showCustomNotification('Encryption password set successfully! 🔒', 'success');
+  try {
+    // Dynamically import and enable encryption via secure storage
+    const SecureStorageModule = await import('./secure-storage.ts');
+    const secureStorage = SecureStorageModule.default.getInstance();
+    const ok = await secureStorage.enableEncryption(newPassword);
+
+    if (!ok) {
+      alert('Failed to enable encryption. Please try again.');
+      return;
+    }
+
+    // Reflect UI: enable toggle and swap buttons
+    const encryptionToggle = document.getElementById('encryption-enabled') as HTMLInputElement;
+    if (encryptionToggle) encryptionToggle.checked = true;
+
+    const setBtn = document.getElementById('set-password-btn') as HTMLButtonElement;
+    const changeBtn = document.getElementById('change-password-btn') as HTMLButtonElement;
+    const testBtn = document.getElementById('test-unlock-btn') as HTMLButtonElement;
+    if (setBtn) setBtn.style.display = 'none';
+    if (changeBtn) changeBtn.style.display = '';
+    if (testBtn) testBtn.style.display = '';
+
+    // Close modal
+    (window as any).closePasswordModal();
+
+    // Success notification
+    const app = (window as any).smileApp;
+    if (app && app.showCustomNotification) {
+      app.showCustomNotification('Encryption password set successfully! 🔒', 'success');
+    }
+  } catch (err) {
+    console.error('Error enabling encryption:', err);
+    alert('Error enabling encryption. Please try again.');
   }
 };
 
