@@ -1858,46 +1858,7 @@
      UNIFIED GLASSMORPHISM SYSTEM
      ======================================== */
   
-  /* Primary glass panel - main content areas */
-  .glass-panel {
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    box-shadow: 
-      0 8px 32px rgba(0, 0, 0, 0.1),
-      inset 0 1px 0 rgba(255, 255, 255, 0.15);
-  }
-
-  /* Secondary glass panel - for nested content */
-  .glass-panel-secondary {
-    background: rgba(255, 255, 255, 0.06);
-    backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.10);
-    box-shadow: 
-      0 4px 16px rgba(0, 0, 0, 0.08),
-      inset 0 1px 0 rgba(255, 255, 255, 0.12);
-  }
-
-  /* Interactive glass panel - with hover states */
-  .glass-panel-interactive {
-    background: rgba(255, 255, 255, 0.07);
-    backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.10);
-    box-shadow: 
-      0 4px 16px rgba(0, 0, 0, 0.06),
-      inset 0 1px 0 rgba(255, 255, 255, 0.12);
-    transition: all 0.3s ease;
-    cursor: pointer;
-  }
-
-  .glass-panel-interactive:hover {
-    background: rgba(255, 255, 255, 0.12);
-    border-color: rgba(255, 255, 255, 0.18);
-    box-shadow: 
-      0 8px 24px rgba(0, 0, 0, 0.08),
-      inset 0 1px 0 rgba(255, 255, 255, 0.18);
-    transform: translateY(-1px);
-  }
+  /* Duplicate glass panel styles removed - definitions exist earlier in file */
 
   /* ========================================
      GLOBAL REUSABLE CARD HOVER SYSTEM
@@ -2298,42 +2259,7 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
-  /* Dark theme glassmorphism overrides */
-  [data-theme="dark"] .glass-panel,
-  [data-theme$="-dark"] .glass-panel {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(255, 255, 255, 0.08);
-    box-shadow: 
-      0 8px 32px rgba(0, 0, 0, 0.3),
-      inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  }
-
-  [data-theme="dark"] .glass-panel-secondary,
-  [data-theme$="-dark"] .glass-panel-secondary {
-    background: rgba(255, 255, 255, 0.04);
-    border-color: rgba(255, 255, 255, 0.06);
-    box-shadow: 
-      0 4px 16px rgba(0, 0, 0, 0.2),
-      inset 0 1px 0 rgba(255, 255, 255, 0.06);
-  }
-
-  [data-theme="dark"] .glass-panel-interactive,
-  [data-theme$="-dark"] .glass-panel-interactive {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.07);
-    box-shadow: 
-      0 4px 16px rgba(0, 0, 0, 0.15),
-      inset 0 1px 0 rgba(255, 255, 255, 0.07);
-  }
-
-  [data-theme="dark"] .glass-panel-interactive:hover,
-  [data-theme$="-dark"] .glass-panel-interactive:hover {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.12);
-    box-shadow: 
-      0 8px 24px rgba(0, 0, 0, 0.2),
-      inset 0 1px 0 rgba(255, 255, 255, 0.12);
-  }
+  /* Dark theme glass panel duplicates removed - definitions exist earlier */
   /* Color utilities */
   .bg-surface { background-color: rgb(var(--md-surface)); }
   .bg-surface-variant { background-color: rgb(var(--md-surface-variant)); }
@@ -2369,7 +2295,7 @@
     backdrop-filter: blur(24px);
     border-right: 1px solid rgba(var(--md-outline-variant), 0.3);
     box-shadow: 
-      inset 1px 0 0 rgba(255, 255, 255, 0.12),
+      inset 1px 0 0 rgba(var(--md-surface-bright), 0.12),
       4px 0 32px rgba(0, 0, 0, 0.1),
       0 0 60px rgba(var(--md-primary), 0.03);
     position: relative;
