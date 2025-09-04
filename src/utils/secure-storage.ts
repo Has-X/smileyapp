@@ -358,6 +358,44 @@ class SecureStorage {
     });
   }
 
+  /**
+   * Danger: Reset and delete all Smile app data.
+   * - Clears all keys starting with 'smile-' and 'smile-encrypted-'
+   * - Removes encryption artifacts and settings
+   * - Locks storage and dispatches a reset event
+   */
+  async resetAndDeleteAllData(): Promise<void> {
+    try {
+      // Remove encrypted payloads
+      this.clearEncryptedData();
+
+      // Remove all Smile keys (settings, flags, etc.)
+      const keys = Object.keys(localStorage);
+      for (const key of keys) {
+        if (key.startsWith('smile-')) {
+          localStorage.removeItem(key);
+        }
+      }
+
+      // Ensure artifacts are gone
+      localStorage.removeItem('smile-encryption-salt');
+      localStorage.removeItem('smile-encryption-test');
+      localStorage.removeItem('smile-security-settings');
+
+      // Reset in-memory state
+      this.cryptoKey = null;
+      this.isUnlocked = false;
+      this.clearAutoLockTimer();
+
+      // Notify listeners
+      window.dispatchEvent(new CustomEvent('smile:data-reset'));
+      window.dispatchEvent(new CustomEvent('smile:storage-locked'));
+    } catch (err) {
+      console.error('resetAndDeleteAllData failed:', err);
+      throw err;
+    }
+  }
+
   // Private methods
 
   private async deriveKeyFromPassword(password: string, salt: Uint8Array): Promise<CryptoKey> {

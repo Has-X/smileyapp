@@ -3,7 +3,7 @@
 ---
 
 <!-- Security Unlock Modal -->
-<div id="security-unlock-modal" class="confirm-modal hidden">
+<div id="security-unlock-modal" class="confirm-modal hidden" data-close-on-backdrop="false" data-close-on-escape="false">
   <div class="confirm-modal-backdrop"></div>
   <div class="confirm-modal-container">
     <div class="confirm-modal-content security-modal-content">
@@ -37,11 +37,11 @@
                 autocomplete="current-password"
               />
               <button type="button" class="password-toggle-btn" id="unlock-password-toggle">
-                <svg class="w-5 h-5 password-icon-hide" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-6 h-6 password-icon-show" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                 </svg>
-                <svg class="w-5 h-5 password-icon-show hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-6 h-6 password-icon-hide hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"/>
                 </svg>
               </button>
@@ -61,15 +61,17 @@
 
       <!-- Modal Actions -->
       <div class="confirm-modal-actions">
-        <button type="button" id="unlock-cancel" class="confirm-btn confirm-btn-secondary">
+        <button type="button" id="unlock-reset" class="confirm-btn confirm-btn-danger">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
           </svg>
-          <span>Cancel</span>
+          <span>Reset & Delete All Data</span>
         </button>
         <button type="submit" id="unlock-submit" class="confirm-btn confirm-btn-primary" form="unlock-form">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"/>
+          <svg class="w-4 h-4" width="16" height="16" style="width:1rem!important;height:1rem!important;flex-shrink:0!important;" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <!-- Optimized unlock icon -->
+            <rect x="6" y="11" width="12" height="9" rx="2" ry="2" stroke-width="2"/>
+            <path d="M10 11V7a2 2 0 0 1 4 0" stroke-width="2" stroke-linecap="round"/>
           </svg>
           <span>Unlock</span>
         </button>
@@ -156,16 +158,18 @@
   justify-content: center;
   transition: all 0.2s ease;
   position: relative;
+  background: hsl(var(--surface));
 }
 
 .checkbox-mark::after {
   content: '✓';
   color: hsl(var(--on-primary));
-  font-size: 0.875rem;
-  font-weight: 600;
+  font-size: 0.75rem;
+  font-weight: 700;
   opacity: 0;
   transform: scale(0.5);
   transition: all 0.2s ease;
+  line-height: 1;
 }
 
 .security-checkbox input[type="checkbox"]:checked + .checkbox-mark {
@@ -176,6 +180,18 @@
 .security-checkbox input[type="checkbox"]:checked + .checkbox-mark::after {
   opacity: 1;
   transform: scale(1);
+}
+
+/* Subtle contrast and focus improvements for checkbox */
+.checkbox-mark:hover {
+  border-color: hsl(var(--primary));
+  background: hsl(var(--primary-container) / 0.08);
+}
+
+.security-checkbox input[type="checkbox"]:focus + .checkbox-mark {
+  box-shadow: 0 0 0 3px hsl(var(--primary) / 0.25);
+  outline: 2px solid hsl(var(--primary));
+  outline-offset: 1px;
 }
 
 .checkbox-label {
@@ -207,6 +223,12 @@
   animation: spin 1s linear infinite;
 }
 
+/* Ensure perfect icon alignment */
+.confirm-btn svg {
+  flex-shrink: 0;
+  display: block;
+}
+
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
@@ -219,9 +241,28 @@
   border: 1px solid hsl(var(--outline-variant));
 }
 
+/* Improve checkbox contrast in dark mode */
 [data-theme="dark"] .checkbox-mark,
 [data-theme$="-dark"] .checkbox-mark {
   border-color: hsl(var(--outline));
+  background: hsl(var(--surface-container-low));
+}
+
+[data-theme="dark"] .checkbox-mark:hover,
+[data-theme$="-dark"] .checkbox-mark:hover {
+  border-color: hsl(var(--primary));
+  background: hsl(var(--primary-container) / 0.15);
+}
+
+[data-theme="dark"] .checkbox-label,
+[data-theme$="-dark"] .checkbox-label {
+  color: hsl(var(--on-surface));
+}
+
+[data-theme="dark"] .security-checkbox input[type="checkbox"]:checked + .checkbox-mark,
+[data-theme$="-dark"] .security-checkbox input[type="checkbox"]:checked + .checkbox-mark {
+  background: hsl(var(--primary));
+  border-color: hsl(var(--primary));
 }
 
 [data-theme="dark"] .password-toggle-btn:hover,
@@ -271,12 +312,49 @@
       // Password toggle
       this.toggleBtn.addEventListener('click', () => this.togglePasswordVisibility());
 
-      // Form submission
+      // Form submission (Enter key or programmatic submit)
       this.form.addEventListener('submit', (e) => this.handleUnlock(e));
 
-      // Cancel button
-      const cancelBtn = document.getElementById('unlock-cancel');
-      cancelBtn?.addEventListener('click', () => this.hide());
+      // Explicit click handler for Unlock button to improve reliability across browsers
+      this.submitBtn = document.getElementById('unlock-submit');
+      this.submitBtn?.addEventListener('click', (e) => {
+        e.preventDefault();
+        // Prefer form.requestSubmit if available
+        if (this.form && (this.form as any).requestSubmit) {
+          (this.form as any).requestSubmit();
+        } else {
+          this.handleUnlock(e);
+        }
+      });
+
+      // Reset and delete all data
+      const resetBtn = document.getElementById('unlock-reset');
+      resetBtn?.addEventListener('click', async () => {
+        const confirmModal: any = (window as any).confirmModal;
+        const proceed = async () => {
+          try {
+            const SecureStorageModule = await import('../utils/secure-storage.ts');
+            const storage = SecureStorageModule.default.getInstance();
+            await storage.resetAndDeleteAllData();
+            // Reload app to fresh state
+            window.location.reload();
+          } catch (err) {
+            console.error('Reset failed:', err);
+            alert('Failed to reset data. Please try again.');
+          }
+        };
+        if (confirmModal && confirmModal.show) {
+          confirmModal.show({
+            title: 'Delete All Data?',
+            message: 'This will permanently erase all local data and reset the app. This action cannot be undone.',
+            onConfirm: proceed,
+          });
+        } else {
+          if (window.confirm('Delete all local data and reset the app? This cannot be undone.')) {
+            await proceed();
+          }
+        }
+      });
 
       // Enter key in password field
       this.passwordInput.addEventListener('keydown', (e) => {
@@ -318,8 +396,7 @@
       if (!this.modal) return;
 
       this.onUnlockCallback = onUnlock || null;
-      this.modal.classList.remove('hidden');
-      this.modal.classList.add('show');
+      (window as any).modalManager?.show(this.modal);
       this.clearError();
       this.resetForm();
       
@@ -330,8 +407,7 @@
     public hide() {
       if (!this.modal) return;
 
-      this.modal.classList.add('hidden');
-      this.modal.classList.remove('show');
+      (window as any).modalManager?.hide(this.modal);
       this.clearError();
       this.resetForm();
     }
@@ -342,12 +418,12 @@
       const isPassword = this.passwordInput.type === 'password';
       this.passwordInput.type = isPassword ? 'text' : 'password';
 
-      const hideIcon = this.toggleBtn.querySelector('.password-icon-hide');
       const showIcon = this.toggleBtn.querySelector('.password-icon-show');
+      const hideIcon = this.toggleBtn.querySelector('.password-icon-hide');
 
-      if (hideIcon && showIcon) {
-        hideIcon.classList.toggle('hidden', !isPassword);
-        showIcon.classList.toggle('hidden', isPassword);
+      if (showIcon && hideIcon) {
+        showIcon.classList.toggle('hidden', !isPassword);
+        hideIcon.classList.toggle('hidden', isPassword);
       }
     }
 
@@ -415,12 +491,12 @@
       this.passwordInput.value = '';
       this.passwordInput.type = 'password';
       
-      // Reset toggle button
+      // Reset toggle button to show the "show password" icon (open eye) when password is hidden
       if (this.toggleBtn) {
-        const hideIcon = this.toggleBtn.querySelector('.password-icon-hide');
         const showIcon = this.toggleBtn.querySelector('.password-icon-show');
-        hideIcon?.classList.remove('hidden');
-        showIcon?.classList.add('hidden');
+        const hideIcon = this.toggleBtn.querySelector('.password-icon-hide');
+        showIcon?.classList.remove('hidden');
+        hideIcon?.classList.add('hidden');
       }
     }
 
@@ -479,6 +555,7 @@
 
   // Initialize when DOM is loaded
   document.addEventListener('DOMContentLoaded', () => {
-    new SecurityUnlockModal();
+    const inst = new SecurityUnlockModal();
+    (window as any).securityUnlockModal = inst;
   });
 </script>

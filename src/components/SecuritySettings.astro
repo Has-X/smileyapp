@@ -12,27 +12,9 @@
     </div>
     <label for="encryption-enabled" class="switch-label">Enable local data encryption</label>
   </div>
-  <p class="setting-description">Encrypt your chat history and settings with a password</p>
+  <p class="setting-description">Encrypt your chat history and settings with a password — AES-256-GCM • PBKDF2 • Client-side only</p>
 </div>
 
-<!-- Auto-Lock Timer -->
-<div class="setting-group">
-  <h4 class="setting-title">Auto-Lock Timer</h4>
-  <div class="custom-select-wrapper">
-    <select id="auto-lock-select" class="custom-select">
-      <option value="0">Never</option>
-      <option value="5">5 minutes</option>
-      <option value="15">15 minutes</option>
-      <option value="30" selected>30 minutes</option>
-      <option value="60">1 hour</option>
-      <option value="120">2 hours</option>
-    </select>
-    <svg class="select-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-    </svg>
-  </div>
-  <p class="setting-description">Automatically lock encrypted data after inactivity</p>
-</div>
 
 <!-- Password Management -->
 <div class="setting-group">
@@ -60,13 +42,25 @@
   <p class="setting-description">Manage your encryption password and test access</p>
 </div>
 
-<!-- Security Details -->
+<!-- Security Details merged into description above -->
+
+<!-- Auto-Lock Timer -->
 <div class="setting-group">
-  <h4 class="setting-title">Security Details</h4>
-  <div style="padding: 0.75rem; background: hsl(var(--surface-variant) / 0.3); border-radius: 0.5rem; font-family: ui-monospace, 'SF Mono', Consolas, monospace; font-size: 0.875rem; color: hsl(var(--on-surface-variant));">
-    AES-256-GCM • PBKDF2 • Client-side only
+  <h4 class="setting-title">Auto-Lock Timer</h4>
+  <div class="custom-select-wrapper">
+    <select id="auto-lock-select" class="custom-select">
+      <option value="0">Never</option>
+      <option value="5">5 minutes</option>
+      <option value="15">15 minutes</option>
+      <option value="30" selected>30 minutes</option>
+      <option value="60">1 hour</option>
+      <option value="120">2 hours</option>
+    </select>
+    <svg class="select-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+    </svg>
   </div>
-  <p class="setting-description">Industry-standard encryption processed locally in your browser</p>
+  <p class="setting-description">Automatically lock encrypted data after inactivity</p>
 </div>
 
 <!-- Password Setup Modal -->

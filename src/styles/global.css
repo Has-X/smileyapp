@@ -6852,6 +6852,25 @@ body {
   opacity: 0.12;
 }
 
+/* Primary confirm button (shared across modals) */
+.confirm-btn-primary {
+  background: rgb(var(--md-primary));
+  color: rgb(var(--md-on-primary));
+  border: 1px solid rgba(var(--md-primary), 0.9);
+  box-shadow: 0 2px 8px rgba(var(--md-primary), 0.25);
+}
+
+.confirm-btn-primary:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(var(--md-primary), 0.35);
+}
+
+.confirm-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgb(var(--md-primary) / 0.25);
+}
+
 .confirm-btn-secondary {
   background: rgba(var(--md-surface-variant), 0.8);
   color: rgb(var(--md-on-surface-variant));
@@ -7800,15 +7819,23 @@ body {
 /* Dark Theme Buttons */
 [data-theme="dark"] .confirm-btn-secondary,
 [data-theme$="-dark"] .confirm-btn-secondary {
-  background: var(--md-surface, #212529);
-  color: var(--md-primary, #64b5f6);
-  border: 1px solid var(--md-outline, #404040);
+  background: rgba(var(--md-surface-variant), 0.24);
+  color: rgb(var(--md-on-surface));
+  border: 1px solid rgba(var(--md-outline-variant), 0.5);
 }
 
 [data-theme="dark"] .confirm-btn-danger,
 [data-theme$="-dark"] .confirm-btn-danger {
   background: var(--md-error, #ff6b61);
   color: var(--md-on-error, #000000);
+}
+
+/* Dark Theme Primary Confirm Button */
+[data-theme="dark"] .confirm-btn-primary,
+[data-theme$="-dark"] .confirm-btn-primary {
+  background: rgb(var(--md-primary));
+  color: rgb(var(--md-on-primary));
+  border: 1px solid rgba(var(--md-primary), 0.9);
 }
 
 /* Dark Theme Edit and Delete Buttons */

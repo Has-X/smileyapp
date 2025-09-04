@@ -270,6 +270,17 @@ class SmileApp {
         this.testUnlock();
       });
     }
+
+    // Initialize security UI from current storage state
+    import('./secure-storage.ts').then(module => {
+      const storage = module.default.getInstance();
+      const settings = storage.getSecuritySettings();
+      if (encryptionToggle) encryptionToggle.checked = !!settings.encryptionEnabled;
+      if (autoLockSelect) autoLockSelect.value = String(settings.autoLockInterval ?? 30);
+      if (setPasswordBtn) setPasswordBtn.style.display = settings.encryptionEnabled ? 'none' : '';
+      if (changePasswordBtn) changePasswordBtn.style.display = settings.encryptionEnabled ? '' : 'none';
+      if (testUnlockBtn) testUnlockBtn.style.display = settings.encryptionEnabled ? '' : 'none';
+    }).catch(() => {/* ignore */});
   }
 
   private setupOnboardingListeners() {
@@ -2218,7 +2229,29 @@ class SmileApp {
   }
 
   private testUnlock() {
-    this.showCustomNotification('Test unlock functionality - Implementation pending', 'info');
+    import('./secure-storage.ts').then(module => {
+      const storage = module.default.getInstance();
+      if (!storage.isEncryptionAvailable()) {
+        this.showCustomNotification('Encryption not available in this browser', 'error');
+        return;
+      }
+      if (!storage.isEncryptionEnabled()) {
+        this.showCustomNotification('Encryption is disabled. Enable it first.', 'info');
+        return;
+      }
+      if (storage.isStorageUnlocked()) {
+        this.showCustomNotification('Storage is already unlocked', 'success');
+        return;
+      }
+      const unlockModal = (window as any).securityUnlockModal;
+      if (unlockModal && unlockModal.show) {
+        unlockModal.show(() => {
+          this.showCustomNotification('Unlock successful ✔', 'success');
+        });
+      } else {
+        this.showCustomNotification('Unlock UI not ready yet', 'error');
+      }
+    });
   }
 }
 
