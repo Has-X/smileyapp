@@ -51,6 +51,23 @@
     --md-elevation-5: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
   }
 
+  /* Smile theme (Ocean Blue) - explicit definition to match :root */
+  [data-theme="smile"] {
+    --md-primary: 26 88 159;
+    --md-on-primary: 255 255 255;
+    --md-primary-container: 211 227 253;
+    --md-on-primary-container: 0 30 66;
+    
+    --md-secondary: 84 95 113;
+    --md-on-secondary: 255 255 255;
+    --md-secondary-container: 212 227 248;
+    --md-on-secondary-container: 15 29 42;
+    
+    --md-surface-container: 242 246 251;
+    --md-surface-container-high: 236 242 248;
+    --md-surface-container-highest: 230 237 245;
+  }
+
   /* Forest theme */
   [data-theme="forest"] {
     --md-primary: 56 142 60;
@@ -233,6 +250,15 @@
   }
 
   /* Theme-specific ambient backgrounds */
+  [data-theme="smile"] body::before {
+    background: 
+      radial-gradient(circle 680px at 22% 28%, rgb(var(--md-primary) / 0.16) 0%, transparent 55%),
+      radial-gradient(circle 580px at 78% 72%, rgb(var(--md-secondary) / 0.12) 0%, transparent 55%),
+      radial-gradient(circle 520px at 45% 78%, rgb(var(--md-success) / 0.10) 0%, transparent 55%),
+      radial-gradient(circle 620px at 88% 22%, rgb(var(--md-warning) / 0.07) 0%, transparent 42%),
+      radial-gradient(circle 560px at 12% 62%, rgb(var(--md-info) / 0.07) 0%, transparent 48%);
+  }
+
   [data-theme="forest"] body::before {
     background: 
       radial-gradient(circle 680px at 22% 30%, rgb(var(--md-primary) / 0.16) 0%, transparent 55%),
@@ -304,80 +330,80 @@
   [data-theme$="-dark"] #panel-history,
   [data-theme="dark"] #panel-profile,
   [data-theme$="-dark"] #panel-profile {
-    background: rgba(255, 255, 255, 0.04);
+    background: rgba(var(--md-surface-container), 0.6);
     backdrop-filter: blur(32px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(var(--md-outline-variant), 0.3);
     color: rgb(var(--md-on-surface));
   }
 
   [data-theme="dark"] .glass-panel {
-    background: rgba(255, 255, 255, 0.12);
-    border-color: rgba(255, 255, 255, 0.18);
+    background: rgba(var(--md-surface-container), 0.8);
+    border-color: rgba(var(--md-outline-variant), 0.4);
     backdrop-filter: blur(32px) saturate(180%);
     box-shadow: 
       0 12px 40px rgba(0, 0, 0, 0.5),
       0 4px 16px rgba(0, 0, 0, 0.3),
-      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      inset 0 1px 0 rgba(var(--md-surface-bright), 0.1);
   }
 
   [data-theme="dark"] .setting-group {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.12);
+    background: rgba(var(--md-surface-container), 0.5);
+    border-color: rgba(var(--md-outline-variant), 0.3);
     color: rgb(var(--md-on-surface));
   }
 
   [data-theme="dark"] .setting-group:hover {
-    background: rgba(255, 255, 255, 0.12);
-    border-color: rgba(255, 255, 255, 0.18);
+    background: rgba(var(--md-surface-container-high), 0.7);
+    border-color: rgba(var(--md-outline-variant), 0.5);
   }
 
   [data-theme="dark"] .material-select {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(var(--md-surface-container), 0.6);
+    border-color: rgba(var(--md-outline-variant), 0.3);
     color: rgb(var(--md-on-surface));
   }
 
   [data-theme="dark"] .material-select:hover {
-    background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(255, 255, 255, 0.25);
+    background: rgba(var(--md-surface-container-high), 0.8);
+    border-color: rgba(var(--md-outline-variant), 0.5);
   }
 
   [data-theme="dark"] .material-select:focus {
-    background: rgba(255, 255, 255, 0.12);
+    background: rgba(var(--md-surface-container), 0.8);
     border-color: rgba(var(--md-primary), 0.6);
   }
 
   [data-theme="dark"] .nav-button,
   [data-theme$="-dark"] .nav-button {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.15);
+    background: rgba(var(--md-surface-container), 0.5);
+    border-color: rgba(var(--md-outline-variant), 0.4);
     color: rgb(var(--md-on-surface));
     box-shadow: 
       0 4px 16px rgba(0, 0, 0, 0.25),
       0 2px 8px rgba(0, 0, 0, 0.2),
-      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      inset 0 1px 0 rgba(var(--md-surface-bright), 0.1);
   }
 
   [data-theme="dark"] .nav-button:hover,
   [data-theme$="-dark"] .nav-button:hover {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(var(--md-surface-container-high), 0.7);
     border-color: rgba(var(--md-primary), 0.4);
     color: rgb(var(--md-primary));
     box-shadow: 
       0 6px 20px rgba(var(--md-primary), 0.15),
       0 3px 10px rgba(0, 0, 0, 0.25),
-      inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      inset 0 1px 0 rgba(var(--md-surface-bright), 0.15);
   }
 
   [data-theme="dark"] .nav-button-active,
   [data-theme$="-dark"] .nav-button-active {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(var(--md-primary-container), 0.8);
     border-color: rgba(var(--md-primary), 0.5);
     color: rgb(var(--md-primary));
     box-shadow: 
       0 6px 20px rgba(var(--md-primary), 0.3),
       0 3px 12px rgba(0, 0, 0, 0.3),
-      inset 0 1px 0 rgba(255, 255, 255, 0.25),
+      inset 0 1px 0 rgba(var(--md-surface-bright), 0.2),
       inset 0 0 16px rgba(var(--md-primary), 0.2);
     backdrop-filter: blur(16px) saturate(140%);
   }
@@ -385,9 +411,9 @@
   /* Dark theme navigation panel */
   [data-theme="dark"] nav.glass-panel,
   [data-theme$="-dark"] nav.glass-panel {
-    border-right-color: rgba(255, 255, 255, 0.2);
+    border-right-color: rgba(var(--md-outline-variant), 0.5);
     box-shadow: 
-      inset 1px 0 0 rgba(255, 255, 255, 0.25),
+      inset 1px 0 0 rgba(var(--md-surface-bright), 0.15),
       4px 0 32px rgba(0, 0, 0, 0.4),
       0 0 60px rgba(var(--md-primary), 0.1);
   }
@@ -406,11 +432,11 @@
   /* Dark theme navigation sidebar - Enhanced Glassmorphism */
   [data-theme="dark"] .nav-sidebar,
   [data-theme$="-dark"] .nav-sidebar {
-    background: rgba(255, 255, 255, 0.05);
-    border-right-color: rgba(255, 255, 255, 0.08);
+    background: rgba(var(--md-surface-container), 0.4);
+    border-right-color: rgba(var(--md-outline-variant), 0.3);
     box-shadow: 
       4px 0 32px rgba(0, 0, 0, 0.4),
-      0 0 0 1px rgba(255, 255, 255, 0.06) inset;
+      0 0 0 1px rgba(var(--md-surface-bright), 0.08) inset;
   }
 
   /* Dark theme conversations sidebar */
@@ -482,7 +508,7 @@
 
   [data-theme="dark"] .tab-button:hover,
   [data-theme$="-dark"] .tab-button:hover {
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(var(--md-surface-container), 0.5);
     color: rgb(var(--md-on-surface));
   }
 
@@ -494,20 +520,20 @@
 
   [data-theme="dark"] .tabs-nav,
   [data-theme$="-dark"] .tabs-nav {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(255, 255, 255, 0.12);
+    background: rgba(var(--md-surface-container), 0.4);
+    border-color: rgba(var(--md-outline-variant), 0.3);
   }
 
   [data-theme="dark"] .color-theme-card,
   [data-theme$="-dark"] .color-theme-card {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(255, 255, 255, 0.12);
+    background: rgba(var(--md-surface-container), 0.4);
+    border-color: rgba(var(--md-outline-variant), 0.3);
   }
 
   [data-theme="dark"] .color-theme-card:hover,
   [data-theme$="-dark"] .color-theme-card:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.18);
+    background: rgba(var(--md-surface-container-high), 0.6);
+    border-color: rgba(var(--md-outline-variant), 0.5);
   }
 
   [data-theme="dark"] .color-theme-card.active,
@@ -517,14 +543,14 @@
   }
 
   [data-theme="dark"] .empty-state {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.1);
+    background: rgba(var(--md-surface-container), 0.3);
+    border-color: rgba(var(--md-outline-variant), 0.2);
     color: rgb(var(--md-on-surface));
   }
 
   [data-theme="dark"] .chat-input-container {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.15);
+    background: rgba(var(--md-surface-container), 0.5);
+    border-color: rgba(var(--md-outline-variant), 0.4);
   }
 
   [data-theme="dark"] .chat-textarea {
@@ -786,36 +812,12 @@
   .tabs-nav {
     display: flex;
     gap: 0.5rem;
-    background: rgba(255, 255, 255, 0.04);
+    background: rgba(var(--md-surface-container), 0.8);
     backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(var(--md-outline-variant), 0.2);
     border-radius: 1rem;
     padding: 0.5rem;
     overflow-x: auto;
-  }
-
-  /* Dark theme tabs with reduced white */
-  [data-theme="dark"] .tabs-nav,
-  [data-theme$="-dark"] .tabs-nav {
-    background: rgba(255, 255, 255, 0.02);
-    border-color: rgba(255, 255, 255, 0.05);
-  }
-
-  [data-theme="dark"] .tab-button,
-  [data-theme$="-dark"] .tab-button {
-    color: rgb(var(--md-on-surface-variant));
-  }
-
-  [data-theme="dark"] .tab-button:hover,
-  [data-theme$="-dark"] .tab-button:hover {
-    background: rgba(255, 255, 255, 0.04);
-    color: rgb(var(--md-on-surface));
-  }
-
-  [data-theme="dark"] .tab-button.active,
-  [data-theme$="-dark"] .tab-button.active {
-    background: rgba(var(--md-primary), 0.2);
-    color: rgb(var(--md-primary));
   }
 
   .tab-button {
@@ -919,15 +921,15 @@
   }
 
   .setting-group {
-    background: rgba(255, 255, 255, 0.04);
+    background: rgba(var(--md-surface-container), 0.8);
     backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(var(--md-outline-variant), 0.2);
     border-radius: 1rem;
     padding: 1.5rem;
     margin-bottom: 1.5rem;
     box-shadow: 
       0 4px 16px rgba(0, 0, 0, 0.06),
-      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      inset 0 1px 0 rgba(var(--md-surface-bright), 0.1);
     transition: all 0.3s ease;
   }
 
@@ -936,12 +938,12 @@
   }
 
   .setting-group:hover {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(255, 255, 255, 0.12);
+    background: rgba(var(--md-surface-container-high), 0.9);
+    border-color: rgba(var(--md-outline-variant), 0.3);
     transform: translateY(-1px);
     box-shadow: 
       0 8px 24px rgba(0, 0, 0, 0.08),
-      inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      inset 0 1px 0 rgba(var(--md-surface-bright), 0.15);
   }
 
   .setting-title {
@@ -959,25 +961,7 @@
     opacity: 0.8;
   }
 
-  /* Dark theme setting overrides with reduced white */
-  [data-theme="dark"] .setting-group,
-  [data-theme$="-dark"] .setting-group {
-    background: rgba(255, 255, 255, 0.02);
-    border-color: rgba(255, 255, 255, 0.05);
-    box-shadow: 
-      0 4px 16px rgba(0, 0, 0, 0.2),
-      inset 0 1px 0 rgba(255, 255, 255, 0.03);
-  }
-
-  [data-theme="dark"] .setting-group:hover,
-  [data-theme$="-dark"] .setting-group:hover {
-    background: rgba(255, 255, 255, 0.035);
-    border-color: rgba(255, 255, 255, 0.08);
-    box-shadow: 
-      0 8px 24px rgba(0, 0, 0, 0.25),
-      inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  }
-
+  /* Keep the non-duplicate dark theme overrides */
   [data-theme="dark"] .setting-group label,
   [data-theme$="-dark"] .setting-group label {
     color: rgb(var(--md-on-surface));
@@ -1111,22 +1095,22 @@
   /* Dark theme select styles with reduced white */
   [data-theme="dark"] .custom-select,
   [data-theme$="-dark"] .custom-select {
-    background: rgba(255, 255, 255, 0.04);
-    border-color: rgba(255, 255, 255, 0.08);
+    background: rgba(var(--md-surface-container), 0.5);
+    border-color: rgba(var(--md-outline-variant), 0.3);
     color: rgb(var(--md-on-surface));
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   }
 
   [data-theme="dark"] .custom-select:hover,
   [data-theme$="-dark"] .custom-select:hover {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(255, 255, 255, 0.12);
+    background: rgba(var(--md-surface-container-high), 0.7);
+    border-color: rgba(var(--md-outline-variant), 0.5);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
   }
 
   [data-theme="dark"] .custom-select:focus,
   [data-theme$="-dark"] .custom-select:focus {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(var(--md-surface-container), 0.6);
     border-color: rgba(var(--md-primary), 0.7);
     box-shadow: 
       0 0 0 3px rgba(var(--md-primary), 0.15),
@@ -1259,26 +1243,26 @@
 
   /* Enhanced glassmorphism for general panels */
   .glass-panel {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(var(--md-surface-container), 0.6);
     backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(var(--md-outline-variant), 0.3);
     box-shadow: 
       0 8px 32px rgba(0, 0, 0, 0.1),
-      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      inset 0 1px 0 rgba(var(--md-surface-bright), 0.1);
   }
 
   /* Empty state styling for panels */
   .empty-state {
     padding: 3rem 2rem;
     text-align: center;
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(var(--md-surface-container), 0.3);
     backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(var(--md-outline-variant), 0.2);
     border-radius: 1.5rem;
     margin: 2rem;
     box-shadow: 
       0 4px 16px rgba(0, 0, 0, 0.06),
-      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      inset 0 1px 0 rgba(var(--md-surface-bright), 0.08);
   }
 
   .empty-state svg {
@@ -1309,9 +1293,9 @@
 
   .chat-input-container {
     position: relative;
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(var(--md-surface-container), 0.6);
     backdrop-filter: blur(24px);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(var(--md-outline-variant), 0.3);
     border-radius: 28px;
     padding: 4px;
     display: flex;
@@ -1874,46 +1858,7 @@
      UNIFIED GLASSMORPHISM SYSTEM
      ======================================== */
   
-  /* Primary glass panel - main content areas */
-  .glass-panel {
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    box-shadow: 
-      0 8px 32px rgba(0, 0, 0, 0.1),
-      inset 0 1px 0 rgba(255, 255, 255, 0.15);
-  }
-
-  /* Secondary glass panel - for nested content */
-  .glass-panel-secondary {
-    background: rgba(255, 255, 255, 0.06);
-    backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.10);
-    box-shadow: 
-      0 4px 16px rgba(0, 0, 0, 0.08),
-      inset 0 1px 0 rgba(255, 255, 255, 0.12);
-  }
-
-  /* Interactive glass panel - with hover states */
-  .glass-panel-interactive {
-    background: rgba(255, 255, 255, 0.07);
-    backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.10);
-    box-shadow: 
-      0 4px 16px rgba(0, 0, 0, 0.06),
-      inset 0 1px 0 rgba(255, 255, 255, 0.12);
-    transition: all 0.3s ease;
-    cursor: pointer;
-  }
-
-  .glass-panel-interactive:hover {
-    background: rgba(255, 255, 255, 0.12);
-    border-color: rgba(255, 255, 255, 0.18);
-    box-shadow: 
-      0 8px 24px rgba(0, 0, 0, 0.08),
-      inset 0 1px 0 rgba(255, 255, 255, 0.18);
-    transform: translateY(-1px);
-  }
+  /* Duplicate glass panel styles removed - definitions exist earlier in file */
 
   /* ========================================
      GLOBAL REUSABLE CARD HOVER SYSTEM
@@ -2314,42 +2259,7 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
-  /* Dark theme glassmorphism overrides */
-  [data-theme="dark"] .glass-panel,
-  [data-theme$="-dark"] .glass-panel {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(255, 255, 255, 0.08);
-    box-shadow: 
-      0 8px 32px rgba(0, 0, 0, 0.3),
-      inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  }
-
-  [data-theme="dark"] .glass-panel-secondary,
-  [data-theme$="-dark"] .glass-panel-secondary {
-    background: rgba(255, 255, 255, 0.04);
-    border-color: rgba(255, 255, 255, 0.06);
-    box-shadow: 
-      0 4px 16px rgba(0, 0, 0, 0.2),
-      inset 0 1px 0 rgba(255, 255, 255, 0.06);
-  }
-
-  [data-theme="dark"] .glass-panel-interactive,
-  [data-theme$="-dark"] .glass-panel-interactive {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.07);
-    box-shadow: 
-      0 4px 16px rgba(0, 0, 0, 0.15),
-      inset 0 1px 0 rgba(255, 255, 255, 0.07);
-  }
-
-  [data-theme="dark"] .glass-panel-interactive:hover,
-  [data-theme$="-dark"] .glass-panel-interactive:hover {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.12);
-    box-shadow: 
-      0 8px 24px rgba(0, 0, 0, 0.2),
-      inset 0 1px 0 rgba(255, 255, 255, 0.12);
-  }
+  /* Dark theme glass panel duplicates removed - definitions exist earlier */
   /* Color utilities */
   .bg-surface { background-color: rgb(var(--md-surface)); }
   .bg-surface-variant { background-color: rgb(var(--md-surface-variant)); }
@@ -2385,7 +2295,7 @@
     backdrop-filter: blur(24px);
     border-right: 1px solid rgba(var(--md-outline-variant), 0.3);
     box-shadow: 
-      inset 1px 0 0 rgba(255, 255, 255, 0.12),
+      inset 1px 0 0 rgba(var(--md-surface-bright), 0.12),
       4px 0 32px rgba(0, 0, 0, 0.1),
       0 0 60px rgba(var(--md-primary), 0.03);
     position: relative;
