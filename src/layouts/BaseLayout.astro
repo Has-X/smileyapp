@@ -15,7 +15,7 @@ import '../styles/global.css';
     <script is:inline>
       (function(){
         try {
-          var mode = localStorage.getItem('smile-theme-mode') || 'auto';
+          var mode = localStorage.getItem('smile-theme-mode') || 'light';
           var accent = localStorage.getItem('smile-accent-color') || 'smile';
           var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
           var theme = (mode === 'dark' || (mode === 'auto' && prefersDark)) ? (accent + '-dark') : accent;

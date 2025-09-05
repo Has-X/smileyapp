@@ -113,7 +113,7 @@
   transform: translateY(-50%);
   background: none;
   border: none;
-  color: hsl(var(--on-surface-variant));
+  color: rgb(var(--md-on-surface-variant));
   cursor: pointer;
   padding: 0.25rem;
   border-radius: 0.25rem;
@@ -121,19 +121,19 @@
 }
 
 .password-toggle-btn:hover {
-  color: hsl(var(--on-surface));
-  background: hsl(var(--surface-variant) / 0.1);
+  color: rgb(var(--md-on-surface));
+  background: rgba(var(--md-surface-variant), 0.1);
 }
 
 .password-toggle-btn:focus {
-  outline: 2px solid hsl(var(--primary));
+  outline: 2px solid rgb(var(--md-primary));
   outline-offset: 2px;
 }
 
 .security-options {
   margin-top: 1rem;
   padding-top: 1rem;
-  border-top: 1px solid hsl(var(--outline-variant));
+  border-top: 1px solid rgb(var(--md-outline-variant));
 }
 
 .security-checkbox {
@@ -151,19 +151,19 @@
 .checkbox-mark {
   width: 1.25rem;
   height: 1.25rem;
-  border: 2px solid hsl(var(--outline));
+  border: 2px solid rgb(var(--md-outline));
   border-radius: 0.25rem;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
   position: relative;
-  background: hsl(var(--surface));
+  background: rgb(var(--md-surface));
 }
 
 .checkbox-mark::after {
   content: '✓';
-  color: hsl(var(--on-primary));
+  color: rgb(var(--md-on-primary));
   font-size: 0.75rem;
   font-weight: 700;
   opacity: 0;
@@ -173,8 +173,8 @@
 }
 
 .security-checkbox input[type="checkbox"]:checked + .checkbox-mark {
-  background: hsl(var(--primary));
-  border-color: hsl(var(--primary));
+  background: rgb(var(--md-primary));
+  border-color: rgb(var(--md-primary));
 }
 
 .security-checkbox input[type="checkbox"]:checked + .checkbox-mark::after {
@@ -184,29 +184,29 @@
 
 /* Subtle contrast and focus improvements for checkbox */
 .checkbox-mark:hover {
-  border-color: hsl(var(--primary));
-  background: hsl(var(--primary-container) / 0.08);
+  border-color: rgb(var(--md-primary));
+  background: rgba(var(--md-primary-container), 0.08);
 }
 
 .security-checkbox input[type="checkbox"]:focus + .checkbox-mark {
-  box-shadow: 0 0 0 3px hsl(var(--primary) / 0.25);
-  outline: 2px solid hsl(var(--primary));
+  box-shadow: 0 0 0 3px rgba(var(--md-primary), 0.25);
+  outline: 2px solid rgb(var(--md-primary));
   outline-offset: 1px;
 }
 
 .checkbox-label {
   font-size: 0.875rem;
-  color: hsl(var(--on-surface));
+  color: rgb(var(--md-on-surface));
 }
 
 .form-error {
   margin-top: 0.5rem;
   padding: 0.5rem;
-  background: hsl(var(--error-container));
-  color: hsl(var(--on-error-container));
+  background: rgb(var(--md-error-container));
+  color: rgb(var(--md-on-error-container));
   border-radius: 0.5rem;
   font-size: 0.875rem;
-  border-left: 3px solid hsl(var(--error));
+  border-left: 3px solid rgb(var(--md-error));
 }
 
 .form-error.hidden {
@@ -235,39 +235,39 @@
 }
 
 /* Dark theme adjustments */
-[data-theme="dark"] .security-modal-content,
-[data-theme$="-dark"] .security-modal-content {
-  background: hsl(var(--surface-container));
-  border: 1px solid hsl(var(--outline-variant));
+  [data-theme="dark"] .security-modal-content,
+  [data-theme$="-dark"] .security-modal-content {
+  background: rgb(var(--md-surface-container));
+  border: 1px solid rgb(var(--md-outline-variant));
 }
 
 /* Improve checkbox contrast in dark mode */
-[data-theme="dark"] .checkbox-mark,
-[data-theme$="-dark"] .checkbox-mark {
-  border-color: hsl(var(--outline));
-  background: hsl(var(--surface-container-low));
+  [data-theme="dark"] .checkbox-mark,
+  [data-theme$="-dark"] .checkbox-mark {
+  border-color: rgb(var(--md-outline));
+  background: rgb(var(--md-surface-container));
 }
 
-[data-theme="dark"] .checkbox-mark:hover,
-[data-theme$="-dark"] .checkbox-mark:hover {
-  border-color: hsl(var(--primary));
-  background: hsl(var(--primary-container) / 0.15);
+  [data-theme="dark"] .checkbox-mark:hover,
+  [data-theme$="-dark"] .checkbox-mark:hover {
+  border-color: rgb(var(--md-primary));
+  background: rgba(var(--md-primary-container), 0.15);
 }
 
-[data-theme="dark"] .checkbox-label,
-[data-theme$="-dark"] .checkbox-label {
-  color: hsl(var(--on-surface));
+  [data-theme="dark"] .checkbox-label,
+  [data-theme$="-dark"] .checkbox-label {
+  color: rgb(var(--md-on-surface));
 }
 
-[data-theme="dark"] .security-checkbox input[type="checkbox"]:checked + .checkbox-mark,
-[data-theme$="-dark"] .security-checkbox input[type="checkbox"]:checked + .checkbox-mark {
-  background: hsl(var(--primary));
-  border-color: hsl(var(--primary));
+  [data-theme="dark"] .security-checkbox input[type="checkbox"]:checked + .checkbox-mark,
+  [data-theme$="-dark"] .security-checkbox input[type="checkbox"]:checked + .checkbox-mark {
+  background: rgb(var(--md-primary));
+  border-color: rgb(var(--md-primary));
 }
 
-[data-theme="dark"] .password-toggle-btn:hover,
-[data-theme$="-dark"] .password-toggle-btn:hover {
-  background: hsl(var(--surface-variant) / 0.2);
+  [data-theme="dark"] .password-toggle-btn:hover,
+  [data-theme$="-dark"] .password-toggle-btn:hover {
+  background: rgba(var(--md-surface-variant), 0.2);
 }
 </style>
 

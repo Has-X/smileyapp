@@ -39,7 +39,8 @@ class SmileApp {
 
   private initTheme() {
     // Initialize theme system with separated mode and accent color
-    const savedMode = localStorage.getItem('smile-theme-mode') || 'auto';
+    // Default to light on first run to avoid surprising dark takeover during onboarding
+    const savedMode = localStorage.getItem('smile-theme-mode') || 'light';
     const savedAccent = localStorage.getItem('smile-accent-color') || 'smile';
 
     // Apply initial theme name
@@ -295,8 +296,9 @@ class SmileApp {
           themeCards.forEach(c => c.classList.remove('theme-card-active'));
           // Add active class to clicked card
           target.classList.add('theme-card-active');
-          // Set theme
-          this.setTheme(theme);
+          // Persist accent and preview in light mode for clarity during onboarding
+          this.setAccentColor(theme);
+          this.setThemeMode('light');
         }
       });
     });
