@@ -370,7 +370,7 @@ class SmileApp {
   }
 
   private showClearDataModal() {
-    if (confirm('Are you sure you want to clear all data? This will remove all chat history and preferences.')) {
+  const clearAll = () => {
       // Clear all localStorage data
       const keysToRemove = Object.keys(localStorage).filter(key => key.startsWith('smile-'));
       keysToRemove.forEach(key => localStorage.removeItem(key));
@@ -381,7 +381,10 @@ class SmileApp {
       // Reset to onboarding
       this.isOnboardingComplete = false;
       this.showOnboarding();
-    }
+    };
+
+  // Prefer app confirm modal, fallback to native via helper
+  (window as any).showAppConfirm('Clear All Data', 'Are you sure you want to clear all data? This will remove all chat history and preferences.', clearAll);
   }
 
   private initViewToggles() {
@@ -874,7 +877,7 @@ class SmileApp {
       padding: 1rem 1.5rem;
       border-radius: 0.5rem;
       box-shadow: var(--md-elevation-3);
-      z-index: 1000;
+  z-index: 13000;
       max-width: 90vw;
       text-align: center;
       font-weight: 500;
@@ -1590,32 +1593,29 @@ class SmileApp {
     }
 
     // Show confirmation dialog
-    if (confirm('Are you sure you want to delete this conversation? This action cannot be undone.')) {
+  const doDelete = () => {
       // In a real implementation, this would:
       // 1. Remove conversation from localStorage
       // 2. Remove the conversation item from the DOM
       // 3. Update the history count
       
       this.showCustomNotification('Conversation deleted', 'success');
-    }
+    };
+
+  (window as any).showAppConfirm('Delete Conversation', 'Are you sure you want to delete this conversation? This action cannot be undone.', doDelete);
   }
 
   private clearHistory() {
     // Show confirmation dialog
-    if (confirm('Are you sure you want to clear all conversation history? This action cannot be undone.')) {
-      // In a real implementation, this would:
-      // 1. Clear all conversations from localStorage
-      // 2. Clear all conversation items from the DOM
-      // 3. Reset the history count to 0
-      // 4. Show empty state
-      
+  const doClearHistory = () => {
       const historyCount = document.getElementById('history-count');
       if (historyCount) {
         historyCount.textContent = '0';
       }
-      
       this.showCustomNotification('All conversation history cleared', 'success');
-    }
+    };
+
+  (window as any).showAppConfirm('Clear Conversation History', 'Are you sure you want to clear all conversation history? This action cannot be undone.', doClearHistory);
   }
 
   // Journal Panel Management
@@ -1895,11 +1895,13 @@ class SmileApp {
   private deleteJournalEntry(entryElement: HTMLElement) {
     const title = entryElement.querySelector('.journal-entry-title')?.textContent || 'this entry';
     
-    if (confirm(`Are you sure you want to delete "${title}"?`)) {
+  const doDeleteJournal = () => {
       entryElement.remove();
       this.showCustomNotification('Journal entry deleted', 'info');
       this.updateJournalEntryCount();
-    }
+    };
+
+  (window as any).showAppConfirm('Delete Journal Entry', `Are you sure you want to delete "${title}"?`, doDeleteJournal);
   }
 
   private searchJournalEntries(query: string) {
@@ -2263,22 +2265,71 @@ class SmileApp {
   (window as any).modalManager?.hide(modal);
 };
 
+// Global confirm helper that prefers the app confirm modal but falls back
+// to the native confirm after a short polling period. This avoids native
+// confirms being hidden behind custom modal layers.
+(window as any).showAppConfirm = function(title: string, message: string, onConfirm: () => void) {
+  try {
+    const cm = (window as any).confirmModal;
+    if (cm && cm.show) {
+      cm.show({ title, message, onConfirm });
+      return;
+    }
+
+    // Poll for the confirm modal to become available for up to ~1s
+    let attempts = 0;
+    const id = setInterval(() => {
+      attempts++;
+      const cm2 = (window as any).confirmModal;
+      if (cm2 && cm2.show) {
+        clearInterval(id);
+        cm2.show({ title, message, onConfirm });
+        return;
+      }
+      if (attempts > 9) {
+        clearInterval(id);
+        // Final fallback to native confirm
+        if (window.confirm(message)) {
+          try { onConfirm(); } catch (err) { console.error(err); }
+        }
+      }
+    }, 100);
+  } catch (err) {
+    console.error('showAppConfirm error', err);
+    if (window.confirm(message)) {
+      try { onConfirm(); } catch (e) { console.error(e); }
+    }
+  }
+};
+
 (window as any).savePassword = async function() {
   const newPassword = (document.getElementById('new-password') as HTMLInputElement)?.value;
   const confirmPassword = (document.getElementById('confirm-password') as HTMLInputElement)?.value;
   
   if (!newPassword || !confirmPassword) {
-    alert('Please fill in both password fields');
+    if ((window as any).smileApp && typeof (window as any).smileApp.showCustomNotification === 'function') {
+      (window as any).smileApp.showCustomNotification('Please fill in both password fields', 'error');
+    } else {
+      console.warn('Please fill in both password fields');
+    }
     return;
   }
-  
+
   if (newPassword !== confirmPassword) {
-    alert('Passwords do not match');
+    if ((window as any).smileApp && typeof (window as any).smileApp.showCustomNotification === 'function') {
+      (window as any).smileApp.showCustomNotification('Passwords do not match', 'error');
+    } else {
+      console.warn('Passwords do not match');
+    }
     return;
   }
-  
+
   if (newPassword.length < 6) {
-    alert('Password must be at least 6 characters');
+    if ((window as any).smileApp && typeof (window as any).smileApp.showCustomNotification === 'function') {
+      (window as any).smileApp.showCustomNotification('Password must be at least 6 characters', 'error');
+    } else {
+      console.warn('Password must be at least 6 characters');
+    }
     return;
   }
   try {
@@ -2288,7 +2339,11 @@ class SmileApp {
     const ok = await secureStorage.enableEncryption(newPassword);
 
     if (!ok) {
-      alert('Failed to enable encryption. Please try again.');
+      if ((window as any).smileApp && typeof (window as any).smileApp.showCustomNotification === 'function') {
+        (window as any).smileApp.showCustomNotification('Failed to enable encryption. Please try again.', 'error');
+      } else {
+        console.error('Failed to enable encryption. Please try again.');
+      }
       return;
     }
 
@@ -2313,7 +2368,11 @@ class SmileApp {
     }
   } catch (err) {
     console.error('Error enabling encryption:', err);
-    alert('Error enabling encryption. Please try again.');
+    if ((window as any).smileApp && typeof (window as any).smileApp.showCustomNotification === 'function') {
+      (window as any).smileApp.showCustomNotification('Error enabling encryption. Please try again.', 'error');
+    } else {
+      console.error('Error enabling encryption. Please try again.');
+    }
   }
 };
 

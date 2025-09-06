@@ -562,8 +562,14 @@
     overflow-x: hidden;
   }
 
+  /* Let colors breathe a bit more on light surfaces */
+  :not([data-theme$="-dark"]):not([data-theme="dark"]) body {
+    background-color: rgba(var(--md-surface), 0.92);
+  }
+
   #app-shell {
-    background-color: rgba(var(--md-surface), 0.85);
+    /* Slightly lower alpha in light themes to let ambient colors bloom */
+    background-color: rgba(var(--md-surface), 0.80);
     position: relative;
   }
 
@@ -614,6 +620,12 @@
   [data-theme="dark"] body::after,
   [data-theme$="-dark"] body::after {
     filter: saturate(1.08) brightness(1.05);
+  }
+
+  /* Match light-mode vibrancy with a subtle boost */
+  :not([data-theme$="-dark"]):not([data-theme="dark"]) body::before,
+  :not([data-theme$="-dark"]):not([data-theme="dark"]) body::after {
+    filter: saturate(1.12) brightness(1.03);
   }
 
   /* Ensure blobs are visible in dark themes with a touch more chroma */
@@ -754,14 +766,17 @@
       radial-gradient(400px 300px at 10% 10%, rgba(251, 191, 36, 0.06) 0%, transparent 50%);
   }
 
-  /* Light mode background - enhanced visibility */
+  /* Light mode background - enhanced visibility
+     Use theme variables so accent color affects the ambient canvas.
+     This mirrors the dark-theme structure but with slightly higher
+     transparency to keep readability on light surfaces. */
   :not([data-theme$="-dark"]):not([data-theme="dark"]) #app-shell::before {
-    background: 
-      radial-gradient(900px 700px at 20% 30%, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.08) 40%, transparent 60%),
-      radial-gradient(700px 500px at 80% 70%, rgba(16, 185, 129, 0.12) 0%, rgba(16, 185, 129, 0.06) 40%, transparent 60%),
-      radial-gradient(1100px 900px at 50% 50%, rgba(245, 158, 11, 0.10) 0%, rgba(245, 158, 11, 0.04) 40%, transparent 70%),
-      radial-gradient(600px 400px at 70% 20%, rgba(236, 72, 153, 0.08) 0%, transparent 50%),
-      radial-gradient(500px 300px at 30% 80%, rgba(168, 85, 247, 0.07) 0%, transparent 50%);
+    background:
+      radial-gradient(900px 700px at 20% 30%, rgba(var(--md-primary), 0.24) 0%, rgba(var(--md-primary), 0.12) 40%, transparent 60%),
+      radial-gradient(700px 500px at 80% 70%, rgba(var(--md-secondary), 0.18) 0%, rgba(var(--md-secondary), 0.10) 40%, transparent 60%),
+      radial-gradient(1100px 900px at 50% 50%, rgba(var(--md-info), 0.16) 0%, rgba(var(--md-info), 0.08) 40%, transparent 70%),
+      radial-gradient(600px 400px at 70% 20%, rgba(var(--md-warning), 0.14) 0%, transparent 50%),
+      radial-gradient(500px 300px at 30% 80%, rgba(var(--md-success), 0.14) 0%, transparent 50%);
   }
 
   /* Modern panel styling - unified bright backgrounds */
@@ -1169,6 +1184,8 @@
   .btn-outlined {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
     padding: 0.75rem 1.5rem;
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(12px);
@@ -1180,6 +1197,11 @@
     text-decoration: none;
     transition: all 0.3s ease;
     cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .btn-outlined svg {
+    flex-shrink: 0;
   }
 
   .btn-outlined:hover {
@@ -2042,8 +2064,8 @@
   .progress-stats-card {
     background: linear-gradient(
       135deg,
-      rgba(var(--md-surface-container), 0.9) 0%,
-      rgba(var(--md-surface-container-high), 0.8) 100%
+      rgba(var(--md-surface-container), 0.90) 0%,
+      rgba(var(--md-surface-container-high), 0.80) 100%
     );
     backdrop-filter: blur(12px);
     border: 1px solid rgba(var(--md-outline-variant), 0.3);
@@ -2174,6 +2196,29 @@
   [data-theme="dark"] .progress-stat-item:hover,
   [data-theme$="-dark"] .progress-stat-item:hover {
     background: rgba(var(--md-surface-container-highest), 0.7);
+  }
+
+  /* Light Theme Progress Stats (explicit tint so it’s visible on white) */
+  :not([data-theme$="-dark"]):not([data-theme="dark"]) .progress-stats-card {
+    background:
+      linear-gradient(135deg,
+        rgba(var(--md-primary), 0.06) 0%,
+        rgba(var(--md-secondary), 0.04) 35%,
+        rgba(var(--md-tertiary), 0.03) 100%),
+      linear-gradient(135deg,
+        rgba(var(--md-surface-container-high), 0.92) 0%,
+        rgba(var(--md-surface-container), 0.88) 100%) !important;
+    border-color: rgba(var(--md-outline-variant), 0.18) !important;
+    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.06) !important;
+  }
+
+  :not([data-theme$="-dark"]):not([data-theme="dark"]) .progress-stat-item {
+    background: rgba(var(--md-surface-container-highest), 0.62);
+    border-color: rgba(var(--md-outline-variant), 0.22);
+  }
+
+  :not([data-theme$="-dark"]):not([data-theme="dark"]) .progress-stat-item:hover {
+    background: rgba(var(--md-surface-container-highest), 0.85);
   }
 
   /* Responsive Design for Progress Stats */
@@ -4548,10 +4593,11 @@
 [data-theme="forest"] .journal-modal-wide .confirm-btn-primary,
 [data-theme="sunset"] .journal-modal-wide .confirm-btn-primary,
 [data-theme="lavender"] .journal-modal-wide .confirm-btn-primary {
-  background: linear-gradient(135deg, #3b82f6, #1d4ed8) !important;
-  color: white !important;
+  /* Use current accent color for gradients */
+  background: linear-gradient(135deg, rgb(var(--md-primary)), rgb(var(--md-primary) / 0.9)) !important;
+  color: rgb(var(--md-on-primary)) !important;
   border: none !important;
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3) !important;
+  box-shadow: 0 4px 12px rgba(var(--md-primary), 0.3) !important;
 }
 
 [data-theme="light"] .journal-modal-wide .confirm-btn-primary:hover,
@@ -4559,9 +4605,9 @@
 [data-theme="forest"] .journal-modal-wide .confirm-btn-primary:hover,
 [data-theme="sunset"] .journal-modal-wide .confirm-btn-primary:hover,
 [data-theme="lavender"] .journal-modal-wide .confirm-btn-primary:hover {
-  background: linear-gradient(135deg, #2563eb, #1e40af) !important;
+  background: linear-gradient(135deg, rgb(var(--md-primary)), rgb(var(--md-primary) / 0.8)) !important;
   transform: translateY(-1px) !important;
-  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4) !important;
+  box-shadow: 0 8px 20px rgba(var(--md-primary), 0.4) !important;
 }
 
 /* Final override to ensure journal modal width */
@@ -5594,6 +5640,17 @@
   box-shadow: 
     0 2px 16px rgba(0, 0, 0, 0.2),
     0 1px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Light theme: add subtle accent tint so cards are distinguishable on white */
+:not([data-theme$="-dark"]):not([data-theme="dark"]) .journal-entry-card-enhanced {
+  background:
+    linear-gradient(135deg,
+      rgba(var(--md-primary), 0.05) 0%,
+      rgba(var(--md-secondary), 0.03) 40%,
+      rgba(var(--md-primary), 0.04) 100%),
+    rgba(var(--md-surface-container), 0.88);
+  border-color: rgba(var(--md-outline-variant), 0.18);
 }
 
 @keyframes slideDown {
@@ -6766,10 +6823,16 @@ body {
   cursor: pointer;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
   transition: all 0.2s ease;
   position: relative;
   overflow: hidden;
+  white-space: nowrap;
+}
+
+.confirm-btn svg {
+  flex-shrink: 0;
 }
 
 .confirm-btn::before {
@@ -6866,34 +6929,77 @@ body {
 }
 
 /* Search Container for History Panel */
+/* Base search container styles - shared properties only */
 .search-container {
   position: relative;
   display: flex;
   align-items: center;
-  background: rgba(var(--md-surface-container), 0.8);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(var(--md-outline-variant), 0.3);
-  border-radius: 1.5rem;
   padding: 0.75rem 1rem;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  /* Enhanced light theme shadows */
+}
+
+/* Dark theme search styles */
+[data-theme="dark"] .search-container,
+[data-theme$="-dark"] .search-container {
+  background: rgba(var(--surface), 0.8);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1.5rem;
   box-shadow: 
-    0 4px 16px rgba(0, 0, 0, 0.1),
-    0 2px 8px rgba(0, 0, 0, 0.06),
-    0 3px 12px rgba(var(--md-primary), 0.08),
+    0 4px 16px rgba(0, 0, 0, 0.2),
+    0 2px 8px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] .search-container:hover,
+[data-theme$="-dark"] .search-container:hover {
+  background: rgba(var(--surface), 0.9);
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 
+    0 6px 20px rgba(0, 0, 0, 0.25),
+    0 3px 10px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .search-container:focus-within,
+[data-theme$="-dark"] .search-container:focus-within {
+  background: rgba(var(--surface), 0.95);
+  border-color: rgba(var(--primary), 0.5);
+  box-shadow: 
+    0 4px 20px rgba(var(--primary), 0.2),
+    0 2px 10px rgba(0, 0, 0, 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
-.search-container:focus-within {
-  background: rgba(var(--md-surface-container-high), 0.9);
-  border-color: rgba(var(--md-primary), 0.5);
-  /* Enhanced focus shadows for better depth */
+/* Light theme styles */
+[data-theme="light"] .search-container,
+:not([data-theme$="-dark"]):not([data-theme="dark"]) .search-container {
+  background: rgba(var(--surface-container), 0.85);
+  backdrop-filter: blur(16px) saturate(150%);
+  border: 1px solid rgba(var(--outline-variant), 0.2);
+  border-radius: 1rem;
+  box-shadow:
+    0 2px 12px rgba(0, 0, 0, 0.08),
+    0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .search-container:hover,
+:not([data-theme$="-dark"]):not([data-theme="dark"]) .search-container:hover {
+  background: rgba(var(--surface-container-high), 0.9);
+  border-color: rgba(var(--outline), 0.3);
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.12),
+    0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .search-container:focus-within,
+:not([data-theme$="-dark"]):not([data-theme="dark"]) .search-container:focus-within {
+  background: rgba(var(--surface-container-high), 0.9);
+  border-color: rgba(var(--primary), 0.35);
   box-shadow: 
-    0 0 0 2px rgba(var(--md-primary), 0.12),
-    0 12px 32px rgba(0, 0, 0, 0.15),
-    0 8px 24px rgba(var(--md-primary), 0.15),
-    0 4px 12px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    0 0 0 2px rgba(var(--primary), 0.12),
+    0 4px 16px rgba(0, 0, 0, 0.12),
+    0 2px 8px rgba(var(--primary), 0.08);
 }
 
 .search-icon {

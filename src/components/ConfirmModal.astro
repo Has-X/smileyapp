@@ -49,7 +49,7 @@
     private currentData: any;
 
     constructor() {
-      this.modal = document.getElementById('confirm-modal');
+    this.modal = document.getElementById('confirm-modal');
       this.cancelBtn = document.getElementById('confirm-cancel-btn');
       this.deleteBtn = document.getElementById('confirm-delete-btn');
       this.titleElement = this.modal?.querySelector('.confirm-modal-title') as HTMLElement | null;
@@ -79,6 +79,11 @@
         this.hide();
       });
 
+      // Ensure modal is always attached to document.body so it stacks above other components
+      if (this.modal && this.modal.parentElement !== document.body) {
+        document.body.appendChild(this.modal);
+      }
+
       // Close on escape key
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && this.modal?.classList.contains('show')) {
@@ -106,6 +111,16 @@
       this.currentCallback = onConfirm;
       this.currentData = data;
 
+      // Bring to front by setting very high z-index values on show
+      if (this.modal) {
+        this.modal.style.zIndex = '14000';
+        const backdrop = this.modal.querySelector('.confirm-modal-backdrop') as HTMLElement | null;
+        const container = this.modal.querySelector('.confirm-modal-container') as HTMLElement | null;
+        const content = this.modal.querySelector('.confirm-modal-content') as HTMLElement | null;
+        if (backdrop) backdrop.style.zIndex = '13990';
+        if (container) container.style.zIndex = '14000';
+        if (content) content.style.zIndex = '14010';
+      }
       this.modal?.classList.remove('hidden');
       setTimeout(() => {
         this.modal?.classList.add('show');
@@ -136,8 +151,8 @@
   });
 
   function setupDeleteHandlers() {
-    // Memory delete handlers
-    document.querySelectorAll('.memory-delete-btn').forEach(btn => {
+    // Memory delete handlers (scope to Memories panel only)
+    document.querySelectorAll('#panel-memories .memory-delete-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
         const memoryId = (btn as HTMLElement).dataset.memoryId;
@@ -153,8 +168,8 @@
       });
     });
 
-    // Journal delete handlers
-    document.querySelectorAll('.journal-delete-btn').forEach(btn => {
+    // Journal delete handlers (scope to Journal panel)
+    document.querySelectorAll('#panel-journal .journal-delete-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
         const journalId = (btn as HTMLElement).dataset.journalId;
@@ -170,8 +185,8 @@
       });
     });
 
-    // History delete handlers
-    document.querySelectorAll('.history-delete-btn').forEach(btn => {
+    // History delete handlers (explicit class in History panel)
+    document.querySelectorAll('#panel-history .history-delete-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
         const conversationId = (btn as HTMLElement).dataset.conversationId;
