@@ -456,7 +456,8 @@
       this.clearError();
 
       try {
-        const success = await this.secureStorage.unlock(password);
+        const remember = (document.getElementById('remember-session') as HTMLInputElement)?.checked ?? false;
+        const success = await this.secureStorage.unlock(password, remember);
         
         if (success) {
           this.hide();
@@ -504,6 +505,8 @@
 
       this.passwordInput.value = '';
       this.passwordInput.type = 'password';
+      const remember = document.getElementById('remember-session') as HTMLInputElement | null;
+      if (remember) remember.checked = false;
       
       // Reset toggle button to show the "show password" icon (open eye) when password is hidden
       if (this.toggleBtn) {

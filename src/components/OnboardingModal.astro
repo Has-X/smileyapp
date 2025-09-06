@@ -1,68 +1,966 @@
-<!-- Onboarding Modal (unified with confirm modal backdrop) -->
-<div id="onboarding-modal" class="confirm-modal hidden">
-  <div class="confirm-modal-backdrop"></div>
-  <div class="confirm-modal-container">
-    <div class="confirm-modal-content">
-      <div class="modal-header">
-        <h3 class="modal-title">Welcome to Smile AI</h3>
-        <p class="modal-subtitle">Let's set up your experience</p>
-      </div>
+<!-- Material Design 3 Onboarding Modal -->
+<div id="onboarding-modal" class="global-modal" style="display: none;">
+  <div class="global-modal-backdrop"></div>
+  <div class="global-modal-container">
+    <div class="global-modal-content onboarding-content">
       
-      <div class="modal-body">
-        <div class="onboarding-step">
-          <h4 class="step-title">Choose your AI model</h4>
-          <select id="onboarding-model-select" class="material-select">
-            <option>Loading available models...</option>
-          </select>
-          <p class="step-description">GPT-OSS 20B recommended for most conversations</p>
-        </div>
-
-        <div class="onboarding-step">
-          <h4 class="step-title">Select a theme</h4>
-          <div class="theme-grid">
-            <button class="theme-card theme-card-active" data-theme="smile">
-              <div class="theme-preview bg-gradient-to-br from-blue-500 to-blue-600"></div>
-              <span>Ocean Blue</span>
-            </button>
-            <button class="theme-card" data-theme="forest">
-              <div class="theme-preview bg-gradient-to-br from-green-500 to-green-600"></div>
-              <span>Forest</span>
-            </button>
-            <button class="theme-card" data-theme="sunset">
-              <div class="theme-preview bg-gradient-to-br from-orange-500 to-red-500"></div>
-              <span>Sunset</span>
-            </button>
-            <button class="theme-card" data-theme="lavender">
-              <div class="theme-preview bg-gradient-to-br from-purple-500 to-pink-500"></div>
-              <span>Lavender</span>
-            </button>
+      <!-- Header with Material Design 3 Styling -->
+      <div class="onboarding-header material-card">
+        <div class="onboarding-welcome">
+          <div class="onboarding-logo">
+            <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
           </div>
+          <h1 class="onboarding-title">Welcome to Smile AI</h1>
+          <p class="onboarding-subtitle">Your personal AI companion for mental wellness</p>
         </div>
 
-        <div class="onboarding-step">
-          <label class="material-switch">
-            <input id="onboarding-tts" type="checkbox" />
-            <span class="switch-track">
-              <span class="switch-thumb"></span>
-            </span>
-            <span class="switch-label">Enable voice responses</span>
-          </label>
-        </div>
-
-        <div class="privacy-notice">
-          <svg class="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M10,17L6,13L7.41,11.59L10,14.17L16.59,7.58L18,9L10,17Z"/>
-          </svg>
-          <div>
-            <p class="notice-title">Privacy First</p>
-            <p class="notice-text">Your conversations stay on your device. No data is sent to external servers.</p>
+        <!-- Material Progress Indicator -->
+        <div class="onboarding-progress">
+          <div class="progress-track">
+            <div class="progress-step active" data-step="1">
+              <span class="step-number">1</span>
+              <span class="step-label">Welcome</span>
+            </div>
+            <div class="progress-step" data-step="2">
+              <span class="step-number">2</span>
+              <span class="step-label">AI Setup</span>
+            </div>
+            <div class="progress-step" data-step="3">
+              <span class="step-number">3</span>
+              <span class="step-label">Theme</span>
+            </div>
+            <div class="progress-step" data-step="4">
+              <span class="step-number">4</span>
+              <span class="step-label">Preferences</span>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="confirm-modal-actions">
-        <button id="onboarding-complete" class="btn-primary w-full">Get Started</button>
+      <!-- Material Design Body -->
+      <div class="onboarding-body">
+        
+        <!-- Step 1: Welcome with Material Cards -->
+        <div class="onboarding-step-content active" data-step="1">
+          <div class="step-content-card material-card elevated">
+            <div class="step-icon-container">
+              <div class="step-icon">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+              </div>
+            </div>
+            <div class="step-text">
+              <h2 class="step-title">Welcome to Smile AI</h2>
+              <p class="step-description">Your personal companion for mental wellness, powered by AI and designed with privacy in mind.</p>
+            </div>
+          </div>
+          
+          <div class="feature-grid">
+            <div class="feature-card material-card">
+              <div class="feature-icon">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                </svg>
+              </div>
+              <div class="feature-content">
+                <h4>Intelligent Conversations</h4>
+                <p>AI that adapts to your personality and needs</p>
+              </div>
+            </div>
+            
+            <div class="feature-card material-card">
+              <div class="feature-icon">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                </svg>
+              </div>
+              <div class="feature-content">
+                <h4>Mood Insights</h4>
+                <p>AI-powered analytics for emotional wellness</p>
+              </div>
+            </div>
+            
+            <div class="feature-card material-card">
+              <div class="feature-icon">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                </svg>
+              </div>
+              <div class="feature-content">
+                <h4>Secure & Private</h4>
+                <p>End-to-end encryption for your peace of mind</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2: Ollama Setup with Material Design -->
+        <div class="onboarding-step-content" data-step="2">
+          <div class="step-content-card material-card elevated">
+            <div class="step-icon-container">
+              <div class="step-icon">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/>
+                </svg>
+              </div>
+            </div>
+            <div class="step-text">
+              <h2 class="step-title">Setup AI Engine</h2>
+              <p class="step-description">Smile AI works with Ollama to run AI models locally on your device for maximum privacy and performance.</p>
+            </div>
+          </div>
+          
+          <div class="ollama-setup-container material-card">
+            <div id="ollama-setup-content">
+              <!-- This will be populated by the Ollama helper component -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3: Theme Selection with Material Cards -->
+        <div class="onboarding-step-content" data-step="3">
+          <div class="step-content-card material-card elevated">
+            <div class="step-icon-container">
+              <div class="step-icon">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v12a4 4 0 004 4h4a2 2 0 002-2V5z"/>
+                </svg>
+              </div>
+            </div>
+            <div class="step-text">
+              <h2 class="step-title">Choose Your Theme</h2>
+              <p class="step-description">Select a color theme that feels right for you. You can always change this later in settings.</p>
+            </div>
+          </div>
+          
+          <div class="theme-selection">
+            <div class="theme-grid">
+              <button class="theme-card material-card theme-card-active" data-theme="smile">
+                <div class="theme-preview smile-preview">
+                  <div class="preview-dot primary"></div>
+                  <div class="preview-dot secondary"></div>
+                  <div class="preview-dot accent"></div>
+                </div>
+                <div class="theme-info">
+                  <span class="theme-name">Ocean Blue</span>
+                  <span class="theme-description">Calm and focused</span>
+                </div>
+              </button>
+              
+              <button class="theme-card material-card" data-theme="forest">
+                <div class="theme-preview forest-preview">
+                  <div class="preview-dot primary"></div>
+                  <div class="preview-dot secondary"></div>
+                  <div class="preview-dot accent"></div>
+                </div>
+                <div class="theme-info">
+                  <span class="theme-name">Forest</span>
+                  <span class="theme-description">Natural and grounding</span>
+                </div>
+              </button>
+              
+              <button class="theme-card material-card" data-theme="sunset">
+                <div class="theme-preview sunset-preview">
+                  <div class="preview-dot primary"></div>
+                  <div class="preview-dot secondary"></div>
+                  <div class="preview-dot accent"></div>
+                </div>
+                <div class="theme-info">
+                  <span class="theme-name">Sunset</span>
+                  <span class="theme-description">Warm and energizing</span>
+                </div>
+              </button>
+              
+              <button class="theme-card material-card" data-theme="lavender">
+                <div class="theme-preview lavender-preview">
+                  <div class="preview-dot primary"></div>
+                  <div class="preview-dot secondary"></div>
+                  <div class="preview-dot accent"></div>
+                </div>
+                <div class="theme-info">
+                  <span class="theme-name">Lavender</span>
+                  <span class="theme-description">Soft and peaceful</span>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 4: Preferences with Material Components -->
+        <div class="onboarding-step-content" data-step="4">
+          <div class="step-content-card material-card elevated">
+            <div class="step-icon-container">
+              <div class="step-icon">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+              </div>
+            </div>
+            <div class="step-text">
+              <h2 class="step-title">Final Preferences</h2>
+              <p class="step-description">Configure your experience with these optional features to get the most out of Smile AI.</p>
+            </div>
+          </div>
+          
+          <div class="preferences-container">
+            <div class="preference-options">
+              <div class="preference-item material-card">
+                <div class="preference-content">
+                  <div class="preference-icon">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 14.142M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/>
+                    </svg>
+                  </div>
+                  <div class="preference-info">
+                    <h4>Voice Responses</h4>
+                    <p>Have AI responses read aloud to you</p>
+                  </div>
+                  <label class="material-switch">
+                    <input id="onboarding-tts" type="checkbox" />
+                    <span class="switch-track">
+                      <span class="switch-thumb"></span>
+                    </span>
+                  </label>
+                </div>
+              </div>
+              
+              <div class="preference-item material-card">
+                <div class="preference-content">
+                  <div class="preference-icon">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                    </svg>
+                  </div>
+                  <div class="preference-info">
+                    <h4>Data Encryption</h4>
+                    <p>Encrypt your conversations and journal entries</p>
+                  </div>
+                  <label class="material-switch">
+                    <input id="onboarding-encryption" type="checkbox" checked />
+                    <span class="switch-track">
+                      <span class="switch-thumb"></span>
+                    </span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="model-selection material-card">
+                <div class="model-content">
+                  <div class="model-icon">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/>
+                    </svg>
+                  </div>
+                  <div class="model-info">
+                    <label for="onboarding-model-select" class="model-label">AI Model</label>
+                    <select id="onboarding-model-select" class="form-select">
+                      <option>Loading available models...</option>
+                    </select>
+                    <p class="model-description">Choose your preferred AI model for conversations</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="privacy-notice material-card">
+              <div class="privacy-icon">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                </svg>
+              </div>
+              <div class="privacy-content">
+                <h4>Privacy Promise</h4>
+                <p>All your data stays on your device. We never collect, store, or transmit your personal information to external servers.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>      <!-- Material Navigation Actions -->
+      <div class="onboarding-actions">
+        <button id="onboarding-back" class="material-button btn-outlined" style="display: none;">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+          </svg>
+          Back
+        </button>
+        
+        <div class="actions-spacer"></div>
+        
+        <button id="onboarding-next" class="material-button btn-primary">
+          Next
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+        </button>
+        
+        <button id="onboarding-complete" class="material-button btn-primary" style="display: none;">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+          </svg>
+          Complete Setup
+        </button>
       </div>
     </div>
   </div>
 </div>
+
+<style>
+/* Material Design 3 Onboarding Modal Styles */
+.onboarding-content {
+  max-width: 680px;
+  width: 90vw;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Header Styling */
+.onboarding-header {
+  padding: 2rem 2rem 1.5rem 2rem;
+  border-bottom: 1px solid rgba(var(--md-outline-variant), 0.2);
+  background: linear-gradient(135deg, rgba(var(--md-primary-container), 0.1) 0%, rgba(var(--md-secondary-container), 0.05) 100%);
+}
+
+.onboarding-welcome {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.onboarding-logo svg {
+  width: 3rem;
+  height: 3rem;
+  color: rgb(var(--md-primary));
+  margin-bottom: 1rem;
+}
+
+.onboarding-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: rgb(var(--md-on-surface));
+  margin: 0 0 0.5rem 0;
+  line-height: 1.2;
+}
+
+.onboarding-subtitle {
+  font-size: 1rem;
+  color: rgb(var(--md-on-surface-variant));
+  margin: 0;
+  opacity: 0.8;
+}
+
+/* Progress Indicator */
+.onboarding-progress {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.progress-track {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  min-width: fit-content;
+  padding: 0 1rem;
+}
+
+.progress-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+  min-width: 80px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.step-number {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: all 0.3s ease;
+  border: 2px solid rgba(var(--md-outline-variant), 0.5);
+  background: rgba(var(--md-surface-variant), 0.3);
+  color: rgb(var(--md-on-surface-variant));
+}
+
+.step-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: rgb(var(--md-on-surface-variant));
+  opacity: 0.7;
+  transition: all 0.3s ease;
+}
+
+.progress-step.active .step-number {
+  background: rgb(var(--md-primary));
+  color: rgb(var(--md-on-primary));
+  border-color: rgb(var(--md-primary));
+  transform: scale(1.1);
+}
+
+.progress-step.active .step-label {
+  color: rgb(var(--md-primary));
+  opacity: 1;
+  font-weight: 600;
+}
+
+.progress-step.completed .step-number {
+  background: rgba(var(--md-primary), 0.2);
+  color: rgb(var(--md-primary));
+  border-color: rgb(var(--md-primary));
+}
+
+.progress-step.completed .step-label {
+  color: rgb(var(--md-on-surface));
+  opacity: 0.8;
+}
+
+.progress-step:hover .step-number {
+  transform: scale(1.05);
+}
+
+/* Body Styling */
+.onboarding-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 2rem;
+}
+
+.onboarding-step-content {
+  display: none;
+  animation: fadeInUp 0.4s ease-out;
+}
+
+.onboarding-step-content.active {
+  display: block;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Step Content Cards */
+.step-content-card {
+  margin-bottom: 2rem;
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.step-icon-container {
+  flex-shrink: 0;
+}
+
+.step-icon {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, rgb(var(--md-primary)) 0%, rgb(var(--md-secondary)) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(var(--md-on-primary));
+}
+
+.step-text h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: rgb(var(--md-on-surface));
+  margin: 0 0 0.75rem 0;
+}
+
+.step-text p {
+  font-size: 1rem;
+  color: rgb(var(--md-on-surface-variant));
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Feature Grid */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.feature-card {
+  padding: 1.5rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+}
+
+.feature-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.75rem;
+  background: rgba(var(--md-primary), 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(var(--md-primary));
+  flex-shrink: 0;
+}
+
+.feature-content h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgb(var(--md-on-surface));
+  margin: 0 0 0.5rem 0;
+}
+
+.feature-content p {
+  font-size: 0.875rem;
+  color: rgb(var(--md-on-surface-variant));
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Ollama Setup Container */
+.ollama-setup-container {
+  padding: 1.5rem;
+  margin-top: 1rem;
+}
+
+/* Theme Selection */
+.theme-selection {
+  margin-top: 1.5rem;
+}
+
+.theme-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+}
+
+.theme-card {
+  padding: 1.5rem;
+  border: 2px solid rgba(var(--md-outline-variant), 0.3);
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: rgba(var(--md-surface-container), 0.3);
+  text-align: center;
+}
+
+.theme-card:hover {
+  border-color: rgba(var(--md-primary), 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
+}
+
+.theme-card.theme-card-active {
+  border-color: rgb(var(--md-primary));
+  background: rgba(var(--md-primary-container), 0.2);
+  box-shadow: 0 4px 8px rgba(var(--md-primary), 0.2);
+}
+
+.theme-preview {
+  width: 100%;
+  height: 60px;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.preview-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.smile-preview {
+  background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+}
+
+.smile-preview .preview-dot.primary { background: #1e40af; }
+.smile-preview .preview-dot.secondary { background: #3b82f6; }
+.smile-preview .preview-dot.accent { background: #60a5fa; }
+
+.forest-preview {
+  background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+}
+
+.forest-preview .preview-dot.primary { background: #047857; }
+.forest-preview .preview-dot.secondary { background: #10b981; }
+.forest-preview .preview-dot.accent { background: #34d399; }
+
+.sunset-preview {
+  background: linear-gradient(135deg, #ea580c 0%, #fb923c 100%);
+}
+
+.sunset-preview .preview-dot.primary { background: #c2410c; }
+.sunset-preview .preview-dot.secondary { background: #fb923c; }
+.sunset-preview .preview-dot.accent { background: #fdba74; }
+
+.lavender-preview {
+  background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+}
+
+.lavender-preview .preview-dot.primary { background: #6d28d9; }
+.lavender-preview .preview-dot.secondary { background: #a855f7; }
+.lavender-preview .preview-dot.accent { background: #c084fc; }
+
+.theme-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.theme-name {
+  font-weight: 600;
+  color: rgb(var(--md-on-surface));
+  font-size: 0.95rem;
+}
+
+.theme-description {
+  font-size: 0.8rem;
+  color: rgb(var(--md-on-surface-variant));
+  opacity: 0.8;
+}
+
+/* Preferences Container */
+.preferences-container {
+  margin-top: 1.5rem;
+}
+
+.preference-options {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.preference-item {
+  padding: 1.5rem;
+}
+
+.preference-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.preference-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.75rem;
+  background: rgba(var(--md-primary), 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(var(--md-primary));
+  flex-shrink: 0;
+}
+
+.preference-info {
+  flex: 1;
+}
+
+.preference-info h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgb(var(--md-on-surface));
+  margin: 0 0 0.25rem 0;
+}
+
+.preference-info p {
+  font-size: 0.875rem;
+  color: rgb(var(--md-on-surface-variant));
+  margin: 0;
+  opacity: 0.8;
+}
+
+/* Material Switch */
+.material-switch {
+  position: relative;
+  display: inline-block;
+  width: 52px;
+  height: 32px;
+  cursor: pointer;
+}
+
+.material-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.switch-track {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(var(--md-outline), 0.3);
+  border-radius: 16px;
+  transition: all 0.3s ease;
+}
+
+.switch-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 28px;
+  height: 28px;
+  background-color: rgb(var(--md-outline));
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.material-switch input:checked + .switch-track {
+  background-color: rgb(var(--md-primary));
+}
+
+.material-switch input:checked + .switch-track .switch-thumb {
+  transform: translateX(20px);
+  background-color: rgb(var(--md-on-primary));
+}
+
+/* Model Selection */
+.model-selection {
+  padding: 1.5rem;
+}
+
+.model-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.model-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.75rem;
+  background: rgba(var(--md-primary), 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(var(--md-primary));
+  flex-shrink: 0;
+  margin-top: 0.5rem;
+}
+
+.model-info {
+  flex: 1;
+}
+
+.model-label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgb(var(--md-on-surface));
+  margin-bottom: 0.75rem;
+  display: block;
+}
+
+.model-description {
+  font-size: 0.875rem;
+  color: rgb(var(--md-on-surface-variant));
+  margin: 0.75rem 0 0 0;
+  opacity: 0.8;
+}
+
+/* Privacy Notice */
+.privacy-notice {
+  padding: 1.5rem;
+  background: rgba(var(--md-primary-container), 0.1);
+  border: 1px solid rgba(var(--md-primary), 0.2);
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.privacy-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.75rem;
+  background: rgba(var(--md-primary), 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(var(--md-primary));
+  flex-shrink: 0;
+}
+
+.privacy-content h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgb(var(--md-on-surface));
+  margin: 0 0 0.5rem 0;
+}
+
+.privacy-content p {
+  font-size: 0.875rem;
+  color: rgb(var(--md-on-surface-variant));
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Actions */
+.onboarding-actions {
+  padding: 1.5rem 2rem 2rem 2rem;
+  border-top: 1px solid rgba(var(--md-outline-variant), 0.2);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: rgba(var(--md-surface-container), 0.3);
+}
+
+.actions-spacer {
+  flex: 1;
+}
+
+.onboarding-actions .material-button {
+  min-width: 120px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .onboarding-content {
+    width: 95vw;
+    max-height: 90vh;
+  }
+  
+  .onboarding-header {
+    padding: 1.5rem;
+  }
+  
+  .onboarding-body {
+    padding: 1.5rem;
+  }
+  
+  .step-content-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 1.5rem;
+  }
+  
+  .feature-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .theme-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .progress-track {
+    gap: 0.5rem;
+    padding: 0 0.5rem;
+  }
+  
+  .progress-step {
+    min-width: 60px;
+  }
+  
+  .step-label {
+    font-size: 0.65rem;
+  }
+  
+  .onboarding-title {
+    font-size: 1.5rem;
+  }
+  
+  .preference-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .model-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .onboarding-actions {
+    padding: 1rem 1.5rem;
+    flex-wrap: wrap;
+  }
+  
+  .onboarding-actions .material-button {
+    min-width: 100px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .theme-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .step-content-card {
+    padding: 1rem;
+  }
+  
+  .feature-card {
+    padding: 1rem;
+  }
+  
+  .preference-item,
+  .model-selection,
+  .privacy-notice {
+    padding: 1rem;
+  }
+}
+
+/* Dark theme adjustments */
+[data-theme="dark"] .onboarding-header,
+[data-theme$="-dark"] .onboarding-header {
+  background: linear-gradient(135deg, rgba(var(--md-primary-container), 0.15) 0%, rgba(var(--md-secondary-container), 0.1) 100%);
+}
+
+[data-theme="dark"] .theme-card,
+[data-theme$="-dark"] .theme-card {
+  background: rgba(var(--md-surface-container), 0.5);
+}
+
+[data-theme="dark"] .theme-card:hover,
+[data-theme$="-dark"] .theme-card:hover {
+  background: rgba(var(--md-surface-container), 0.7);
+}
+
+[data-theme="dark"] .onboarding-actions,
+[data-theme$="-dark"] .onboarding-actions {
+  background: rgba(var(--md-surface-container), 0.5);
+}
+</style>
+<script>
+// Load external onboarding script
+import './onboarding-script.js';
+</script>

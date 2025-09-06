@@ -25,6 +25,7 @@ class SecureStorage {
   private isUnlocked: boolean = false;
   private autoLockTimer: number | null = null;
   private lastActivity: number = Date.now();
+  private rememberForSession: boolean = false;
   private readonly ALGORITHM = 'AES-GCM';
   private readonly KEY_DERIVATION = 'PBKDF2';
   private readonly ITERATIONS = 100000;
@@ -145,7 +146,7 @@ class SecureStorage {
   /**
    * Unlock storage with password
    */
-  async unlock(password: string): Promise<boolean> {
+  async unlock(password: string, rememberSession: boolean = false): Promise<boolean> {
     if (!this.isEncryptionEnabled()) {
       this.isUnlocked = true;
       return true;
@@ -180,6 +181,7 @@ class SecureStorage {
 
       this.cryptoKey = key;
       this.isUnlocked = true;
+      this.rememberForSession = !!rememberSession;
       this.updateActivity();
       this.setupAutoLock();
 
@@ -196,6 +198,8 @@ class SecureStorage {
   lock(): void {
     this.cryptoKey = null;
     this.isUnlocked = false;
+    // Reset session preference on explicit lock
+    this.rememberForSession = false;
     this.clearAutoLockTimer();
     
     // Dispatch lock event
@@ -205,9 +209,13 @@ class SecureStorage {
   /**
    * Disable encryption (with current password verification)
    */
-  async disableEncryption(currentPassword: string): Promise<boolean> {
-    if (!await this.unlock(currentPassword)) {
-      return false;
+  async disableEncryption(currentPassword?: string): Promise<boolean> {
+    // If not currently unlocked and encryption enabled, attempt unlock when a password is provided
+    if (this.isEncryptionEnabled() && !this.isStorageUnlocked()) {
+      if (!currentPassword) return false;
+      if (!await this.unlock(currentPassword)) {
+        return false;
+      }
     }
 
     try {
@@ -502,6 +510,10 @@ class SecureStorage {
     this.clearAutoLockTimer();
     
     const settings = this.getSecuritySettings();
+    // If user chose to remember this session, don't auto-lock until refresh
+    if (this.rememberForSession) {
+      return;
+    }
     if (settings.autoLockInterval > 0 && this.isStorageUnlocked()) {
       const interval = settings.autoLockInterval * 60 * 1000; // Convert to milliseconds
       

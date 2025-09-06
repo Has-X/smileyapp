@@ -315,8 +315,11 @@ class SmileApp {
   private showOnboarding() {
     const modal = document.getElementById('onboarding-modal');
     if (modal) {
-      // Use unified manager to show modal
-      (window as any).modalManager?.show(modal);
+      // Show onboarding modal with new Material Design structure
+      modal.style.display = 'flex';
+      setTimeout(() => {
+        modal.classList.add('show');
+      }, 10);
 
       // Load models in onboarding select
       const onboardingModelSelect = document.getElementById('onboarding-model-select') as HTMLSelectElement;
@@ -2208,17 +2211,67 @@ class SmileApp {
   // Security Settings Methods
   private toggleEncryption(enabled: boolean) {
     if (enabled) {
-      this.showPasswordModal();
+      this.showPasswordModal('set');
     } else {
-      // Disable encryption
-      localStorage.setItem('smile-encryption-enabled', 'false');
-      this.showCustomNotification('Encryption disabled', 'info');
+      // Confirm disabling and decrypting any secure data
+      (window as any).showAppConfirm(
+        'Disable Encryption?',
+        'This will turn off encryption for local data. You may need to enter your password to proceed.',
+        async () => {
+          try {
+            const SecureStorageModule = await import('./secure-storage.ts');
+            const secureStorage = SecureStorageModule.default.getInstance();
+
+            const proceedDisable = async () => {
+              const ok = await secureStorage.disableEncryption();
+              if (ok) {
+                // Reflect UI state
+                const setBtn = document.getElementById('set-password-btn') as HTMLButtonElement;
+                const changeBtn = document.getElementById('change-password-btn') as HTMLButtonElement;
+                const testBtn = document.getElementById('test-unlock-btn') as HTMLButtonElement;
+                if (setBtn) setBtn.style.display = '';
+                if (changeBtn) changeBtn.style.display = 'none';
+                if (testBtn) testBtn.style.display = 'none';
+                this.showCustomNotification('Encryption disabled', 'info');
+              } else {
+                this.showCustomNotification('Failed to disable encryption', 'error');
+                const encToggle = document.getElementById('encryption-enabled') as HTMLInputElement;
+                if (encToggle) encToggle.checked = true; // revert
+              }
+            };
+
+            if (!secureStorage.isStorageUnlocked() && secureStorage.isEncryptionEnabled()) {
+              const unlockModal = (window as any).securityUnlockModal;
+              if (unlockModal && unlockModal.show) {
+                unlockModal.show(async () => {
+                  await proceedDisable();
+                });
+              } else {
+                this.showCustomNotification('Unlock UI not ready yet', 'error');
+                const encToggle = document.getElementById('encryption-enabled') as HTMLInputElement;
+                if (encToggle) encToggle.checked = true; // revert
+              }
+            } else {
+              await proceedDisable();
+            }
+          } catch (err) {
+            console.error('disableEncryption error', err);
+            this.showCustomNotification('An error occurred disabling encryption', 'error');
+            const encToggle = document.getElementById('encryption-enabled') as HTMLInputElement;
+            if (encToggle) encToggle.checked = true; // revert
+          }
+        }
+      );
     }
   }
 
   private updateAutoLock(minutes: number) {
-    localStorage.setItem('smile-auto-lock-minutes', minutes.toString());
-    this.showCustomNotification(`Auto-lock set to ${minutes === 0 ? 'never' : minutes + ' minutes'}`, 'success');
+    import('./secure-storage.ts').then(module => {
+      const storage = module.default.getInstance();
+      storage.updateSecuritySettings({ autoLockInterval: minutes });
+    }).finally(() => {
+      this.showCustomNotification(`Auto-lock set to ${minutes === 0 ? 'never' : minutes + ' minutes'}`, 'success');
+    });
   }
 
   private showPasswordModal(mode: 'set' | 'change' = 'set') {
@@ -2227,6 +2280,12 @@ class SmileApp {
       // Update modal title based on mode
       const title = modal.querySelector('.confirm-modal-title');
       if (title) title.textContent = mode === 'set' ? 'Set Encryption Password' : 'Change Encryption Password';
+      // Update modal mode attributes and fields
+      (modal as HTMLElement).setAttribute('data-mode', mode);
+      const currentField = document.getElementById('current-password-field') as HTMLElement;
+      const submitLabel = document.getElementById('password-submit-label') as HTMLElement;
+      if (currentField) currentField.style.display = mode === 'change' ? '' : 'none';
+      if (submitLabel) submitLabel.textContent = mode === 'change' ? 'Change Password' : 'Set Password';
       // Show via unified manager
       (window as any).modalManager?.show(modal);
     }
@@ -2303,14 +2362,17 @@ class SmileApp {
 };
 
 (window as any).savePassword = async function() {
+  const modal = document.getElementById('password-setup-modal');
+  const mode = modal?.getAttribute('data-mode') === 'change' ? 'change' : 'set';
+  const currentPassword = (document.getElementById('current-password') as HTMLInputElement)?.value;
   const newPassword = (document.getElementById('new-password') as HTMLInputElement)?.value;
   const confirmPassword = (document.getElementById('confirm-password') as HTMLInputElement)?.value;
   
-  if (!newPassword || !confirmPassword) {
+  if (!newPassword || !confirmPassword || (mode === 'change' && !currentPassword)) {
     if ((window as any).smileApp && typeof (window as any).smileApp.showCustomNotification === 'function') {
-      (window as any).smileApp.showCustomNotification('Please fill in both password fields', 'error');
+      (window as any).smileApp.showCustomNotification(mode === 'change' ? 'Please fill in all password fields' : 'Please fill in both password fields', 'error');
     } else {
-      console.warn('Please fill in both password fields');
+      console.warn(mode === 'change' ? 'Please fill in all password fields' : 'Please fill in both password fields');
     }
     return;
   }
@@ -2336,7 +2398,12 @@ class SmileApp {
     // Dynamically import and enable encryption via secure storage
     const SecureStorageModule = await import('./secure-storage.ts');
     const secureStorage = SecureStorageModule.default.getInstance();
-    const ok = await secureStorage.enableEncryption(newPassword);
+    let ok = false;
+    if (mode === 'change') {
+      ok = await secureStorage.changePassword(currentPassword!, newPassword);
+    } else {
+      ok = await secureStorage.enableEncryption(newPassword);
+    }
 
     if (!ok) {
       if ((window as any).smileApp && typeof (window as any).smileApp.showCustomNotification === 'function') {
@@ -2364,14 +2431,16 @@ class SmileApp {
     // Success notification
     const app = (window as any).smileApp;
     if (app && app.showCustomNotification) {
-      app.showCustomNotification('Encryption password set successfully! 🔒', 'success');
+      const msg = mode === 'change' ? 'Password changed successfully 🔒' : 'Encryption password set successfully! 🔒';
+      app.showCustomNotification(msg, 'success');
     }
   } catch (err) {
-    console.error('Error enabling encryption:', err);
+    console.error('Error handling password modal:', err);
     if ((window as any).smileApp && typeof (window as any).smileApp.showCustomNotification === 'function') {
-      (window as any).smileApp.showCustomNotification('Error enabling encryption. Please try again.', 'error');
+      const msg = mode === 'change' ? 'Error changing password. Please try again.' : 'Error enabling encryption. Please try again.';
+      (window as any).smileApp.showCustomNotification(msg, 'error');
     } else {
-      console.error('Error enabling encryption. Please try again.');
+      console.error('Error in password handling.');
     }
   }
 };
