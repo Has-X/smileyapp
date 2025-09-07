@@ -1,307 +1,403 @@
-<!-- Material Design 3 Onboarding Modal -->
+---
+// OnboardingModal.astro - Clean Material Design 3 Implementation with OllamaHelper Integration
+import OllamaHelper from './OllamaHelper.astro';
+---
+
 <div id="onboarding-modal" class="global-modal" style="display: none;">
   <div class="global-modal-backdrop"></div>
   <div class="global-modal-container">
     <div class="global-modal-content onboarding-content">
       
-      <!-- Header with Material Design 3 Styling -->
-      <div class="onboarding-header material-card">
-        <div class="onboarding-welcome">
-          <div class="onboarding-logo">
-            <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
+      <!-- Progress Indicator -->
+      <div class="progress-container">
+        <div class="onboarding-progress-bar" role="progressbar" aria-valuemin="1" aria-valuemax="6" aria-valuenow="1">
+          <div class="onboarding-progress-fill"></div>
+        </div>
+        <span class="onboarding-progress-text">Step 1 of 6</span>
+      </div>
+
+      <!-- Onboarding Steps -->
+      <div class="onboarding-body">
+        
+        <!-- Step 1: Welcome -->
+        <div class="step-content active" data-step="1">
+          <div class="step-header">
+            <div class="step-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+                <line x1="9" y1="9" x2="9.01" y2="9"/>
+                <line x1="15" y1="9" x2="15.01" y2="9"/>
+              </svg>
+            </div>
+            <h2>Welcome to Smile AI</h2>
+            <p>Your personal wellness companion powered by AI. Let's set up your experience in just a few steps.</p>
           </div>
-          <h1 class="onboarding-title">Welcome to Smile AI</h1>
-          <p class="onboarding-subtitle">Your personal AI companion for mental wellness</p>
+          
+          <div class="features-grid">
+            <div class="feature-item">
+              <div class="feature-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+                </svg>
+              </div>
+              <div>
+                <h4>AI Chat Support</h4>
+                <p>Talk to your AI companion anytime</p>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                  <path d="M8 7h8"/>
+                  <path d="M8 11h8"/>
+                  <path d="M8 15h6"/>
+                </svg>
+              </div>
+              <div>
+                <h4>Personal Journal</h4>
+                <p>Track your thoughts and progress</p>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2L2 7v10c0 5.55 3.84 9.95 9 11 5.16-1.05 9-5.45 9-11V7l-10-5z"/>
+                  <path d="M9 12l2 2 4-4"/>
+                </svg>
+              </div>
+              <div>
+                <h4>Wellness Tools</h4>
+                <p>Mindfulness and relaxation exercises</p>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                  <circle cx="12" cy="16" r="1"/>
+                  <path d="m7 11 0-3a5 5 0 0 1 10 0v3"/>
+                </svg>
+              </div>
+              <div>
+                <h4>Private & Secure</h4>
+                <p>Your data stays safe on your device</p>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <!-- Material Progress Indicator -->
-        <div class="onboarding-progress">
-          <div class="progress-track">
-            <div class="progress-step active" data-step="1">
-              <span class="step-number">1</span>
-              <span class="step-label">Welcome</span>
+        <!-- Step 2: Theme Selection (Redesigned) -->
+        <div class="step-content" data-step="2">
+          <div class="step-header">
+            <div class="step-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="5"/>
+                <path d="M12 1v2"/>
+                <path d="M12 21v2"/>
+                <path d="M4.22 4.22l1.42 1.42"/>
+                <path d="M18.36 18.36l1.42 1.42"/>
+                <path d="M1 12h2"/>
+                <path d="M21 12h2"/>
+                <path d="M4.22 19.78l1.42-1.42"/>
+                <path d="M18.36 5.64l1.42-1.42"/>
+              </svg>
             </div>
-            <div class="progress-step" data-step="2">
-              <span class="step-number">2</span>
-              <span class="step-label">AI Setup</span>
+            <h2>Choose Your Theme</h2>
+            <p>Select a visual accent. Preview updates instantly; you can change it later.</p>
+          </div>
+
+          <div class="theme-live-preview" id="theme-live-preview">
+            <div class="tlp-header"></div>
+            <div class="tlp-body">
+              <div class="tlp-card tlp-card-lg"></div>
+              <div class="tlp-card tlp-card-sm"></div>
             </div>
-            <div class="progress-step" data-step="3">
-              <span class="step-number">3</span>
-              <span class="step-label">Theme</span>
+          </div>
+
+          <div class="themes-grid compact">
+            <button class="theme-chip" data-theme="smile" aria-label="Select Smile Blue theme">
+              <span class="chip-bg smile-theme"></span>
+              <span class="chip-outline"></span>
+              <span class="chip-name">Smile Blue</span>
+            </button>
+            <button class="theme-chip" data-theme="forest" aria-label="Select Forest Green theme">
+              <span class="chip-bg forest-theme"></span>
+              <span class="chip-outline"></span>
+              <span class="chip-name">Forest Green</span>
+            </button>
+            <button class="theme-chip" data-theme="sunset" aria-label="Select Sunset Orange theme">
+              <span class="chip-bg sunset-theme"></span>
+              <span class="chip-outline"></span>
+              <span class="chip-name">Sunset Orange</span>
+            </button>
+            <button class="theme-chip" data-theme="lavender" aria-label="Select Lavender Purple theme">
+              <span class="chip-bg lavender-theme"></span>
+              <span class="chip-outline"></span>
+              <span class="chip-name">Lavender Purple</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 3: Security Settings -->
+        <div class="step-content" data-step="3">
+          <div class="step-header">
+            <div class="step-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                <circle cx="12" cy="16" r="1"/>
+                <path d="m7 11 0-3a5 5 0 0 1 10 0v3"/>
+              </svg>
             </div>
-            <div class="progress-step" data-step="4">
-              <span class="step-number">4</span>
-              <span class="step-label">Preferences</span>
+            <h2>Secure Your Data</h2>
+            <p>Protect your conversations and journal entries with local encryption. Your data stays on your device and is encrypted in your browser's storage.</p>
+          </div>
+
+          <div class="security-options">
+            <div class="security-card">
+              <div class="security-header">
+                <div class="security-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                    <circle cx="12" cy="16" r="1"/>
+                    <path d="m7 11 0-3a5 5 0 0 1 10 0v3"/>
+                  </svg>
+                </div>
+                <div class="security-details">
+                  <h4>Enable Local Data Encryption</h4>
+                  <p>Encrypt your conversations and journal entries in your browser's local storage</p>
+                </div>
+                <div class="security-toggle">
+                  <input type="checkbox" id="onboarding-encryption" class="toggle-input">
+                  <label for="onboarding-encryption" class="toggle-label">
+                    <span class="toggle-track">
+                      <span class="toggle-thumb"></span>
+                    </span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="security-info">
+              <div class="info-item">
+                <span class="info-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                    <circle cx="12" cy="16" r="1"/>
+                    <path d="m7 11 0-3a5 5 0 0 1 10 0v3"/>
+                  </svg>
+                </span>
+                <span>Encrypts data in your browser's local storage using AES-256</span>
+              </div>
+              <div class="info-item">
+                <span class="info-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                    <line x1="8" y1="21" x2="16" y2="21"/>
+                    <line x1="12" y1="17" x2="12" y2="21"/>
+                  </svg>
+                </span>
+                <span>Data never leaves your device - stored locally only</span>
+              </div>
+              <div class="info-item">
+                <span class="info-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
+                  </svg>
+                </span>
+                <span>You control your encryption password</span>
+              </div>
+            </div>
+
+            <div class="security-note">
+              <div class="note-content">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M12 16v-4"/>
+                  <path d="M12 8h.01"/>
+                </svg>
+                <p><strong>Optional:</strong> You can enable encryption later in settings. If enabled now, you'll set up your password after onboarding.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 4: Profile Setup -->
+        <div class="step-content" data-step="4">
+          <div class="step-header">
+            <div class="step-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+            </div>
+            <h2>Tell Me About Yourself</h2>
+            <p>Help me provide better support by sharing a bit about yourself. All information is optional and private.</p>
+          </div>
+
+          <div class="profile-form">
+            <div class="form-group">
+              <label for="onboarding-name" class="form-label">What should I call you?</label>
+              <input type="text" id="onboarding-name" class="form-input" placeholder="Your preferred name" maxlength="50">
+            </div>
+
+            <div class="form-group">
+              <label for="onboarding-goals" class="form-label">What would you like to work on?</label>
+              <textarea id="onboarding-goals" class="form-textarea" placeholder="Tell me about your wellness goals, challenges, or what brings you here..." rows="4" maxlength="500"></textarea>
+              <div class="char-counter">
+                <span class="char-count">0</span>/500 characters
+              </div>
+            </div>
+
+            <div class="profile-note">
+              <div class="note-content">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                  <circle cx="12" cy="16" r="1"/>
+                  <path d="m7 11 0-3a5 5 0 0 1 10 0v3"/>
+                </svg>
+                <p><strong>Privacy First:</strong> This information helps personalize your experience but is completely optional. You can update it anytime in your profile.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 5: AI Setup with OllamaHelper -->
+        <div class="step-content" data-step="5">
+          <div class="step-header">
+            <div class="step-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                <line x1="8" y1="21" x2="16" y2="21"/>
+                <line x1="12" y1="17" x2="12" y2="21"/>
+              </svg>
+            </div>
+            <h2>AI Engine Setup</h2>
+            <p>Set up Ollama for enhanced AI capabilities. This step is optional and can be completed later.</p>
+          </div>
+
+          <div class="ai-setup-container">
+            <div class="ai-status-check">
+              <div class="status-section">
+                <h4>AI Engine Status</h4>
+                <button id="check-ai-status" class="status-check-btn">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                  </svg>
+                  Check AI Status
+                </button>
+              </div>
+              <div id="ai-status-result" class="status-result">
+                Click 'Check AI Status' to verify your setup
+              </div>
+            </div>
+
+            <OllamaHelper />
+            
+            <div class="setup-note">
+              <div class="note-content">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M12 16v-4"/>
+                  <path d="M12 8h.01"/>
+                </svg>
+                <p><strong>Optional Setup:</strong> You can skip this step and configure AI later in settings. Smile AI will work with basic features without the AI engine.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 6: Thank You & Completion -->
+        <div class="step-content" data-step="6">
+          <div class="step-header">
+            <div class="step-icon success">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+                <line x1="9" y1="9" x2="9.01" y2="9"/>
+                <line x1="15" y1="9" x2="15.01" y2="9"/>
+              </svg>
+            </div>
+            <h2>Thank You & Welcome! 😊</h2>
+            <p>Your personal wellness companion is ready. We're here to support you, listen to you, and help you smile through life's journey.</p>
+          </div>
+
+          <div class="completion-content">
+            <div class="welcome-message">
+              <h3>Your Smile Matters</h3>
+              <p>Every conversation, every moment of reflection, every step forward—they all matter. We're honored to be part of your wellness journey.</p>
+            </div>
+
+            <div class="features-quick-list">
+              <div class="feature-quick">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+                </svg>
+                <span>Start conversations anytime</span>
+              </div>
+              <div class="feature-quick">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                  <path d="M8 7h8"/><path d="M8 11h8"/><path d="M8 15h6"/>
+                </svg>
+                <span>Journal your thoughts</span>
+              </div>
+              <div class="feature-quick">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2L2 7v10c0 5.55 3.84 9.95 9 11 5.16-1.05 9-5.45 9-11V7l-10-5z"/>
+                  <path d="M9 12l2 2 4-4"/>
+                </svg>
+                <span>Explore wellness tools</span>
+              </div>
+            </div>
+
+            <div class="acknowledgments-compact">
+              <p class="ack-intro">Special thanks to</p>
+              <div class="ack-list">
+                <span class="ack-credit"><strong>OpenAI</strong> for GPT models</span>
+                <span class="ack-separator">•</span>
+                <span class="ack-credit"><strong>NVIDIA</strong> for amazing hardware</span>
+              </div>
+            </div>
+
+            <div class="privacy-final">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                <circle cx="12" cy="16" r="1"/>
+                <path d="m7 11 0-3a5 5 0 0 1 10 0v3"/>
+              </svg>
+              <span>All data stays private on your device</span>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Material Design Body -->
-      <div class="onboarding-body">
-        
-        <!-- Step 1: Welcome with Material Cards -->
-        <div class="onboarding-step-content active" data-step="1">
-          <div class="step-content-card material-card elevated">
-            <div class="step-icon-container">
-              <div class="step-icon">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
-              </div>
-            </div>
-            <div class="step-text">
-              <h2 class="step-title">Welcome to Smile AI</h2>
-              <p class="step-description">Your personal companion for mental wellness, powered by AI and designed with privacy in mind.</p>
-            </div>
-          </div>
-          
-          <div class="feature-grid">
-            <div class="feature-card material-card">
-              <div class="feature-icon">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
-                </svg>
-              </div>
-              <div class="feature-content">
-                <h4>Intelligent Conversations</h4>
-                <p>AI that adapts to your personality and needs</p>
-              </div>
-            </div>
-            
-            <div class="feature-card material-card">
-              <div class="feature-icon">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
-                </svg>
-              </div>
-              <div class="feature-content">
-                <h4>Mood Insights</h4>
-                <p>AI-powered analytics for emotional wellness</p>
-              </div>
-            </div>
-            
-            <div class="feature-card material-card">
-              <div class="feature-icon">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                </svg>
-              </div>
-              <div class="feature-content">
-                <h4>Secure & Private</h4>
-                <p>End-to-end encryption for your peace of mind</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Step 2: Ollama Setup with Material Design -->
-        <div class="onboarding-step-content" data-step="2">
-          <div class="step-content-card material-card elevated">
-            <div class="step-icon-container">
-              <div class="step-icon">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/>
-                </svg>
-              </div>
-            </div>
-            <div class="step-text">
-              <h2 class="step-title">Setup AI Engine</h2>
-              <p class="step-description">Smile AI works with Ollama to run AI models locally on your device for maximum privacy and performance.</p>
-            </div>
-          </div>
-          
-          <div class="ollama-setup-container material-card">
-            <div id="ollama-setup-content">
-              <!-- This will be populated by the Ollama helper component -->
-            </div>
-          </div>
-        </div>
-
-        <!-- Step 3: Theme Selection with Material Cards -->
-        <div class="onboarding-step-content" data-step="3">
-          <div class="step-content-card material-card elevated">
-            <div class="step-icon-container">
-              <div class="step-icon">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v12a4 4 0 004 4h4a2 2 0 002-2V5z"/>
-                </svg>
-              </div>
-            </div>
-            <div class="step-text">
-              <h2 class="step-title">Choose Your Theme</h2>
-              <p class="step-description">Select a color theme that feels right for you. You can always change this later in settings.</p>
-            </div>
-          </div>
-          
-          <div class="theme-selection">
-            <div class="theme-grid">
-              <button class="theme-card material-card theme-card-active" data-theme="smile">
-                <div class="theme-preview smile-preview">
-                  <div class="preview-dot primary"></div>
-                  <div class="preview-dot secondary"></div>
-                  <div class="preview-dot accent"></div>
-                </div>
-                <div class="theme-info">
-                  <span class="theme-name">Ocean Blue</span>
-                  <span class="theme-description">Calm and focused</span>
-                </div>
-              </button>
-              
-              <button class="theme-card material-card" data-theme="forest">
-                <div class="theme-preview forest-preview">
-                  <div class="preview-dot primary"></div>
-                  <div class="preview-dot secondary"></div>
-                  <div class="preview-dot accent"></div>
-                </div>
-                <div class="theme-info">
-                  <span class="theme-name">Forest</span>
-                  <span class="theme-description">Natural and grounding</span>
-                </div>
-              </button>
-              
-              <button class="theme-card material-card" data-theme="sunset">
-                <div class="theme-preview sunset-preview">
-                  <div class="preview-dot primary"></div>
-                  <div class="preview-dot secondary"></div>
-                  <div class="preview-dot accent"></div>
-                </div>
-                <div class="theme-info">
-                  <span class="theme-name">Sunset</span>
-                  <span class="theme-description">Warm and energizing</span>
-                </div>
-              </button>
-              
-              <button class="theme-card material-card" data-theme="lavender">
-                <div class="theme-preview lavender-preview">
-                  <div class="preview-dot primary"></div>
-                  <div class="preview-dot secondary"></div>
-                  <div class="preview-dot accent"></div>
-                </div>
-                <div class="theme-info">
-                  <span class="theme-name">Lavender</span>
-                  <span class="theme-description">Soft and peaceful</span>
-                </div>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Step 4: Preferences with Material Components -->
-        <div class="onboarding-step-content" data-step="4">
-          <div class="step-content-card material-card elevated">
-            <div class="step-icon-container">
-              <div class="step-icon">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                </svg>
-              </div>
-            </div>
-            <div class="step-text">
-              <h2 class="step-title">Final Preferences</h2>
-              <p class="step-description">Configure your experience with these optional features to get the most out of Smile AI.</p>
-            </div>
-          </div>
-          
-          <div class="preferences-container">
-            <div class="preference-options">
-              <div class="preference-item material-card">
-                <div class="preference-content">
-                  <div class="preference-icon">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 14.142M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/>
-                    </svg>
-                  </div>
-                  <div class="preference-info">
-                    <h4>Voice Responses</h4>
-                    <p>Have AI responses read aloud to you</p>
-                  </div>
-                  <label class="material-switch">
-                    <input id="onboarding-tts" type="checkbox" />
-                    <span class="switch-track">
-                      <span class="switch-thumb"></span>
-                    </span>
-                  </label>
-                </div>
-              </div>
-              
-              <div class="preference-item material-card">
-                <div class="preference-content">
-                  <div class="preference-icon">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                    </svg>
-                  </div>
-                  <div class="preference-info">
-                    <h4>Data Encryption</h4>
-                    <p>Encrypt your conversations and journal entries</p>
-                  </div>
-                  <label class="material-switch">
-                    <input id="onboarding-encryption" type="checkbox" checked />
-                    <span class="switch-track">
-                      <span class="switch-thumb"></span>
-                    </span>
-                  </label>
-                </div>
-              </div>
-
-              <div class="model-selection material-card">
-                <div class="model-content">
-                  <div class="model-icon">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/>
-                    </svg>
-                  </div>
-                  <div class="model-info">
-                    <label for="onboarding-model-select" class="model-label">AI Model</label>
-                    <select id="onboarding-model-select" class="form-select">
-                      <option>Loading available models...</option>
-                    </select>
-                    <p class="model-description">Choose your preferred AI model for conversations</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="privacy-notice material-card">
-              <div class="privacy-icon">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-                </svg>
-              </div>
-              <div class="privacy-content">
-                <h4>Privacy Promise</h4>
-                <p>All your data stays on your device. We never collect, store, or transmit your personal information to external servers.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>      <!-- Material Navigation Actions -->
-      <div class="onboarding-actions">
-        <button id="onboarding-back" class="material-button btn-outlined" style="display: none;">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+      <!-- Navigation -->
+      <div class="onboarding-nav">
+        <button id="prev-btn" class="nav-btn secondary" style="display: none;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15,18 9,12 15,6"/>
           </svg>
           Back
         </button>
         
-        <div class="actions-spacer"></div>
+        <div class="nav-spacer"></div>
         
-        <button id="onboarding-next" class="material-button btn-primary">
+        <button id="next-btn" class="nav-btn primary">
           Next
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9,18 15,12 9,6"/>
           </svg>
         </button>
         
-        <button id="onboarding-complete" class="material-button btn-primary" style="display: none;">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+        <button id="finish-btn" class="nav-btn primary" style="display: none;">
+          Get Started
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="20,6 9,17 4,12"/>
           </svg>
-          Complete Setup
         </button>
       </div>
     </div>
@@ -309,217 +405,343 @@
 </div>
 
 <style>
-/* Material Design 3 Onboarding Modal Styles */
+/* Clean Material Design 3 Onboarding */
 .onboarding-content {
-  max-width: 680px;
+  max-width: 600px;
   width: 90vw;
   max-height: 85vh;
   display: flex;
   flex-direction: column;
-  padding: 0;
   overflow: hidden;
-}
-
-/* Header Styling */
-.onboarding-header {
-  padding: 2rem 2rem 1.5rem 2rem;
-  border-bottom: 1px solid rgba(var(--md-outline-variant), 0.2);
-  background: linear-gradient(135deg, rgba(var(--md-primary-container), 0.1) 0%, rgba(var(--md-secondary-container), 0.05) 100%);
-}
-
-.onboarding-welcome {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-.onboarding-logo svg {
-  width: 3rem;
-  height: 3rem;
-  color: rgb(var(--md-primary));
-  margin-bottom: 1rem;
-}
-
-.onboarding-title {
-  font-size: 2rem;
-  font-weight: 700;
-  color: rgb(var(--md-on-surface));
-  margin: 0 0 0.5rem 0;
-  line-height: 1.2;
-}
-
-.onboarding-subtitle {
-  font-size: 1rem;
-  color: rgb(var(--md-on-surface-variant));
-  margin: 0;
-  opacity: 0.8;
+  border-radius: 1.5rem;
+  background: rgb(var(--md-surface-container));
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.16);
 }
 
 /* Progress Indicator */
-.onboarding-progress {
-  max-width: 100%;
-  overflow-x: auto;
+.progress-container {
+  padding: 1.5rem 2rem 1rem;
+  border-bottom: 1px solid rgba(var(--md-outline-variant), 0.2);
+  background: rgba(var(--md-surface), 0.8);
+  backdrop-filter: blur(8px);
 }
 
-.progress-track {
-  display: flex;
+.onboarding-progress-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(var(--md-outline-variant), 0.3);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+}
+
+.onboarding-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, rgb(var(--md-primary)), rgb(var(--md-secondary)));
+  border-radius: 3px;
+  width: 25%;
+  transition: width 0.4s ease;
+}
+
+.onboarding-progress-text {
+  font-size: 0.875rem;
+  color: rgb(var(--md-on-surface-variant));
+  font-weight: 500;
+}
+/* Redesigned Theme Chips */
+.themes-grid.compact { 
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); 
   gap: 1rem;
-  justify-content: center;
-  min-width: fit-content;
-  padding: 0 1rem;
 }
 
-.progress-step {
+.theme-live-preview {
+  width: 100%;
+  background: var(--tlp-bg, linear-gradient(135deg,#3b82f6,#1e40af));
+  border-radius: 1.25rem;
+  padding: 1.25rem;
+  margin: 0 0 1.25rem 0;
+  position: relative;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  flex: 1;
-  min-width: 80px;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  gap: 0.75rem;
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  isolation: isolate;
 }
 
-.step-number {
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  font-size: 0.875rem;
-  transition: all 0.3s ease;
-  border: 2px solid rgba(var(--md-outline-variant), 0.5);
-  background: rgba(var(--md-surface-variant), 0.3);
-  color: rgb(var(--md-on-surface-variant));
+.theme-live-preview::before { 
+  content:""; 
+  position:absolute; 
+  inset:0; 
+  background:linear-gradient(180deg,rgba(255,255,255,0.15),transparent); 
+  pointer-events:none; 
 }
 
-.step-label {
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: rgb(var(--md-on-surface-variant));
-  opacity: 0.7;
-  transition: all 0.3s ease;
+.tlp-header { 
+  height: 44px; 
+  background: var(--tlp-primary, rgba(255,255,255,.12)); 
+  border-radius: .875rem; 
 }
 
-.progress-step.active .step-number {
-  background: rgb(var(--md-primary));
-  color: rgb(var(--md-on-primary));
+.tlp-body { 
+  flex:1; 
+  display:flex; 
+  flex-direction:column; 
+  gap:.6rem; 
+}
+
+.tlp-card { 
+  background: var(--tlp-surface, rgba(255,255,255,.55)); 
+  backdrop-filter: blur(8px); 
+  border-radius:.9rem; 
+  height:38px; 
+}
+
+.tlp-card-sm { 
+  width:65%; 
+  height:30px; 
+  background: var(--tlp-surface-variant, rgba(255,255,255,.38)); 
+}
+
+.theme-chip { 
+  position: relative;
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  gap: 0.75rem; 
+  padding: 1.25rem 1rem; 
+  background: rgb(var(--md-surface-container-low));
+  border: 2px solid rgba(var(--md-outline-variant), 0.3); 
+  border-radius: 1.25rem; 
+  cursor: pointer; 
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.theme-chip:hover { 
+  transform: translateY(-3px); 
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+  border-color: rgba(var(--md-primary), 0.4);
+}
+
+.theme-chip:active { 
+  transform: translateY(-1px); 
+}
+
+.theme-chip.selected { 
   border-color: rgb(var(--md-primary));
-  transform: scale(1.1);
+  box-shadow: 0 0 0 3px rgba(var(--md-primary), 0.2), 0 8px 24px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
 }
 
-.progress-step.active .step-label {
+.theme-chip .chip-bg { 
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.theme-chip .chip-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.3), transparent);
+  border-radius: inherit;
+}
+
+.theme-chip .chip-outline { 
+  display: none;
+}
+
+.theme-chip .chip-name { 
+  font-size: 0.875rem; 
+  font-weight: 600; 
+  letter-spacing: 0.025em;
+  color: rgb(var(--md-on-surface)); 
+  text-align: center;
+  line-height: 1.2;
+}
+
+.theme-chip.selected .chip-name {
   color: rgb(var(--md-primary));
-  opacity: 1;
-  font-weight: 600;
 }
 
-.progress-step.completed .step-number {
-  background: rgba(var(--md-primary), 0.2);
-  color: rgb(var(--md-primary));
-  border-color: rgb(var(--md-primary));
+/* Improved theme gradients */
+.theme-chip .smile-theme { 
+  background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
 }
 
-.progress-step.completed .step-label {
-  color: rgb(var(--md-on-surface));
-  opacity: 0.8;
+.theme-chip .forest-theme { 
+  background: linear-gradient(135deg, #10b981 0%, #047857 100%);
 }
 
-.progress-step:hover .step-number {
-  transform: scale(1.05);
+.theme-chip .sunset-theme { 
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
 }
 
-/* Body Styling */
+.theme-chip .lavender-theme { 
+  background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+}
+
+@media (max-width: 640px){
+  .themes-grid.compact { grid-template-columns: repeat(2,1fr); }
+  .theme-live-preview { padding:1rem; }
+}
+
+/* Body */
 .onboarding-body {
   flex: 1;
   overflow-y: auto;
   padding: 2rem;
 }
 
-.onboarding-step-content {
+.step-content {
   display: none;
-  animation: fadeInUp 0.4s ease-out;
+  animation: slideInRight 0.3s ease-out;
 }
 
-.onboarding-step-content.active {
+.step-content.active {
   display: block;
 }
 
-@keyframes fadeInUp {
+@keyframes slideInRight {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateX(20px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateX(0);
   }
 }
 
-/* Step Content Cards */
-.step-content-card {
+/* Step Header */
+.step-header {
+  text-align: center;
   margin-bottom: 2rem;
-  padding: 2rem;
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-}
-
-.step-icon-container {
-  flex-shrink: 0;
 }
 
 .step-icon {
   width: 4rem;
   height: 4rem;
   border-radius: 1rem;
-  background: linear-gradient(135deg, rgb(var(--md-primary)) 0%, rgb(var(--md-secondary)) 100%);
+  background: linear-gradient(135deg, rgb(var(--md-primary)), rgb(var(--md-secondary)));
+  color: rgb(var(--md-on-primary));
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgb(var(--md-on-primary));
+  margin: 0 auto 1rem;
 }
 
-.step-text h2 {
-  font-size: 1.5rem;
+.step-icon.success {
+  background: linear-gradient(135deg, rgb(var(--md-success)), rgb(var(--md-primary)));
+}
+
+.step-header h2 {
+  font-size: 1.75rem;
   font-weight: 600;
   color: rgb(var(--md-on-surface));
-  margin: 0 0 0.75rem 0;
+  margin: 0 0 0.5rem 0;
 }
 
-.step-text p {
+.step-header p {
   font-size: 1rem;
   color: rgb(var(--md-on-surface-variant));
   margin: 0;
   line-height: 1.5;
 }
 
-/* Feature Grid */
-.feature-grid {
+/* Features Grid */
+.features-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1rem;
 }
 
-.feature-card {
-  padding: 1.5rem;
+.feature-item {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 1rem;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  background: rgba(var(--md-surface-container-low), 0.5);
+  border: 1px solid rgba(var(--md-outline-variant), 0.2);
   transition: all 0.3s ease;
 }
 
-.feature-card:hover {
+.feature-item:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  border-color: rgba(var(--md-primary), 0.3);
 }
 
 .feature-icon {
   width: 2.5rem;
   height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 0.75rem;
   background: rgba(var(--md-primary), 0.1);
+  flex-shrink: 0;
+  color: rgb(var(--md-primary));
+}
+
+.feature-item h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgb(var(--md-on-surface));
+  margin: 0 0 0.25rem 0;
+}
+
+.feature-item p {
+  font-size: 0.875rem;
+  color: rgb(var(--md-on-surface-variant));
+  margin: 0;
+}
+
+/* Theme Selection */
+.themes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1rem;
+}
+
+/* Security Settings Styles */
+.security-options {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.security-card {
+  background: rgba(var(--md-surface-container-low), 0.5);
+  border: 1px solid rgba(var(--md-outline-variant), 0.2);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.security-card:hover {
+  border-color: rgba(var(--md-primary), 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.security-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.security-icon {
+  width: 3rem;
+  height: 3rem;
+  background: rgba(var(--md-primary), 0.1);
+  border-radius: 0.75rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -527,70 +749,293 @@
   flex-shrink: 0;
 }
 
-.feature-content h4 {
+.security-details {
+  flex: 1;
+}
+
+.security-details h4 {
+  margin: 0 0 0.25rem 0;
   font-size: 1rem;
   font-weight: 600;
   color: rgb(var(--md-on-surface));
-  margin: 0 0 0.5rem 0;
 }
 
-.feature-content p {
+.security-details p {
+  margin: 0;
   font-size: 0.875rem;
   color: rgb(var(--md-on-surface-variant));
-  margin: 0;
-  line-height: 1.4;
 }
 
-/* Ollama Setup Container */
-.ollama-setup-container {
-  padding: 1.5rem;
-  margin-top: 1rem;
+.security-toggle {
+  flex-shrink: 0;
 }
 
-/* Theme Selection */
-.theme-selection {
-  margin-top: 1.5rem;
+.toggle-input {
+  display: none;
 }
 
-.theme-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 1rem;
+.toggle-label {
+  cursor: pointer;
+  display: block;
 }
 
-.theme-card {
-  padding: 1.5rem;
-  border: 2px solid rgba(var(--md-outline-variant), 0.3);
+.toggle-track {
+  width: 3rem;
+  height: 1.75rem;
+  background: rgba(var(--md-outline), 0.3);
   border-radius: 1rem;
+  position: relative;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+}
+
+.toggle-thumb {
+  width: 1.25rem;
+  height: 1.25rem;
+  background: rgb(var(--md-outline));
+  border-radius: 50%;
+  position: absolute;
+  left: 0.25rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-input:checked + .toggle-label .toggle-track {
+  background: rgb(var(--md-primary));
+}
+
+.toggle-input:checked + .toggle-label .toggle-thumb {
+  left: 1.5rem;
+  background: rgb(var(--md-on-primary));
+}
+
+.security-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.25rem;
+  background: rgba(var(--md-primary-container), 0.1);
+  border: 1px solid rgba(var(--md-primary), 0.2);
+  border-radius: 1rem;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+  color: rgb(var(--md-on-surface-variant));
+}
+
+.info-icon {
+  font-size: 1.25rem;
+  width: 1.5rem;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+/* Profile Form Styles */
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.form-label {
+  font-size: 1rem;
+  font-weight: 500;
+  color: rgb(var(--md-on-surface));
+}
+
+.form-input {
+  padding: 0.875rem 1rem;
+  border: 1px solid rgba(var(--md-outline-variant), 0.3);
+  border-radius: 0.75rem;
+  background: rgba(var(--md-surface-container-highest), 0.8);
+  color: rgb(var(--md-on-surface));
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: rgb(var(--md-primary));
+  box-shadow: 0 0 0 2px rgba(var(--md-primary), 0.2);
+}
+
+.form-input::placeholder {
+  color: rgb(var(--md-on-surface-variant));
+}
+
+.goals-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.75rem;
+}
+
+.goal-option {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: rgba(var(--md-surface-container-low), 0.5);
+  border: 1px solid rgba(var(--md-outline-variant), 0.2);
+  border-radius: 0.75rem;
   cursor: pointer;
   transition: all 0.3s ease;
-  background: rgba(var(--md-surface-container), 0.3);
+}
+
+.goal-option:hover {
+  border-color: rgba(var(--md-primary), 0.3);
+  background: rgba(var(--md-surface-container), 0.7);
+}
+
+.goal-option input[type="checkbox"] {
+  width: 1.125rem;
+  height: 1.125rem;
+  accent-color: rgb(var(--md-primary));
+  margin: 0;
+}
+
+.goal-option input[type="checkbox"]:checked + .goal-text {
+  color: rgb(var(--md-primary));
+  font-weight: 500;
+}
+
+.goal-text {
+  font-size: 0.875rem;
+  color: rgb(var(--md-on-surface));
+  transition: all 0.3s ease;
+}
+
+.profile-note {
+  background: rgba(var(--md-primary-container), 0.1);
+  border: 1px solid rgba(var(--md-primary), 0.2);
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.theme-showcase {
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.theme-preview-large {
+  position: relative;
+}
+
+.preview-phone {
+  width: 160px;
+  height: 280px;
+  background: linear-gradient(145deg, #f0f0f0, #ffffff);
+  border-radius: 1.5rem;
+  padding: 0.75rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.preview-phone::before {
+  content: '';
+  position: absolute;
+  top: 0.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 4px;
+  background: #ddd;
+  border-radius: 2px;
+}
+
+.preview-screen {
+  width: 100%;
+  height: 100%;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  transition: all 0.5s ease;
+  background: var(--preview-bg, linear-gradient(135deg, #3b82f6, #1e40af));
+}
+
+.preview-header {
+  height: 60px;
+  background: var(--preview-primary, rgba(30, 64, 175, 0.9));
+  position: relative;
+}
+
+.preview-content {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  height: calc(100% - 60px);
+}
+
+.preview-card {
+  height: 40px;
+  background: var(--preview-surface, rgba(255, 255, 255, 0.9));
+  border-radius: 0.75rem;
+  backdrop-filter: blur(8px);
+}
+
+.preview-card.small {
+  height: 30px;
+  width: 70%;
+  background: var(--preview-surface-variant, rgba(255, 255, 255, 0.7));
+}
+
+.theme-option {
   text-align: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
 }
 
-.theme-card:hover {
-  border-color: rgba(var(--md-primary), 0.5);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
-}
-
-.theme-card.theme-card-active {
-  border-color: rgb(var(--md-primary));
-  background: rgba(var(--md-primary-container), 0.2);
-  box-shadow: 0 4px 8px rgba(var(--md-primary), 0.2);
+.theme-option:hover {
+  transform: translateY(-4px);
 }
 
 .theme-preview {
   width: 100%;
-  height: 60px;
-  border-radius: 0.5rem;
-  margin-bottom: 1rem;
+  height: 100px;
+  border-radius: 1rem;
+  margin-bottom: 0.75rem;
+  position: relative;
+  overflow: hidden;
+  border: 3px solid transparent;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.theme-option:hover .theme-preview {
+  border-color: rgba(var(--md-primary), 0.5);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.theme-option.selected .theme-preview {
+  border-color: rgb(var(--md-primary));
+  box-shadow: 0 0 0 2px rgba(var(--md-primary), 0.2);
+}
+
+.preview-bar {
+  height: 30%;
+  width: 100%;
+}
+
+.preview-content {
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  position: relative;
-  overflow: hidden;
+  padding: 1rem;
 }
 
 .preview-dot {
@@ -599,368 +1044,1238 @@
   border-radius: 50%;
 }
 
-.smile-preview {
-  background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+/* Theme Colors */
+.smile-theme {
+  background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
 }
+.smile-theme .preview-bar { background: #1e40af; }
+.smile-theme .preview-dot.primary { background: #1e3a8a; }
+.smile-theme .preview-dot.secondary { background: #3b82f6; }
+.smile-theme .preview-dot.accent { background: #60a5fa; }
 
-.smile-preview .preview-dot.primary { background: #1e40af; }
-.smile-preview .preview-dot.secondary { background: #3b82f6; }
-.smile-preview .preview-dot.accent { background: #60a5fa; }
-
-.forest-preview {
-  background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+.forest-theme {
+  background: linear-gradient(135deg, #10b981 0%, #047857 100%);
 }
+.forest-theme .preview-bar { background: #047857; }
+.forest-theme .preview-dot.primary { background: #065f46; }
+.forest-theme .preview-dot.secondary { background: #10b981; }
+.forest-theme .preview-dot.accent { background: #34d399; }
 
-.forest-preview .preview-dot.primary { background: #047857; }
-.forest-preview .preview-dot.secondary { background: #10b981; }
-.forest-preview .preview-dot.accent { background: #34d399; }
-
-.sunset-preview {
-  background: linear-gradient(135deg, #ea580c 0%, #fb923c 100%);
+.sunset-theme {
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
 }
+.sunset-theme .preview-bar { background: #ea580c; }
+.sunset-theme .preview-dot.primary { background: #c2410c; }
+.sunset-theme .preview-dot.secondary { background: #f97316; }
+.sunset-theme .preview-dot.accent { background: #fb923c; }
 
-.sunset-preview .preview-dot.primary { background: #c2410c; }
-.sunset-preview .preview-dot.secondary { background: #fb923c; }
-.sunset-preview .preview-dot.accent { background: #fdba74; }
-
-.lavender-preview {
-  background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+.lavender-theme {
+  background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
 }
-
-.lavender-preview .preview-dot.primary { background: #6d28d9; }
-.lavender-preview .preview-dot.secondary { background: #a855f7; }
-.lavender-preview .preview-dot.accent { background: #c084fc; }
-
-.theme-info {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
+.lavender-theme .preview-bar { background: #7c3aed; }
+.lavender-theme .preview-dot.primary { background: #6d28d9; }
+.lavender-theme .preview-dot.secondary { background: #a855f7; }
+.lavender-theme .preview-dot.accent { background: #c084fc; }
 
 .theme-name {
-  font-weight: 600;
+  font-size: 0.9rem;
+  font-weight: 500;
   color: rgb(var(--md-on-surface));
-  font-size: 0.95rem;
 }
 
-.theme-description {
-  font-size: 0.8rem;
-  color: rgb(var(--md-on-surface-variant));
-  opacity: 0.8;
-}
-
-/* Preferences Container */
-.preferences-container {
-  margin-top: 1.5rem;
-}
-
-.preference-options {
+/* AI Setup */
+.setup-container,
+.ai-setup-container {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  margin-bottom: 2rem;
+  gap: 1.5rem;
 }
 
-.preference-item {
+.ai-status-check {
+  background: rgba(var(--md-surface-container-low), 0.5);
+  border: 1px solid rgba(var(--md-outline-variant), 0.2);
+  border-radius: 1rem;
   padding: 1.5rem;
 }
 
-.preference-content {
+.status-section {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
   gap: 1rem;
 }
 
-.preference-icon {
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 0.75rem;
-  background: rgba(var(--md-primary), 0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: rgb(var(--md-primary));
-  flex-shrink: 0;
-}
-
-.preference-info {
-  flex: 1;
-}
-
-.preference-info h4 {
+.status-section h4 {
   font-size: 1rem;
   font-weight: 600;
   color: rgb(var(--md-on-surface));
-  margin: 0 0 0.25rem 0;
-}
-
-.preference-info p {
-  font-size: 0.875rem;
-  color: rgb(var(--md-on-surface-variant));
   margin: 0;
-  opacity: 0.8;
 }
 
-/* Material Switch */
-.material-switch {
-  position: relative;
-  display: inline-block;
-  width: 52px;
-  height: 32px;
+.status-check-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background: rgb(var(--md-primary));
+  color: rgb(var(--md-on-primary));
+  border: none;
+  border-radius: 0.75rem;
+  font-weight: 500;
+  font-size: 0.9rem;
   cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
 }
 
-.material-switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
+.status-check-btn:hover {
+  background: rgb(var(--md-primary-container));
+  color: rgb(var(--md-on-primary-container));
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(var(--md-primary), 0.3);
 }
 
-.switch-track {
+.status-result {
+  min-height: 50px;
+  padding: 1rem;
+  background: rgba(var(--md-surface-container-highest), 0.5);
+  border: 1px solid rgba(var(--md-outline-variant), 0.2);
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(var(--md-on-surface-variant));
+  font-size: 0.875rem;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.system-detection {
+  margin-bottom: 1rem;
+}
+
+.detection-card {
+  padding: 1.5rem;
+  background: linear-gradient(135deg, rgba(var(--md-primary), 0.1), rgba(var(--md-secondary), 0.05));
+  border: 1px solid rgba(var(--md-primary), 0.2);
+  border-radius: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.detection-card::before {
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
-  background-color: rgba(var(--md-outline), 0.3);
-  border-radius: 16px;
-  transition: all 0.3s ease;
+  height: 3px;
+  background: linear-gradient(90deg, rgb(var(--md-primary)), rgb(var(--md-secondary)));
 }
 
-.switch-thumb {
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 28px;
-  height: 28px;
-  background-color: rgb(var(--md-outline));
-  border-radius: 50%;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.material-switch input:checked + .switch-track {
-  background-color: rgb(var(--md-primary));
-}
-
-.material-switch input:checked + .switch-track .switch-thumb {
-  transform: translateX(20px);
-  background-color: rgb(var(--md-on-primary));
-}
-
-/* Model Selection */
-.model-selection {
-  padding: 1.5rem;
-}
-
-.model-content {
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-}
-
-.model-icon {
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 0.75rem;
-  background: rgba(var(--md-primary), 0.1);
+.detection-header {
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
   color: rgb(var(--md-primary));
-  flex-shrink: 0;
-  margin-top: 0.5rem;
 }
 
-.model-info {
-  flex: 1;
-}
-
-.model-label {
-  font-size: 1rem;
-  font-weight: 600;
-  color: rgb(var(--md-on-surface));
-  margin-bottom: 0.75rem;
-  display: block;
-}
-
-.model-description {
-  font-size: 0.875rem;
-  color: rgb(var(--md-on-surface-variant));
-  margin: 0.75rem 0 0 0;
-  opacity: 0.8;
-}
-
-/* Privacy Notice */
-.privacy-notice {
-  padding: 1.5rem;
-  background: rgba(var(--md-primary-container), 0.1);
-  border: 1px solid rgba(var(--md-primary), 0.2);
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-}
-
-.privacy-icon {
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 0.75rem;
-  background: rgba(var(--md-primary), 0.15);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: rgb(var(--md-primary));
-  flex-shrink: 0;
-}
-
-.privacy-content h4 {
-  font-size: 1rem;
-  font-weight: 600;
-  color: rgb(var(--md-on-surface));
-  margin: 0 0 0.5rem 0;
-}
-
-.privacy-content p {
-  font-size: 0.875rem;
-  color: rgb(var(--md-on-surface-variant));
+.detection-header h4 {
   margin: 0;
+  font-weight: 600;
+}
+
+.system-info {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.system-badge {
+  background: rgba(var(--md-primary), 0.1);
+  color: rgb(var(--md-primary));
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: 1px solid rgba(var(--md-primary), 0.2);
+}
+
+.setup-instructions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.instruction-card {
+  background: rgba(var(--md-surface-container-low), 0.5);
+  border: 1px solid rgba(var(--md-outline-variant), 0.2);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.instruction-card:hover {
+  border-color: rgba(var(--md-primary), 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.instruction-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.step-number {
+  width: 2rem;
+  height: 2rem;
+  background: linear-gradient(135deg, rgb(var(--md-primary)), rgb(var(--md-secondary)));
+  color: rgb(var(--md-on-primary));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.instruction-header h4 {
+  margin: 0;
+  color: rgb(var(--md-on-surface));
+  font-weight: 600;
+}
+
+.command-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.command-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.command-group label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgb(var(--md-on-surface-variant));
+}
+
+.command-box {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(var(--md-surface-container-highest), 0.8);
+  border: 1px solid rgba(var(--md-outline-variant), 0.3);
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.command-box:hover {
+  border-color: rgba(var(--md-primary), 0.5);
+  box-shadow: 0 4px 12px rgba(var(--md-primary), 0.1);
+}
+
+.command-box code {
+  flex: 1;
+  background: transparent;
+  border: none;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+  font-size: 0.875rem;
+  color: rgb(var(--md-primary));
+  font-weight: 500;
+}
+
+.copy-btn {
+  background: rgba(var(--md-primary), 0.1);
+  border: 1px solid rgba(var(--md-primary), 0.2);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  color: rgb(var(--md-primary));
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.copy-btn:hover {
+  background: rgba(var(--md-primary), 0.2);
+  transform: translateY(-1px);
+}
+
+.command-note {
+  font-size: 0.75rem;
+  color: rgb(var(--md-on-surface-variant));
+  margin: 0.5rem 0 0 0;
+  font-style: italic;
+}
+
+.status-card {
+  background: linear-gradient(135deg, rgba(var(--md-tertiary), 0.1), rgba(var(--md-primary), 0.05));
+  border: 1px solid rgba(var(--md-tertiary), 0.2);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.status-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  color: rgb(var(--md-tertiary));
+}
+
+.status-header h4 {
+  margin: 0;
+  font-weight: 600;
+}
+
+.ai-status {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.setup-info {
+  padding: 1.5rem;
+  background: rgba(var(--md-surface-container-low), 0.5);
+  border-radius: 1rem;
+  border: 1px solid rgba(var(--md-outline-variant), 0.2);
+}
+
+.setup-info h4 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: rgb(var(--md-on-surface));
+  margin: 0 0 1rem 0;
+}
+
+.setup-steps {
+  margin: 0;
+  padding-left: 1.5rem;
+}
+
+.setup-steps li {
+  margin-bottom: 0.5rem;
+  color: rgb(var(--md-on-surface-variant));
   line-height: 1.5;
 }
 
-/* Actions */
-.onboarding-actions {
-  padding: 1.5rem 2rem 2rem 2rem;
-  border-top: 1px solid rgba(var(--md-outline-variant), 0.2);
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  background: rgba(var(--md-surface-container), 0.3);
+.setup-steps code {
+  background: rgba(var(--md-surface-container-highest), 0.8);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-family: 'Monaco', monospace;
+  font-size: 0.875rem;
+  color: rgb(var(--md-primary));
 }
 
-.actions-spacer {
-  flex: 1;
+.setup-steps a {
+  color: rgb(var(--md-primary));
+  text-decoration: none;
+  font-weight: 500;
 }
 
-.onboarding-actions .material-button {
-  min-width: 120px;
-  height: 44px;
+.setup-steps a:hover {
+  text-decoration: underline;
+}
+
+.status-check-btn {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border: 2px solid rgb(var(--md-primary));
+  border-radius: 0.75rem;
+  background: transparent;
+  color: rgb(var(--md-primary));
+  font-weight: 500;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.status-check-btn:hover {
+  background: rgba(var(--md-primary), 0.1);
+  transform: translateY(-1px);
+}
+
+.status-result {
+  min-height: 60px;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  background: rgba(var(--md-surface-container-low), 0.5);
+  border: 1px solid rgba(var(--md-outline-variant), 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(var(--md-on-surface-variant));
+  font-style: italic;
+}
+
+.status-result:empty::after {
+  content: "Click 'Check AI Status' to verify your setup";
+}
+
+.setup-note {
+  background: rgba(var(--md-warning-container), 0.1);
+  border: 1px solid rgba(var(--md-warning), 0.2);
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.note-content {
+  padding: 1.5rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.note-content svg {
+  color: rgb(var(--md-warning));
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+}
+
+.setup-note p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: rgb(var(--md-on-surface-variant));
+  line-height: 1.5;
+}
+
+/* Completion */
+.completion-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.welcome-message {
+  text-align: center;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, rgba(var(--md-primary), 0.1), rgba(var(--md-secondary), 0.05));
+  border: 1px solid rgba(var(--md-primary), 0.2);
+  border-radius: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.welcome-message::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, rgb(var(--md-primary)), rgb(var(--md-secondary)));
+}
+
+.welcome-message h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: rgb(var(--md-primary));
+  margin: 0 0 0.75rem 0;
+}
+
+.welcome-message p {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: rgb(var(--md-on-surface-variant));
+  margin: 0;
+}
+
+.features-quick-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.feature-quick {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  background: rgba(var(--md-surface-container-low), 0.5);
+  border: 1px solid rgba(var(--md-outline-variant), 0.2);
+  border-radius: 0.75rem;
+  font-size: 0.9rem;
+  color: rgb(var(--md-on-surface));
+}
+
+.feature-quick svg {
+  color: rgb(var(--md-primary));
+  flex-shrink: 0;
+}
+
+.acknowledgments-compact {
+  text-align: center;
+  padding: 1rem;
+  background: rgba(var(--md-tertiary-container), 0.1);
+  border: 1px solid rgba(var(--md-tertiary), 0.2);
+  border-radius: 0.75rem;
+}
+
+.ack-intro {
+  font-size: 0.875rem;
+  color: rgb(var(--md-on-surface-variant));
+  margin: 0 0 0.5rem 0;
+}
+
+.ack-list {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  font-size: 0.875rem;
+}
+
+.ack-credit {
+  color: rgb(var(--md-on-surface));
+}
+
+.ack-credit strong {
+  color: rgb(var(--md-tertiary));
+  font-weight: 600;
+}
+
+.ack-separator {
+  color: rgb(var(--md-outline));
+}
+
+.privacy-final {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem;
+  background: rgba(var(--md-primary-container), 0.1);
+  border: 1px solid rgba(var(--md-primary), 0.2);
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  color: rgb(var(--md-on-surface-variant));
+}
+
+.privacy-final svg {
+  color: rgb(var(--md-primary));
+  flex-shrink: 0;
+}
+
+/* Remove old completion styles */
+.completion-message,
+.welcome-card,
+.completion-features,
+.completion-item,
+.completion-icon,
+.acknowledgments,
+.ack-section,
+.ack-items,
+.ack-item {
+  /* These are now unused - replaced with compact versions */
+}
+
+.privacy-reminder {
+  padding: 1.5rem;
+  background: rgba(var(--md-primary-container), 0.1);
+  border: 1px solid rgba(var(--md-primary), 0.2);
+  border-radius: 1rem;
+  text-align: center;
+}
+
+.privacy-reminder p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: rgb(var(--md-on-surface-variant));
+  line-height: 1.5;
+}
+
+/* Form textarea styles */
+.form-textarea {
+  padding: 0.875rem 1rem;
+  border: 1px solid rgba(var(--md-outline-variant), 0.3);
+  border-radius: 0.75rem;
+  background: rgba(var(--md-surface-container-highest), 0.8);
+  color: rgb(var(--md-on-surface));
+  font-size: 1rem;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 100px;
+  transition: all 0.3s ease;
+}
+
+.form-textarea:focus {
+  outline: none;
+  border-color: rgb(var(--md-primary));
+  box-shadow: 0 0 0 2px rgba(var(--md-primary), 0.2);
+}
+
+.form-textarea::placeholder {
+  color: rgb(var(--md-on-surface-variant));
+}
+
+.char-counter {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  color: rgb(var(--md-on-surface-variant));
+}
+
+.char-count {
+  color: rgb(var(--md-primary));
   font-weight: 500;
 }
 
-/* Responsive Design */
+/* Security info icon styling */
+.info-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: rgb(var(--md-primary));
+}
+
+/* Navigation */
+.onboarding-nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+  border-top: 1px solid rgba(var(--md-outline-variant), 0.2);
+  background: rgba(var(--md-surface), 0.8);
+  backdrop-filter: blur(8px);
+}
+
+.nav-spacer {
+  flex: 1;
+}
+
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border: none;
+  min-width: 120px;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.nav-btn.primary {
+  background: rgb(var(--md-primary));
+  color: rgb(var(--md-on-primary));
+}
+
+.nav-btn.primary:hover {
+  background: rgb(var(--md-primary-container));
+  color: rgb(var(--md-on-primary-container));
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(var(--md-primary), 0.3);
+}
+
+.nav-btn.secondary {
+  background: transparent;
+  color: rgb(var(--md-on-surface-variant));
+  border: 1px solid rgba(var(--md-outline), 0.3);
+}
+
+.nav-btn.secondary:hover {
+  background: rgba(var(--md-surface-container), 0.5);
+  border-color: rgba(var(--md-outline), 0.5);
+}
+
+/* Responsive */
 @media (max-width: 768px) {
   .onboarding-content {
     width: 95vw;
     max-height: 90vh;
   }
   
-  .onboarding-header {
-    padding: 1.5rem;
-  }
-  
   .onboarding-body {
     padding: 1.5rem;
   }
   
-  .step-content-card {
-    flex-direction: column;
-    text-align: center;
-    padding: 1.5rem;
+  .progress-container {
+    padding: 1rem 1.5rem 0.75rem;
   }
   
-  .feature-grid {
+  .features-grid {
     grid-template-columns: 1fr;
   }
   
-  .theme-grid {
+  .themes-grid {
     grid-template-columns: repeat(2, 1fr);
   }
   
-  .progress-track {
-    gap: 0.5rem;
-    padding: 0 0.5rem;
+  .goals-grid {
+    grid-template-columns: 1fr;
   }
   
-  .progress-step {
-    min-width: 60px;
-  }
-  
-  .step-label {
-    font-size: 0.65rem;
-  }
-  
-  .onboarding-title {
-    font-size: 1.5rem;
-  }
-  
-  .preference-content {
+  .security-header {
     flex-direction: column;
-    align-items: flex-start;
+    text-align: center;
     gap: 1rem;
   }
   
-  .model-content {
-    flex-direction: column;
-    align-items: flex-start;
+  .security-toggle {
+    align-self: center;
   }
   
-  .onboarding-actions {
+  .preview-phone {
+    width: 120px;
+    height: 200px;
+    padding: 0.5rem;
+  }
+  
+  .theme-showcase {
+    margin-bottom: 1.5rem;
+  }
+  
+  .onboarding-nav {
     padding: 1rem 1.5rem;
-    flex-wrap: wrap;
   }
   
-  .onboarding-actions .material-button {
-    min-width: 100px;
-    height: 40px;
+  .step-header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .step-icon {
+    width: 3rem;
+    height: 3rem;
   }
 }
 
 @media (max-width: 480px) {
-  .theme-grid {
+  .themes-grid {
     grid-template-columns: 1fr;
   }
   
-  .step-content-card {
+  .goals-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .security-info {
+    gap: 0.5rem;
     padding: 1rem;
   }
   
-  .feature-card {
+  .info-item {
+    font-size: 0.8rem;
+  }
+  
+  .security-card {
     padding: 1rem;
   }
   
-  .preference-item,
-  .model-selection,
-  .privacy-notice {
+  .preview-phone {
+    width: 100px;
+    height: 160px;
+    padding: 0.375rem;
+  }
+  
+  .theme-showcase {
+    margin-bottom: 1rem;
+  }
+  
+  .nav-btn {
+    min-width: 100px;
+    padding: 0.75rem 1rem;
+  }
+  
+  .feature-item {
     padding: 1rem;
+  }
+  
+  .security-header {
+    gap: 0.75rem;
+  }
+  
+  .security-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+  
+  .welcome-card {
+    padding: 1.5rem;
+  }
+  
+  .welcome-card h3 {
+    font-size: 1.25rem;
+  }
+  
+  .acknowledgments {
+    padding: 1rem;
+  }
+  
+  .ack-items {
+    gap: 0.5rem;
+  }
+  
+  .ack-item {
+    padding: 0.75rem;
+    font-size: 0.8rem;
   }
 }
 
 /* Dark theme adjustments */
-[data-theme="dark"] .onboarding-header,
-[data-theme$="-dark"] .onboarding-header {
-  background: linear-gradient(135deg, rgba(var(--md-primary-container), 0.15) 0%, rgba(var(--md-secondary-container), 0.1) 100%);
+[data-theme="dark"] .onboarding-content,
+[data-theme$="-dark"] .onboarding-content {
+  background: rgb(var(--md-surface-container));
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.4);
 }
 
-[data-theme="dark"] .theme-card,
-[data-theme$="-dark"] .theme-card {
+[data-theme="dark"] .progress-container,
+[data-theme$="-dark"] .progress-container,
+[data-theme="dark"] .onboarding-nav,
+[data-theme$="-dark"] .onboarding-nav {
+  background: rgba(var(--md-surface-container), 0.8);
+}
+
+[data-theme="dark"] .form-input,
+[data-theme$="-dark"] .form-input {
+  background: rgba(var(--md-surface-container-highest), 0.9);
+  border-color: rgba(var(--md-outline-variant), 0.4);
+  color: rgb(var(--md-on-surface));
+}
+
+[data-theme="dark"] .form-input:focus,
+[data-theme$="-dark"] .form-input:focus {
+  border-color: rgb(var(--md-primary));
+  box-shadow: 0 0 0 2px rgba(var(--md-primary), 0.3);
+}
+
+[data-theme="dark"] .security-card,
+[data-theme$="-dark"] .security-card,
+[data-theme="dark"] .goal-option,
+[data-theme$="-dark"] .goal-option {
+  background: rgba(var(--md-surface-container-low), 0.7);
+  border-color: rgba(var(--md-outline-variant), 0.3);
+}
+
+[data-theme="dark"] .security-card:hover,
+[data-theme$="-dark"] .security-card:hover,
+[data-theme="dark"] .goal-option:hover,
+[data-theme$="-dark"] .goal-option:hover {
+  background: rgba(var(--md-surface-container), 0.8);
+  border-color: rgba(var(--md-primary), 0.4);
+}
+
+[data-theme="dark"] .toggle-track,
+[data-theme$="-dark"] .toggle-track {
+  background: rgba(var(--md-outline), 0.4);
+}
+
+[data-theme="dark"] .toggle-thumb,
+[data-theme$="-dark"] .toggle-thumb {
+  background: rgb(var(--md-surface-bright));
+}
+
+[data-theme="dark"] .toggle-input:checked + .toggle-label .toggle-thumb,
+[data-theme$="-dark"] .toggle-input:checked + .toggle-label .toggle-thumb {
+  background: rgb(var(--md-on-primary));
+}
+
+[data-theme="dark"] .form-textarea,
+[data-theme$="-dark"] .form-textarea {
+  background: rgba(var(--md-surface-container-highest), 0.9);
+  border-color: rgba(var(--md-outline-variant), 0.4);
+  color: rgb(var(--md-on-surface));
+}
+
+[data-theme="dark"] .form-textarea:focus,
+[data-theme$="-dark"] .form-textarea:focus {
+  border-color: rgb(var(--md-primary));
+  box-shadow: 0 0 0 2px rgba(var(--md-primary), 0.3);
+}
+
+[data-theme="dark"] .welcome-card,
+[data-theme$="-dark"] .welcome-card,
+[data-theme="dark"] .acknowledgments,
+[data-theme$="-dark"] .acknowledgments {
+  background: rgba(var(--md-surface-container-low), 0.7);
+  border-color: rgba(var(--md-outline-variant), 0.3);
+}
+
+[data-theme="dark"] .ack-item,
+[data-theme$="-dark"] .ack-item {
   background: rgba(var(--md-surface-container), 0.5);
-}
-
-[data-theme="dark"] .theme-card:hover,
-[data-theme$="-dark"] .theme-card:hover {
-  background: rgba(var(--md-surface-container), 0.7);
-}
-
-[data-theme="dark"] .onboarding-actions,
-[data-theme$="-dark"] .onboarding-actions {
-  background: rgba(var(--md-surface-container), 0.5);
+  border-color: rgba(var(--md-outline-variant), 0.2);
 }
 </style>
+
 <script>
-// Load external onboarding script
-import './onboarding-script.js';
+// @ts-nocheck
+// Plain-JS onboarding logic (no TypeScript syntax)
+/**
+ * Lightweight typing hints so Astro's TS analyzer doesn't complain.
+ * These are ignored at runtime but silence editor diagnostics.
+ */
+/** @typedef {{bg:string,primary:string,surface:string,surfaceVariant:string}} AccentCfg */
+/** @typedef {{[k:string]:AccentCfg}} AccentMap */
+/** @type {any} */
+window.__smileOnboardingInstance;
+class OnboardingFlow {
+  currentStep = 1;
+  totalSteps = 6;
+  selectedAccent = 'smile';
+  encryptionEnabled = false;
+  profileData = {};
+  
+  constructor() {
+    this.init();
+    this.detectSystem();
+  }
+
+  init() {
+    this.updateProgress();
+    this.updateNavigation();
+    this.setupEventListeners();
+  }
+
+  detectSystem() {
+    const systemInfo = document.getElementById('system-info');
+    if (!systemInfo) return;
+    const userAgent = navigator.userAgent.toLowerCase();
+    let os = 'Unknown';
+    let icon = '💻';
+    if (userAgent.includes('linux')) { os = 'Linux'; icon = '🐧'; }
+    else if (userAgent.includes('mac')) { os = 'macOS'; icon = '🍎'; }
+    else if (userAgent.includes('win')) { os = 'Windows'; icon = '🪟'; }
+    systemInfo.innerHTML = `<span class="system-badge">${icon} ${os} detected</span>`;
+  }
+
+  setupEventListeners() {
+    // Navigation buttons
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const finishBtn = document.getElementById('finish-btn');
+    if (prevBtn) prevBtn.addEventListener('click', () => this.prevStep());
+    if (nextBtn) nextBtn.addEventListener('click', () => this.nextStep());
+    if (finishBtn) finishBtn.addEventListener('click', () => this.finish());
+
+    // Theme selection
+    const themeChips = document.querySelectorAll('.theme-chip');
+    themeChips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        themeChips.forEach(c => c.classList.remove('selected'));
+        chip.classList.add('selected');
+        this.selectedAccent = chip.getAttribute('data-theme') || 'smile';
+        this.applyAccent();
+      });
+    });
+
+    // Security settings
+    const encryptionToggle = document.getElementById('onboarding-encryption');
+    if (encryptionToggle) {
+      encryptionToggle.addEventListener('change', () => {
+        this.encryptionEnabled = encryptionToggle.checked;
+      });
+    }
+
+    // Profile data collection
+    const nameInput = document.getElementById('onboarding-name');
+    if (nameInput) {
+      nameInput.addEventListener('input', () => {
+        this.profileData.name = nameInput.value;
+      });
+    }
+
+    // Goals textarea with character counter
+    const goalsTextarea = document.getElementById('onboarding-goals');
+    const charCount = document.querySelector('.char-count');
+    if (goalsTextarea && charCount) {
+      goalsTextarea.addEventListener('input', () => {
+        this.profileData.goals = goalsTextarea.value;
+        const count = goalsTextarea.value.length;
+        charCount.textContent = count.toString();
+        
+        // Change color as approaching limit
+        if (count > 450) {
+          charCount.style.color = 'rgb(var(--md-error))';
+        } else if (count > 400) {
+          charCount.style.color = 'rgb(var(--md-warning))';
+        } else {
+          charCount.style.color = 'rgb(var(--md-primary))';
+        }
+      });
+    }
+
+    // AI status check
+    const checkBtn = document.getElementById('check-ai-status');
+    if (checkBtn) checkBtn.addEventListener('click', () => this.checkAIStatus());
+
+    // Enhanced AI status check for onboarding
+    const statusCheckBtn = this.modal.querySelector('.status-check-btn');
+    const statusResult = this.modal.querySelector('.status-result');
+    
+    if (statusCheckBtn && statusResult) {
+      statusCheckBtn.addEventListener('click', async () => {
+        // Update button state
+        statusCheckBtn.disabled = true;
+        statusCheckBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12,4a8,8 0 0,1 7.89,6.7 1.53,1.53 0 0,0 1.49,1.3 1.5,1.5 0 0,0 1.48,-1.75 11,11 0 0,0 -21.72,0A1.5,1.5 0 0,0 2.62,11.5 1.53,1.53 0 0,0 4.11,10.7 8,8 0 0,1 12,4Z" fill="currentColor"><animateTransform attributeName="transform" type="rotate" dur="0.75s" values="0 12 12;360 12 12" repeatCount="indefinite"/></path></svg> Checking...';
+        
+        // Update result to show checking state
+        statusResult.innerHTML = '<div style="display: flex; align-items: center; gap: 0.5rem;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12,4a8,8 0 0,1 7.89,6.7 1.53,1.53 0 0,0 1.49,1.3 1.5,1.5 0 0,0 1.48,-1.75 11,11 0 0,0 -21.72,0A1.5,1.5 0 0,0 2.62,11.5 1.53,1.53 0 0,0 4.11,10.7 8,8 0 0,1 12,4Z" fill="currentColor"><animateTransform attributeName="transform" type="rotate" dur="0.75s" values="0 12 12;360 12 12" repeatCount="indefinite"/></path></svg> Checking AI engine status...</div>';
+        
+        try {
+          const response = await fetch('/api/ollama-health');
+          const result = await response.json();
+          
+          let statusMessage = '';
+          let statusIcon = '';
+          
+          if (result.status === 'connected') {
+            statusIcon = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="rgb(var(--md-success))" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>';
+            statusMessage = `<span style="color: rgb(var(--md-success)); font-weight: 500;">Connected!</span> Found ${result.models?.length || 0} AI models available.`;
+          } else {
+            statusIcon = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke="rgb(var(--md-warning))" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>';
+            statusMessage = `<span style="color: rgb(var(--md-warning)); font-weight: 500;">Not connected.</span> Follow the setup instructions below to get started.`;
+          }
+          
+          statusResult.innerHTML = `<div style="display: flex; align-items: center; gap: 0.75rem;">${statusIcon} ${statusMessage}</div>`;
+          
+        } catch (error) {
+          statusResult.innerHTML = '<div style="display: flex; align-items: center; gap: 0.75rem;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke="rgb(var(--md-error))" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> <span style="color: rgb(var(--md-error)); font-weight: 500;">Connection failed.</span> Please check the setup instructions below.</div>';
+        }
+        
+        // Reset button state
+        statusCheckBtn.disabled = false;
+        statusCheckBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Check Status';
+      });
+    }
+
+    // Copy buttons
+    const copyBtns = document.querySelectorAll('.copy-btn');
+    copyBtns.forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const copyText = btn.getAttribute('data-copy');
+        if (!copyText) return;
+        try {
+          await navigator.clipboard.writeText(copyText);
+          const originalHTML = btn.innerHTML;
+          btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20,6 9,17 4,12"/></svg>`;
+          setTimeout(() => { btn.innerHTML = originalHTML; }, 2000);
+          if (window.smileApp && typeof window.smileApp.showCustomNotification === 'function') {
+            window.smileApp.showCustomNotification('Copied to clipboard!', 'success');
+          }
+        } catch (err) {
+          console.error('Failed to copy text:', err);
+          if (window.smileApp && typeof window.smileApp.showCustomNotification === 'function') {
+            window.smileApp.showCustomNotification('Failed to copy text', 'error');
+          }
+        }
+      });
+    });
+
+    // Default theme selection and preview
+    const defaultChip = document.querySelector('.theme-chip[data-theme="smile"]');
+    if (defaultChip) defaultChip.classList.add('selected');
+    this.updateThemePreview('smile');
+  }
+
+  /** @param {string} accent */
+  updateThemePreview(accent) {
+    const preview = document.getElementById('theme-live-preview');
+    if (!preview) return;
+  /** @type {AccentMap} */
+  const themeConfig = {
+      smile: { bg: 'linear-gradient(135deg,#3b82f6,#1e40af)', primary: 'rgba(30,64,175,.55)', surface: 'rgba(255,255,255,.55)', surfaceVariant: 'rgba(255,255,255,.38)' },
+      forest: { bg: 'linear-gradient(135deg,#10b981,#047857)', primary: 'rgba(4,120,87,.55)', surface: 'rgba(255,255,255,.55)', surfaceVariant: 'rgba(255,255,255,.38)' },
+      sunset: { bg: 'linear-gradient(135deg,#f97316,#ea580c)', primary: 'rgba(234,88,12,.55)', surface: 'rgba(255,255,255,.55)', surfaceVariant: 'rgba(255,255,255,.38)' },
+      lavender: { bg: 'linear-gradient(135deg,#a855f7,#7c3aed)', primary: 'rgba(124,58,237,.55)', surface: 'rgba(255,255,255,.55)', surfaceVariant: 'rgba(255,255,255,.38)' },
+    };
+  /** @type {AccentCfg|undefined} */
+  const cfg = themeConfig[accent];
+    if (!cfg) return;
+    preview.style.setProperty('--tlp-bg', cfg.bg);
+    preview.style.setProperty('--tlp-primary', cfg.primary);
+    preview.style.setProperty('--tlp-surface', cfg.surface);
+    preview.style.setProperty('--tlp-surface-variant', cfg.surfaceVariant);
+  }
+
+  applyAccent(){
+    this.updateThemePreview(this.selectedAccent);
+    localStorage.setItem('smile-accent-color', this.selectedAccent);
+    const mode = localStorage.getItem('smile-theme-mode') || 'light';
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const themeName = mode === 'dark' ? `${this.selectedAccent}-dark` : (mode === 'auto' ? (prefersDark ? `${this.selectedAccent}-dark` : this.selectedAccent) : this.selectedAccent);
+    if (window.smileApp && typeof window.smileApp.setTheme === 'function') {
+      window.smileApp.setTheme(themeName);
+    } else {
+      document.documentElement.setAttribute('data-theme', themeName);
+      localStorage.setItem('smile-theme', themeName);
+    }
+  }
+
+  prevStep() {
+    if (this.currentStep > 1) {
+      this.currentStep--;
+      this.updateStep();
+    }
+  }
+
+  nextStep() {
+    if (this.currentStep < this.totalSteps) {
+      this.currentStep++;
+      this.updateStep();
+    }
+  }
+
+  updateStep() {
+    const steps = document.querySelectorAll('.step-content');
+    steps.forEach((step) => step.classList.remove('active'));
+    const current = document.querySelector(`[data-step="${this.currentStep}"]`);
+    if (current) current.classList.add('active');
+    
+    // Apply theme when reaching the final step to ensure it displays correctly
+    if (this.currentStep === this.totalSteps) {
+      this.applyAccent();
+    }
+    
+    this.updateProgress();
+    this.updateNavigation();
+  }
+
+  updateProgress() {
+  const progressFill = document.querySelector('.onboarding-progress-fill');
+  const progressText = document.querySelector('.onboarding-progress-text');
+    if (progressFill) {
+      const pct = (this.currentStep / this.totalSteps) * 100;
+  /** @type {HTMLElement} */(progressFill).style.width = `${pct}%`;
+      const bar = document.querySelector('.onboarding-progress-bar');
+      if (bar) bar.setAttribute('aria-valuenow', String(this.currentStep));
+    }
+    if (progressText) {
+      progressText.textContent = `Step ${this.currentStep} of ${this.totalSteps}`;
+    }
+  }
+
+  updateNavigation() {
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const finishBtn = document.getElementById('finish-btn');
+    if (prevBtn) prevBtn.style.display = this.currentStep > 1 ? 'flex' : 'none';
+    if (nextBtn) nextBtn.style.display = this.currentStep < this.totalSteps ? 'flex' : 'none';
+    if (finishBtn) finishBtn.style.display = this.currentStep === this.totalSteps ? 'flex' : 'none';
+  }
+
+  async checkAIStatus() {
+    const resultEl = document.getElementById('ai-status-result');
+    if (!resultEl) return;
+    resultEl.innerHTML = `<div style="display:flex;align-items:center;gap:.5rem;color:rgb(var(--md-primary));"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation: spin 1s linear infinite;"><path d="M21 12a9 9 0 11-6.219-8.56"/></svg>Checking AI status...</div>`;
+    try {
+      const response = await fetch('/api/ollama-health');
+      if (!response.ok) throw new Error('Ollama not running');
+      const data = await response.json();
+      const models = data.models || [];
+  const hasRecommendedModel = models.some((/** @type {any} */m) => (m.name||'').includes('llama') || (m.name||'').includes('gpt') || (m.name||'').includes('mistral'));
+      if (hasRecommendedModel) {
+        resultEl.innerHTML = `<div style="display:flex;align-items:center;gap:.5rem;color:rgb(var(--md-success));"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20,6 9,17 4,12"/></svg>AI engine ready! Found ${models.length} model(s).</div>`;
+      } else if (models.length > 0) {
+        resultEl.innerHTML = `<div style="display:flex;align-items:center;gap:.5rem;color:rgb(var(--md-warning));"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>Ollama running with ${models.length} model(s), but no recommended models found.</div>`;
+      } else {
+        resultEl.innerHTML = `<div style="display:flex;align-items:center;gap:.5rem;color:rgb(var(--md-warning));"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>Ollama running, but no models found. Please download a model.</div>`;
+      }
+    } catch (err) {
+      resultEl.innerHTML = `<div style="display:flex;align-items:center;gap:.5rem;color:rgb(var(--md-error));"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>Ollama not found. Please install and set up Ollama.</div>`;
+    }
+  }
+
+  finish() {
+    // Collect final profile data
+    const nameInput = document.getElementById('onboarding-name');
+    const goalsTextarea = document.getElementById('onboarding-goals');
+    
+    if (nameInput) this.profileData.name = nameInput.value;
+    if (goalsTextarea) this.profileData.goals = goalsTextarea.value;
+
+    // Collect all onboarding data
+    const onboardingData = {
+      theme: this.selectedAccent,
+      encryption: this.encryptionEnabled,
+      profile: this.profileData,
+      completedAt: new Date().toISOString()
+    };
+
+    // Persist onboarding state and data
+    const mode = localStorage.getItem('smile-theme-mode') || 'light';
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const themeName = mode === 'dark' ? `${this.selectedAccent}-dark` : (mode === 'auto' ? (prefersDark ? `${this.selectedAccent}-dark` : this.selectedAccent) : this.selectedAccent);
+    
+    // Save all settings
+    localStorage.setItem('smile-accent-color', this.selectedAccent);
+    localStorage.setItem('smile-theme', themeName);
+    localStorage.setItem('smile-onboarding', 'complete');
+    localStorage.setItem('smile-onboarding-data', JSON.stringify(onboardingData));
+    
+    // Save individual settings
+    if (this.encryptionEnabled) {
+      localStorage.setItem('smile-encryption-enabled', 'true');
+    }
+    
+    if (this.profileData.name) {
+      localStorage.setItem('smile-user-name', this.profileData.name);
+    }
+    
+    if (this.profileData.goals) {
+      localStorage.setItem('smile-wellness-goals', this.profileData.goals);
+    }
+
+    // Apply the theme to ensure the completion screen uses the right colors
+    if (window.smileApp && typeof window.smileApp.setTheme === 'function') {
+      window.smileApp.setTheme(themeName);
+    } else {
+      document.documentElement.setAttribute('data-theme', themeName);
+    }
+
+    // Close modal
+    const modal = document.getElementById('onboarding-modal');
+    if (modal) {
+      modal.classList.remove('show');
+      setTimeout(() => { modal.style.display = 'none'; }, 300);
+    }
+    
+    // Show success notification
+    if (window.smileApp && typeof window.smileApp.showCustomNotification === 'function') {
+      window.smileApp.showCustomNotification('Welcome to Smile AI! Setup complete.', 'success');
+    }
+
+    // If encryption was enabled, show password setup modal
+    if (this.encryptionEnabled && window.smileApp && typeof window.smileApp.showPasswordModal === 'function') {
+      setTimeout(() => {
+        window.smileApp.showPasswordModal('set');
+      }, 1000);
+    }
+  }
+}
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+  if (!window.__smileOnboardingInstance) {
+    window.__smileOnboardingInstance = new OnboardingFlow();
+  }
+});
+
+// Add spinning animation for loading states
+const style = document.createElement('style');
+style.textContent = `@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`;
+document.head.appendChild(style);
 </script>

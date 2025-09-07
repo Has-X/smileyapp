@@ -315,11 +315,14 @@ class SmileApp {
   private showOnboarding() {
     const modal = document.getElementById('onboarding-modal');
     if (modal) {
-      // Show onboarding modal with new Material Design structure
-      modal.style.display = 'flex';
-      setTimeout(() => {
-        modal.classList.add('show');
-      }, 10);
+      // Show depending on modal system in use
+      if (modal.classList.contains('confirm-modal')) {
+        (window as any).modalManager?.show(modal);
+      } else {
+        // global-modal behavior
+        (modal as HTMLElement).style.display = 'flex';
+        setTimeout(() => modal.classList.add('show'), 10);
+      }
 
       // Load models in onboarding select
       const onboardingModelSelect = document.getElementById('onboarding-model-select') as HTMLSelectElement;
@@ -359,10 +362,17 @@ class SmileApp {
     localStorage.setItem('smile-onboarding', 'complete');
     this.isOnboardingComplete = true;
 
-    // Hide modal with animation
+    // Hide modal with animation via modal manager
     const modal = document.getElementById('onboarding-modal');
     if (modal) {
-      (window as any).modalManager?.hide(modal);
+      if (modal.classList.contains('confirm-modal')) {
+        (window as any).modalManager?.hide(modal);
+      } else {
+        modal.classList.remove('show');
+        setTimeout(() => {
+          (modal as HTMLElement).style.display = 'none';
+        }, 300);
+      }
     }
 
     // Update main selects
