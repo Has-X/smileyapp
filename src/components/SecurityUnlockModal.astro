@@ -410,7 +410,25 @@
       if (!this.modal) return;
 
       this.onUnlockCallback = onUnlock || null;
-      (window as any).modalManager?.show(this.modal);
+      const mm = (window as any).modalManager;
+      if (mm && typeof mm.show === 'function') {
+        mm.show(this.modal);
+      } else {
+        // Fallback: ensure modal portals to body and appears above other layers
+        if (this.modal.parentElement !== document.body) {
+          document.body.appendChild(this.modal);
+        }
+        (this.modal as HTMLElement).style.zIndex = '21000';
+        const backdrop = this.modal.querySelector('.confirm-modal-backdrop') as HTMLElement | null;
+        const container = this.modal.querySelector('.confirm-modal-container') as HTMLElement | null;
+        const content = this.modal.querySelector('.confirm-modal-content') as HTMLElement | null;
+        if (backdrop) backdrop.style.zIndex = '20990';
+        if (container) container.style.zIndex = '21000';
+        if (content) content.style.zIndex = '21010';
+        this.modal.classList.remove('hidden');
+        (this.modal as HTMLElement).style.display = 'flex';
+        setTimeout(() => this.modal?.classList.add('show'), 10);
+      }
       this.clearError();
       this.resetForm();
       
@@ -421,7 +439,16 @@
     public hide() {
       if (!this.modal) return;
 
-      (window as any).modalManager?.hide(this.modal);
+      const mm = (window as any).modalManager;
+      if (mm && typeof mm.hide === 'function') {
+        mm.hide(this.modal);
+      } else {
+        this.modal.classList.remove('show');
+        setTimeout(() => {
+          this.modal?.classList.add('hidden');
+          (this.modal as HTMLElement).style.display = 'none';
+        }, 200);
+      }
       this.clearError();
       this.resetForm();
     }
@@ -553,7 +580,8 @@
         padding: '1rem 1.5rem',
         borderRadius: '0.5rem',
         boxShadow: '0 6px 20px rgba(0, 0, 0, 0.25)',
-        zIndex: '13150',
+        // Above all modal layers
+        zIndex: '24000',
         maxWidth: '400px',
         fontSize: '0.875rem',
         fontWeight: '500',

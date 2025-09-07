@@ -15,6 +15,17 @@
     </div>
   </div>
 
+  <!-- Compact action: check connection placed directly under status card for onboarding -->
+  <div class="status-actions" style="display:flex;align-items:center;gap:1rem;margin:0.75rem 0 1.25rem;">
+    <button class="btn-primary check-connection-btn" onclick="checkOllamaConnection()">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="margin-right:0.5rem;">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+      </svg>
+      Check Connection
+    </button>
+    <div id="status-badge" class="status-badge" aria-hidden="true"></div>
+  </div>
+
   <!-- Connection Success State -->
   <div class="ollama-connected hidden" id="ollama-connected">
     <div class="connection-success">
@@ -203,13 +214,6 @@
     </div>
 
     <div class="setup-footer">
-      <button class="btn-primary" onclick="checkOllamaConnection()">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-        </svg>
-        Check Connection
-      </button>
-      
       <p class="setup-help">
         Need help? Visit the <a href="https://ollama.ai/docs" target="_blank">Ollama documentation</a> or 
         <a href="#" onclick="showTroubleshooting()">troubleshooting guide</a>.
@@ -546,6 +550,59 @@
 
 .hidden {
   display: none !important;
+}
+
+/* Onboarding-specific button and badge styles */
+.check-connection-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  background: rgb(var(--md-primary));
+  color: rgb(var(--md-on-primary));
+  border: none;
+  border-radius: 0.6rem;
+  font-weight: 600;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  cursor: pointer;
+}
+
+.check-connection-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(0,0,0,0.12);
+}
+
+.status-badge {
+  font-size: 0.9rem;
+  color: rgb(var(--md-on-surface-variant));
+}
+
+/* Onboarding layout tweaks: center icon and tighten spacing */
+.ai-setup-container .ollama-status {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.ai-setup-container .ollama-status .status-icon {
+  margin: 0 0 0.5rem 0;
+}
+
+.ai-setup-container .status-actions {
+  justify-content: center;
+}
+
+.ai-setup-container .instruction-step {
+  margin-bottom: 0.5rem;
+}
+
+.ai-setup-container .code-block {
+  margin-bottom: 0.25rem;
+}
+
+.ai-setup-container .setup-footer {
+  margin-top: 0.25rem;
+  padding-top: 0;
 }
 </style>
 

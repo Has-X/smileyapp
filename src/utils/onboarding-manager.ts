@@ -278,7 +278,7 @@ class OnboardingManager {
 
   private initializeAppWithPreferences(data: ReturnType<OnboardingManager['collectOnboardingData']>) {
     if (data.theme && window.smileApp?.setTheme) window.smileApp.setTheme(data.theme);
-    if (data.encryption) localStorage.setItem('smile-encryption-enabled', String(data.encryption));
+    // Do not write a fake encryption-enabled flag here; encryption is enabled only via password setup
     if (data.profile.name) localStorage.setItem('smile-user-name', data.profile.name);
     if (data.profile.ageRange) localStorage.setItem('smile-user-age-range', data.profile.ageRange);
     if (data.profile.wellnessGoals.length > 0) {

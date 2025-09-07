@@ -1515,101 +1515,6 @@
     outline-offset: 2px;
   }
 
-  /* ========================================
-     CUSTOM CURSOR SYSTEM - WELLBEING OPTIMIZED
-     ======================================== */
-
-  /* Base cursor styles - calm and rounded */
-  * {
-    cursor: default;
-  }
-
-  /* Default cursor with subtle glow */
-  html {
-    cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="4" cy="4" r="2" fill="white" stroke="rgba(0,0,0,0.3)" stroke-width="0.5"/><circle cx="4" cy="4" r="1.2" fill="rgba(59,130,246,0.8)"/></svg>') 4 4, auto;
-  }
-
-  /* Interactive elements - pointer with gentle highlight */
-  button,
-  a,
-  [role="button"],
-  .nav-button,
-  .btn-primary,
-  .btn-outlined,
-  .view-toggle-btn,
-  .memory-card,
-  .journal-entry-card,
-  .conversation-card,
-  .color-theme-card,
-  .tab-button,
-  .filter-chip,
-  .memory-filter-btn,
-  input[type="submit"],
-  input[type="button"],
-  select,
-  .custom-select {
-    cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="6" cy="6" r="3" fill="white" stroke="rgba(0,0,0,0.2)" stroke-width="0.5"/><circle cx="6" cy="6" r="2" fill="rgba(34,197,94,0.9)"/><circle cx="6" cy="6" r="1" fill="rgba(255,255,255,0.8)"/></svg>') 6 6, pointer;
-  }
-
-  /* Text input areas - I-beam with soft styling */
-  input[type="text"],
-  input[type="email"],
-  input[type="password"],
-  input[type="search"],
-  textarea,
-  .chat-textarea,
-  [contenteditable="true"] {
-    cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="11" y="2" width="2" height="20" rx="1" fill="rgba(59,130,246,0.8)"/><rect x="9" y="2" width="6" height="2" rx="1" fill="rgba(59,130,246,0.6)"/><rect x="9" y="20" width="6" height="2" rx="1" fill="rgba(59,130,246,0.6)"/></svg>') 12 12, text;
-  }
-
-  /* Grabbing states for draggable elements */
-  [draggable="true"],
-  .draggable {
-    cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="6" cy="6" r="2.5" fill="white" stroke="rgba(0,0,0,0.2)" stroke-width="0.5"/><circle cx="6" cy="6" r="1.5" fill="rgba(168,85,247,0.8)"/><path d="M8 6h8M6 4v4M14 4v4" stroke="rgba(255,255,255,0.9)" stroke-width="1.5" stroke-linecap="round"/></svg>') 6 6, grab;
-  }
-
-  [draggable="true"]:active,
-  .draggable:active {
-    cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="6" cy="6" r="3" fill="white" stroke="rgba(0,0,0,0.3)" stroke-width="0.5"/><circle cx="6" cy="6" r="2" fill="rgba(168,85,247,1)"/><path d="M8 6h8M6 4v4M14 4v4" stroke="rgba(255,255,255,1)" stroke-width="2" stroke-linecap="round"/></svg>') 6 6, grabbing;
-  }
-
-  /* Resize cursors for interactive elements */
-  .resize-horizontal {
-    cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="8" y="10" width="8" height="4" rx="2" fill="rgba(59,130,246,0.8)"/><path d="M6 12h12M8 10l-2 2 2 2M16 10l2 2-2 2" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>') 12 12, ew-resize;
-  }
-
-  .resize-vertical {
-    cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="10" y="8" width="4" height="8" rx="2" fill="rgba(59,130,246,0.8)"/><path d="M12 6v12M10 8l2-2 2 2M10 16l2 2 2-2" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>') 12 12, ns-resize;
-  }
-
-  /* Loading/wait cursor with gentle animation */
-  .loading,
-  [aria-busy="true"] {
-    cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" fill="none" stroke="rgba(59,130,246,0.3)" stroke-width="2"/><path d="M12 4a8 8 0 018 8" stroke="rgba(59,130,246,0.9)" stroke-width="2.5" stroke-linecap="round"/></svg>') 12 12, wait;
-  }
-
-  /* Disabled state cursor */
-  [disabled],
-  .disabled {
-    cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="6" cy="6" r="2.5" fill="rgba(156,163,175,0.6)"/><line x1="2" y1="2" x2="10" y2="10" stroke="rgba(239,68,68,0.7)" stroke-width="1.5" stroke-linecap="round"/></svg>') 6 6, not-allowed;
-  }
-
-  /* Help/question cursor */
-  .help,
-  [title]:hover {
-    cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="8" cy="8" r="6" fill="rgba(34,197,94,0.8)"/><path d="M6 6.5c0-1 1-1.5 2-1.5s2 0.5 2 1.5-1 1.5-2 1.5M8 10.5h0M8 8.5v0" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>') 8 8, help;
-  }
-
-  /* Theme-adaptive cursor colors for dark mode */
-  [data-theme="dark"] html,
-  [data-theme$="-dark"] html {
-    cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="4" cy="4" r="2" fill="rgba(30,41,59,0.9)" stroke="rgba(255,255,255,0.3)" stroke-width="0.5"/><circle cx="4" cy="4" r="1.2" fill="rgba(99,102,241,0.9)"/></svg>') 4 4, auto;
-  }
-
-  /* ========================================
-     CUSTOM SCROLLBAR SYSTEM - WELLBEING OPTIMIZED
-     ======================================== */
-
   /* Webkit scrollbars - main application */
   ::-webkit-scrollbar {
     width: 8px;
@@ -7649,7 +7554,7 @@ body {
 .confirm-modal {
   position: fixed;
   inset: 0;
-  z-index: 12000;
+  z-index: 20000;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -8317,7 +8222,7 @@ body {
   inset: 0 !important;
   width: 100vw !important;
   height: 100vh !important;
-  z-index: 12000 !important; /* above other modals */
+  z-index: 20000 !important; /* above other modals */
   pointer-events: auto;
 }
 .journal-modal-portal.confirm-modal.hidden {
@@ -8331,7 +8236,7 @@ body {
   inset: 0 !important;
   width: 100vw !important;
   height: 100vh !important;
-  z-index: 11990 !important;
+  z-index: 19990 !important;
 }
 .journal-modal-portal .confirm-modal-container {
   z-index: 12010 !important;

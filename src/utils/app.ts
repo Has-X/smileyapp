@@ -890,7 +890,8 @@ class SmileApp {
       padding: 1rem 1.5rem;
       border-radius: 0.5rem;
       box-shadow: var(--md-elevation-3);
-  z-index: 13000;
+      /* Ensure notifications appear above any modal/backdrop */
+      z-index: 24000;
       max-width: 90vw;
       text-align: center;
       font-weight: 500;
@@ -2287,6 +2288,16 @@ class SmileApp {
   private showPasswordModal(mode: 'set' | 'change' = 'set') {
     const modal = document.getElementById('password-setup-modal');
     if (modal) {
+      // If onboarding is currently visible, temporarily hide it to prevent stacking/pointer issues
+      const onboarding = document.getElementById('onboarding-modal') as HTMLElement | null;
+      if (onboarding) {
+        const isOnboardingVisible = onboarding.classList.contains('show') || (onboarding.style.display && onboarding.style.display !== 'none');
+        if (isOnboardingVisible) {
+          onboarding.setAttribute('data-resume-after-password', 'true');
+          onboarding.classList.remove('show');
+          onboarding.style.display = 'none';
+        }
+      }
       // Update modal title based on mode
       const title = modal.querySelector('.confirm-modal-title');
       if (title) title.textContent = mode === 'set' ? 'Set Encryption Password' : 'Change Encryption Password';
@@ -2296,8 +2307,73 @@ class SmileApp {
       const submitLabel = document.getElementById('password-submit-label') as HTMLElement;
       if (currentField) currentField.style.display = mode === 'change' ? '' : 'none';
       if (submitLabel) submitLabel.textContent = mode === 'change' ? 'Change Password' : 'Set Password';
-      // Show via unified manager
-      (window as any).modalManager?.show(modal);
+      // Show modal: prefer a manager if present, else fallback to class toggle
+      const mm = (window as any).modalManager;
+      if (mm && typeof mm.show === 'function') {
+        mm.show(modal);
+      } else {
+        // Ensure the modal is attached to body so it stacks above other layers
+        if (modal.parentElement !== document.body) {
+          document.body.appendChild(modal);
+        }
+        // Bump z-indexes to be safely above onboarding/global modals
+        (modal as HTMLElement).style.zIndex = '21000';
+        const backdrop = modal.querySelector('.confirm-modal-backdrop') as HTMLElement | null;
+        const container = modal.querySelector('.confirm-modal-container') as HTMLElement | null;
+        const content = modal.querySelector('.confirm-modal-content') as HTMLElement | null;
+        if (backdrop) backdrop.style.zIndex = '20990';
+        if (container) container.style.zIndex = '21000';
+        if (content) content.style.zIndex = '21010';
+
+        modal.classList.remove('hidden');
+        // Allow CSS transitions to apply
+        setTimeout(() => modal.classList.add('show'), 10);
+      }
+
+      // Observe close via class changes (covers backdrop/Escape closes) and resync UI
+      if (!(modal as any)._smileSyncObserver) {
+        const obs = new MutationObserver(() => {
+          const isShown = modal.classList.contains('show') && !modal.classList.contains('hidden');
+          if (!isShown) {
+            // when closing, sync UI from real storage state
+            setTimeout(async () => {
+              try {
+                const SecureStorageModule = await import('./secure-storage.ts');
+                const storage = SecureStorageModule.default.getInstance();
+                const settings = storage.getSecuritySettings();
+                const encEnabled = !!settings.encryptionEnabled;
+
+                const encToggle = document.getElementById('encryption-enabled') as HTMLInputElement | null;
+                if (encToggle) encToggle.checked = encEnabled;
+
+                const obToggle = document.getElementById('onboarding-encryption') as HTMLInputElement | null;
+                if (obToggle) obToggle.checked = encEnabled;
+
+                const setBtn = document.getElementById('set-password-btn') as HTMLButtonElement | null;
+                const changeBtn = document.getElementById('change-password-btn') as HTMLButtonElement | null;
+                const testBtn = document.getElementById('test-unlock-btn') as HTMLButtonElement | null;
+                if (setBtn) setBtn.style.display = encEnabled ? 'none' : '';
+                if (changeBtn) changeBtn.style.display = encEnabled ? '' : 'none';
+                if (testBtn) testBtn.style.display = encEnabled ? '' : 'none';
+              } catch {
+                /* ignore */
+              }
+            }, 0);
+
+            // Also restore onboarding modal if we hid it for password entry
+            const onboarding = document.getElementById('onboarding-modal') as HTMLElement | null;
+            if (onboarding && onboarding.getAttribute('data-resume-after-password') === 'true') {
+              onboarding.removeAttribute('data-resume-after-password');
+              if (localStorage.getItem('smile-onboarding') !== 'complete') {
+                onboarding.style.display = 'flex';
+                setTimeout(() => onboarding.classList.add('show'), 10);
+              }
+            }
+          }
+        });
+        obs.observe(modal, { attributes: true, attributeFilter: ['class'] });
+        (modal as any)._smileSyncObserver = obs;
+      }
     }
   }
 
@@ -2329,9 +2405,43 @@ class SmileApp {
 }
 
 // Global functions for Security Modal
-(window as any).closePasswordModal = function() {
+(window as any).closePasswordModal = async function() {
   const modal = document.getElementById('password-setup-modal');
-  (window as any).modalManager?.hide(modal);
+  const mm = (window as any).modalManager;
+  if (mm && typeof mm.hide === 'function') {
+    mm.hide(modal);
+  } else if (modal) {
+    modal.classList.remove('show');
+    setTimeout(() => {
+      modal.classList.add('hidden');
+    }, 200);
+  }
+
+  // If onboarding was temporarily hidden for password entry, bring it back
+  const onboarding = document.getElementById('onboarding-modal') as HTMLElement | null;
+  if (onboarding && onboarding.getAttribute('data-resume-after-password') === 'true') {
+    onboarding.removeAttribute('data-resume-after-password');
+    // Only restore if onboarding has not been completed/closed
+    if (localStorage.getItem('smile-onboarding') !== 'complete') {
+      onboarding.style.display = 'flex';
+      setTimeout(() => onboarding.classList.add('show'), 10);
+    }
+  }
+
+  // After closing, sync any UI toggles with real encryption state to avoid fake-on
+  try {
+    const SecureStorageModule = await import('./secure-storage.ts');
+    const storage = SecureStorageModule.default.getInstance();
+    const settings = storage.getSecuritySettings();
+
+    const encToggle = document.getElementById('encryption-enabled') as HTMLInputElement | null;
+    if (encToggle) encToggle.checked = !!settings.encryptionEnabled;
+
+    const obToggle = document.getElementById('onboarding-encryption') as HTMLInputElement | null;
+    if (obToggle) obToggle.checked = !!settings.encryptionEnabled;
+  } catch {
+    // ignore
+  }
 };
 
 // Global confirm helper that prefers the app confirm modal but falls back
@@ -2415,7 +2525,7 @@ class SmileApp {
       ok = await secureStorage.enableEncryption(newPassword);
     }
 
-    if (!ok) {
+  if (!ok) {
       if ((window as any).smileApp && typeof (window as any).smileApp.showCustomNotification === 'function') {
         (window as any).smileApp.showCustomNotification('Failed to enable encryption. Please try again.', 'error');
       } else {
@@ -2427,6 +2537,10 @@ class SmileApp {
     // Reflect UI: enable toggle and swap buttons
     const encryptionToggle = document.getElementById('encryption-enabled') as HTMLInputElement;
     if (encryptionToggle) encryptionToggle.checked = true;
+
+    // Reflect onboarding toggle if present
+    const onboardingToggle = document.getElementById('onboarding-encryption') as HTMLInputElement | null;
+    if (onboardingToggle) onboardingToggle.checked = true;
 
     const setBtn = document.getElementById('set-password-btn') as HTMLButtonElement;
     const changeBtn = document.getElementById('change-password-btn') as HTMLButtonElement;

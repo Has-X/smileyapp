@@ -63,9 +63,8 @@ import OllamaHelper from './OllamaHelper.astro';
             </div>
             <div class="feature-item">
               <div class="feature-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M12 2L2 7v10c0 5.55 3.84 9.95 9 11 5.16-1.05 9-5.45 9-11V7l-10-5z"/>
-                  <path d="M9 12l2 2 4-4"/>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/>
                 </svg>
               </div>
               <div>
@@ -152,7 +151,7 @@ import OllamaHelper from './OllamaHelper.astro';
               </svg>
             </div>
             <h2>Secure Your Data</h2>
-            <p>Protect your conversations and journal entries with local encryption. Your data stays on your device and is encrypted in your browser's storage.</p>
+            <p>Protect your conversations and journal entries with encryption. This secures your local storage (your browser's localStorage/IndexedDB) on this device only — nothing is sent anywhere.</p>
           </div>
 
           <div class="security-options">
@@ -167,7 +166,7 @@ import OllamaHelper from './OllamaHelper.astro';
                 </div>
                 <div class="security-details">
                   <h4>Enable Local Data Encryption</h4>
-                  <p>Encrypt your conversations and journal entries in your browser's local storage</p>
+                  <p>Encrypts your data in your browser's local storage so only your password can unlock it</p>
                 </div>
                 <div class="security-toggle">
                   <input type="checkbox" id="onboarding-encryption" class="toggle-input">
@@ -264,46 +263,312 @@ import OllamaHelper from './OllamaHelper.astro';
           </div>
         </div>
 
-        <!-- Step 5: AI Setup with OllamaHelper -->
+        <!-- Step 5: AI Engine Setup - Redesigned -->
         <div class="step-content" data-step="5">
           <div class="step-header">
             <div class="step-icon">
               <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
-                <line x1="8" y1="21" x2="16" y2="21"/>
-                <line x1="12" y1="17" x2="12" y2="21"/>
+                <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.07 2.07 0 0 1-2.44-2.44 2.5 2.5 0 0 1 0-4.92 2.5 2.5 0 0 1 0-4.92 2.5 2.5 0 0 1 0-4.92A2.5 2.5 0 0 1 9.5 2Z"/>
+                <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.07 2.07 0 0 0 2.44-2.44 2.5 2.5 0 0 0 0-4.92 2.5 2.5 0 0 0 0-4.92 2.5 2.5 0 0 0 0-4.92A2.5 2.5 0 0 0 14.5 2Z"/>
               </svg>
             </div>
             <h2>AI Engine Setup</h2>
-            <p>Set up Ollama for enhanced AI capabilities. This step is optional and can be completed later.</p>
+            <p>Connect with Ollama to enhance your AI capabilities. This powerful local AI engine provides private, secure conversations.</p>
           </div>
 
-          <div class="ai-setup-container">
-            <div class="ai-status-check">
-              <div class="status-section">
-                <h4>AI Engine Status</h4>
-                <button id="check-ai-status" class="status-check-btn">
+          <div class="ai-setup-redesigned">
+            <!-- AI Engine Status - Enhanced -->
+            <div class="ai-status-row" id="connection-status-card">
+              <div class="status-icon-container">
+                <div class="status-icon-bg">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.07 2.07 0 0 1-2.44-2.44 2.5 2.5 0 0 1 0-4.92 2.5 2.5 0 0 1 0-4.92 2.5 2.5 0 0 1 0-4.92A2.5 2.5 0 0 1 9.5 2Z"/>
+                    <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.07 2.07 0 0 0 2.44-2.44 2.5 2.5 0 0 0 0-4.92 2.5 2.5 0 0 0 0-4.92 2.5 2.5 0 0 0 0-4.92A2.5 2.5 0 0 0 14.5 2Z"/>
+                  </svg>
+                </div>
+                <div class="status-indicator" id="status-icon">
+                  <div class="status-dot" id="status-dot"></div>
+                </div>
+              </div>
+              
+              <div class="status-info">
+                <div class="status-header">
+                  <span class="status-label">AI Engine</span>
+                  <span class="status-badge" id="connection-message">Checking...</span>
+                </div>
+                <span class="status-description">Local intelligence powered by Ollama</span>
+              </div>
+
+              <button class="check-btn" id="check-connection-btn" onclick="checkOllamaConnection()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Success State -->
+            <div class="ai-success-state hidden" id="ai-success-state">
+              <div class="success-header">
+                <div class="success-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                </div>
+                <div class="success-content">
+                  <h3>🎉 Ollama Connected Successfully!</h3>
+                  <p>Found <span id="model-count-display">0</span> AI models ready to use</p>
+                </div>
+              </div>
+              
+              <div class="models-preview" id="models-preview">
+                <!-- Models will be populated here -->
+              </div>
+              
+              <div class="success-actions">
+                <button class="action-btn secondary" onclick="refreshOllamaModels()">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
                   </svg>
-                  Check AI Status
+                  Refresh Models
                 </button>
-              </div>
-              <div id="ai-status-result" class="status-result">
-                Click 'Check AI Status' to verify your setup
+                <button class="action-btn primary hidden" id="download-model-btn" onclick="downloadRecommendedModel()">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                  </svg>
+                  Download Recommended Model
+                </button>
               </div>
             </div>
 
-            <OllamaHelper />
-            
-            <div class="setup-note">
-              <div class="note-content">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <!-- Setup Instructions -->
+            <div class="ai-setup-instructions" id="ai-setup-instructions">
+              <div class="setup-header">
+                <h3>Install Ollama to Get Started</h3>
+                <p>Choose your operating system and follow the simple installation steps</p>
+              </div>
+
+              <!-- OS Selection Tabs -->
+              <div class="os-tabs">
+                <button class="os-tab active" data-os="windows" onclick="switchOSTab('windows')">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-13.051-1.35"/>
+                  </svg>
+                  Windows
+                </button>
+                <button class="os-tab" data-os="mac" onclick="switchOSTab('mac')">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.89 3.29.89.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.71.85-1.85 1.51-2.97 1.42-.15-1.15.41-2.35 1.07-3.11z"/>
+                  </svg>
+                  macOS
+                </button>
+                <button class="os-tab" data-os="linux" onclick="switchOSTab('linux')">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12.504 0c-.155 0-.315.008-.48.021-4.226.333-3.105 4.807-3.17 6.298-.076 1.092-.3 1.953-1.05 3.02-.885 1.051-2.127 2.75-2.716 4.521-.278.832-.41 1.684-.287 2.489a.424.424 0 00-.11.135c-.26.268-.45.6-.663.839-.199.199-.485.267-.797.4-.313.136-.658.269-.864.68-.09.189-.136.394-.132.602 0 .199.027.4.055.536.058.399.116.728.04.97-.249.68-.28 1.145-.106 1.484.174.334.535.47.94.601.81.2 1.91.135 2.774.6.926.466 1.866.67 2.616.47.526-.116.97-.464 1.208-.946.587-.003 1.23-.269 2.26-.334.699-.058 1.574.267 2.577.2.025.134.063.198.114.333l.003.003c.391.778 1.113 1.132 1.884 1.071.771-.06 1.592-.536 2.257-1.306.631-.765 1.683-1.084 2.378-1.503.348-.199.629-.469.649-.853.023-.4-.2-.811-.714-1.376v-.097l-.003-.003c-.17-.2-.25-.535-.338-.926-.085-.401-.182-.786-.492-1.046h-.003c-.059-.054-.123-.067-.188-.135a.357.357 0 00-.19-.064c.431-1.278.264-2.55-.173-3.694-.533-1.41-1.465-2.638-2.175-3.483-.796-1.005-1.576-1.957-1.56-3.368.026-2.152.236-6.133-3.544-6.139z"/>
+                  </svg>
+                  Linux
+                </button>
+              </div>
+
+              <!-- OS-Specific Instructions -->
+              <div class="os-instructions">
+                <div class="os-content active" data-os="windows">
+                  <div class="install-steps">
+                    <div class="install-step">
+                      <div class="step-number">1</div>
+                      <div class="step-details">
+                        <h4>Download Ollama for Windows</h4>
+                        <p>Get the official Ollama installer for Windows</p>
+                        <a href="https://ollama.ai/download/windows" target="_blank" class="download-link">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                          </svg>
+                          Download for Windows
+                        </a>
+                      </div>
+                    </div>
+                    
+                    <div class="install-step">
+                      <div class="step-number">2</div>
+                      <div class="step-details">
+                        <h4>Install & Launch</h4>
+                        <p>Run the installer and launch Ollama. It will start automatically in the background.</p>
+                      </div>
+                    </div>
+                    
+                    <div class="install-step">
+                      <div class="step-number">3</div>
+                      <div class="step-details">
+                        <h4>Download Your First Model</h4>
+                        <p>Open Command Prompt or PowerShell and run:</p>
+                        <div class="command-block">
+                          <code>ollama pull llama3.2</code>
+                          <button class="copy-command" onclick="copyToClipboard('ollama pull llama3.2')">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                              <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="os-content" data-os="mac">
+                  <div class="install-steps">
+                    <div class="install-step">
+                      <div class="step-number">1</div>
+                      <div class="step-details">
+                        <h4>Download Ollama for macOS</h4>
+                        <p>Get the official Ollama installer for Mac</p>
+                        <a href="https://ollama.ai/download/mac" target="_blank" class="download-link">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                          </svg>
+                          Download for macOS
+                        </a>
+                      </div>
+                    </div>
+                    
+                    <div class="install-step">
+                      <div class="step-number">2</div>
+                      <div class="step-details">
+                        <h4>Install & Launch</h4>
+                        <p>Open the .dmg file, drag Ollama to Applications, and launch it from your Applications folder.</p>
+                      </div>
+                    </div>
+                    
+                    <div class="install-step">
+                      <div class="step-number">3</div>
+                      <div class="step-details">
+                        <h4>Download Your First Model</h4>
+                        <p>Open Terminal and run:</p>
+                        <div class="command-block">
+                          <code>ollama pull llama3.2</code>
+                          <button class="copy-command" onclick="copyToClipboard('ollama pull llama3.2')">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                              <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="os-content" data-os="linux">
+                  <div class="install-steps">
+                    <div class="install-step">
+                      <div class="step-number">1</div>
+                      <div class="step-details">
+                        <h4>Install Ollama</h4>
+                        <p>Run the installation script in your terminal:</p>
+                        <div class="command-block">
+                          <code>curl -fsSL https://ollama.ai/install.sh | sh</code>
+                          <button class="copy-command" onclick="copyToClipboard('curl -fsSL https://ollama.ai/install.sh | sh')">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                              <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="install-step">
+                      <div class="step-number">2</div>
+                      <div class="step-details">
+                        <h4>Start the Service</h4>
+                        <p>Start Ollama as a background service:</p>
+                        <div class="command-block">
+                          <code>systemctl --user start ollama</code>
+                          <button class="copy-command" onclick="copyToClipboard('systemctl --user start ollama')">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                              <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="install-step">
+                      <div class="step-number">3</div>
+                      <div class="step-details">
+                        <h4>Download Your First Model</h4>
+                        <p>Download a recommended AI model:</p>
+                        <div class="command-block">
+                          <code>ollama pull llama3.2</code>
+                          <button class="copy-command" onclick="copyToClipboard('ollama pull llama3.2')">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                              <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="setup-help">
+                <div class="help-links">
+                  <a href="https://ollama.ai/docs" target="_blank" class="help-link">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                      <polyline points="14,2 14,8 20,8"/>
+                      <line x1="16" y1="13" x2="8" y2="13"/>
+                      <line x1="16" y1="17" x2="8" y2="17"/>
+                      <polyline points="10,9 9,9 8,9"/>
+                    </svg>
+                    Documentation
+                  </a>
+                  <button class="help-link" onclick="toggleTroubleshooting()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10"/>
+                      <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/>
+                      <line x1="12" y1="17" x2="12.01" y2="17"/>
+                    </svg>
+                    Troubleshooting
+                  </button>
+                </div>
+              </div>
+
+              <!-- Troubleshooting Section -->
+              <div class="troubleshooting-section hidden" id="troubleshooting-section">
+                <h4>Common Issues & Solutions</h4>
+                <div class="trouble-items">
+                  <div class="trouble-item">
+                    <h5>🔧 Service Not Running</h5>
+                    <p>Make sure Ollama is running. Try restarting the application or running <code>ollama serve</code> in your terminal.</p>
+                  </div>
+                  <div class="trouble-item">
+                    <h5>🌐 Connection Refused</h5>
+                    <p>Verify Ollama is running on port 11434. Visit <a href="http://localhost:11434" target="_blank">localhost:11434</a> to check.</p>
+                  </div>
+                  <div class="trouble-item">
+                    <h5>📦 No Models Found</h5>
+                    <p>Download at least one model using <code>ollama pull llama3.2</code> in your terminal.</p>
+                  </div>
+                  <div class="trouble-item">
+                    <h5>⚡ Slow Performance</h5>
+                    <p>Try a smaller model like <code>llama3.2:1b</code> if you have limited RAM or processing power.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Skip Option -->
+            <div class="skip-option">
+              <div class="skip-content">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <circle cx="12" cy="12" r="10"/>
                   <path d="M12 16v-4"/>
                   <path d="M12 8h.01"/>
                 </svg>
-                <p><strong>Optional Setup:</strong> You can skip this step and configure AI later in settings. Smile AI will work with basic features without the AI engine.</p>
+                <p><strong>Optional Setup:</strong> You can skip this step and configure AI later in settings. Smile AI works great with basic features even without the AI engine.</p>
               </div>
             </div>
           </div>
@@ -312,64 +577,85 @@ import OllamaHelper from './OllamaHelper.astro';
         <!-- Step 6: Thank You & Completion -->
         <div class="step-content" data-step="6">
           <div class="step-header">
-            <div class="step-icon success">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="10"/>
-                <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
-                <line x1="9" y1="9" x2="9.01" y2="9"/>
-                <line x1="15" y1="9" x2="15.01" y2="9"/>
-              </svg>
+            <div class="completion-icon-container">
+              <div class="completion-icon-bg">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" class="completion-icon">
+                  <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                  <path d="M8 12l3 3 5-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                </svg>
+              </div>
             </div>
-            <h2>Thank You & Welcome! 😊</h2>
-            <p>Your personal wellness companion is ready. We're here to support you, listen to you, and help you smile through life's journey.</p>
+            <div class="completion-header">
+              <h2>Welcome to SmileyApp!</h2>
+              <p class="completion-subtitle">Your personal wellness companion is ready</p>
+            </div>
           </div>
 
           <div class="completion-content">
-            <div class="welcome-message">
-              <h3>Your Smile Matters</h3>
-              <p>Every conversation, every moment of reflection, every step forward—they all matter. We're honored to be part of your wellness journey.</p>
-            </div>
-
-            <div class="features-quick-list">
-              <div class="feature-quick">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
-                </svg>
-                <span>Start conversations anytime</span>
-              </div>
-              <div class="feature-quick">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-                  <path d="M8 7h8"/><path d="M8 11h8"/><path d="M8 15h6"/>
-                </svg>
-                <span>Journal your thoughts</span>
-              </div>
-              <div class="feature-quick">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M12 2L2 7v10c0 5.55 3.84 9.95 9 11 5.16-1.05 9-5.45 9-11V7l-10-5z"/>
-                  <path d="M9 12l2 2 4-4"/>
-                </svg>
-                <span>Explore wellness tools</span>
+            <div class="completion-message">
+              <div class="message-content">
+                <h3>Ready to Begin Your Journey</h3>
+                <p>We're here to support you, listen to you, and help you navigate life's moments with confidence and care.</p>
               </div>
             </div>
 
-            <div class="acknowledgments-compact">
-              <p class="ack-intro">Special thanks to</p>
-              <div class="ack-list">
-                <span class="ack-credit"><strong>OpenAI</strong> for GPT models</span>
-                <span class="ack-separator">•</span>
-                <span class="ack-credit"><strong>NVIDIA</strong> for amazing hardware</span>
+            <div class="feature-cards">
+              <div class="feature-card">
+                <div class="feature-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <div class="feature-content">
+                  <span class="feature-title">Start Conversations</span>
+                  <span class="feature-desc">Chat anytime you need support</span>
+                </div>
+              </div>
+              
+              <div class="feature-card">
+                <div class="feature-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" stroke-width="2"/>
+                    <polyline points="14,2 14,8 20,8" stroke="currentColor" stroke-width="2"/>
+                    <line x1="16" y1="13" x2="8" y2="13" stroke="currentColor" stroke-width="2"/>
+                    <line x1="16" y1="17" x2="8" y2="17" stroke="currentColor" stroke-width="2"/>
+                  </svg>
+                </div>
+                <div class="feature-content">
+                  <span class="feature-title">Journal Thoughts</span>
+                  <span class="feature-desc">Reflect and track your wellness</span>
+                </div>
+              </div>
+              
+              <div class="feature-card">
+                <div class="feature-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" stroke="currentColor" stroke-width="2"/>
+                    <polyline points="22,4 12,14.01 9,11.01" stroke="currentColor" stroke-width="2"/>
+                  </svg>
+                </div>
+                <div class="feature-content">
+                  <span class="feature-title">Explore Tools</span>
+                  <span class="feature-desc">Discover wellness exercises</span>
+                </div>
               </div>
             </div>
 
-            <div class="privacy-final">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                <circle cx="12" cy="16" r="1"/>
-                <path d="m7 11 0-3a5 5 0 0 1 10 0v3"/>
-              </svg>
-              <span>All data stays private on your device</span>
+            <div class="completion-footer">
+              <div class="privacy-assurance">
+                <div class="privacy-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" stroke="currentColor" stroke-width="2"/>
+                    <circle cx="12" cy="16" r="1" fill="currentColor"/>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="currentColor" stroke-width="2"/>
+                  </svg>
+                </div>
+                <span>All conversations stay private on your device</span>
+              </div>
+              
+              <div class="acknowledgments">
+                <span class="ack-text">Powered by OpenAI & NVIDIA technologies</span>
+              </div>
             </div>
           </div>
         </div>
@@ -595,7 +881,7 @@ import OllamaHelper from './OllamaHelper.astro';
 .onboarding-body {
   flex: 1;
   overflow-y: auto;
-  padding: 2rem;
+  padding: 1.5rem;
 }
 
 .step-content {
@@ -621,7 +907,7 @@ import OllamaHelper from './OllamaHelper.astro';
 /* Step Header */
 .step-header {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1.25rem;
 }
 
 .step-icon {
@@ -1091,64 +1377,22 @@ import OllamaHelper from './OllamaHelper.astro';
   gap: 1.5rem;
 }
 
-.ai-status-check {
-  background: rgba(var(--md-surface-container-low), 0.5);
-  border: 1px solid rgba(var(--md-outline-variant), 0.2);
+/* Compact Ollama Helper in onboarding */
+.ai-setup-container .ollama-helper {
+  max-height: 600px;
+  overflow-y: auto;
   border-radius: 1rem;
-  padding: 1.5rem;
-}
-
-.status-section {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-  gap: 1rem;
-}
-
-.status-section h4 {
-  font-size: 1rem;
-  font-weight: 600;
-  color: rgb(var(--md-on-surface));
-  margin: 0;
-}
-
-.status-check-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.25rem;
-  background: rgb(var(--md-primary));
-  color: rgb(var(--md-on-primary));
-  border: none;
-  border-radius: 0.75rem;
-  font-weight: 500;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  white-space: nowrap;
-}
-
-.status-check-btn:hover {
-  background: rgb(var(--md-primary-container));
-  color: rgb(var(--md-on-primary-container));
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(var(--md-primary), 0.3);
-}
-
-.status-result {
-  min-height: 50px;
-  padding: 1rem;
-  background: rgba(var(--md-surface-container-highest), 0.5);
   border: 1px solid rgba(var(--md-outline-variant), 0.2);
-  border-radius: 0.75rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: rgb(var(--md-on-surface-variant));
+  background: rgba(var(--md-surface-container-low), 0.3);
+}
+
+.ai-setup-container .ollama-helper .setup-tabs {
+  gap: 0.5rem;
+}
+
+.ai-setup-container .ollama-helper .tab-button {
+  padding: 0.5rem 1rem;
   font-size: 0.875rem;
-  text-align: center;
-  line-height: 1.4;
 }
 
 .system-detection {
@@ -1395,38 +1639,38 @@ import OllamaHelper from './OllamaHelper.astro';
 .status-check-btn {
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  border: 2px solid rgb(var(--md-primary));
+  padding: 0.75rem 1.25rem;
+  background: rgb(var(--md-primary));
+  color: rgb(var(--md-on-primary));
+  border: none;
   border-radius: 0.75rem;
-  background: transparent;
-  color: rgb(var(--md-primary));
   font-weight: 500;
-  transition: all 0.3s ease;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .status-check-btn:hover {
-  background: rgba(var(--md-primary), 0.1);
+  background: rgb(var(--md-primary-container));
+  color: rgb(var(--md-on-primary-container));
   transform: translateY(-1px);
 }
 
+.status-controls { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+
 .status-result {
-  min-height: 60px;
-  padding: 1rem;
-  border-radius: 0.75rem;
-  background: rgba(var(--md-surface-container-low), 0.5);
-  border: 1px solid rgba(var(--md-outline-variant), 0.2);
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  color: rgb(var(--md-on-surface-variant));
-  font-style: italic;
+  min-height: 0;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  background: rgba(var(--md-surface-container-highest), 0.5);
+  border: 1px solid rgba(var(--md-outline-variant), 0.2);
+  color: rgb(var(--md-on-surface));
 }
 
 .status-result:empty::after {
-  content: "Click 'Check AI Status' to verify your setup";
+  content: "Click 'Check Status' to verify your setup";
 }
 
 .setup-note {
@@ -1456,122 +1700,208 @@ import OllamaHelper from './OllamaHelper.astro';
   line-height: 1.5;
 }
 
-/* Completion */
+/* Completion Page - Enhanced Material Design */
+.completion-icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 1rem;
+}
+
+.completion-icon-bg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, rgb(var(--md-primary)), rgb(var(--md-secondary)));
+  border-radius: 32px;
+  box-shadow: 0 4px 20px rgba(var(--md-primary), 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.completion-icon-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
+  border-radius: inherit;
+}
+
+.completion-icon {
+  color: white;
+  z-index: 1;
+}
+
+.completion-header {
+  text-align: center;
+}
+
+.completion-header h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: rgb(var(--md-on-surface));
+  margin: 0 0 0.5rem 0;
+  letter-spacing: -0.025em;
+}
+
+.completion-subtitle {
+  font-size: 1rem;
+  color: rgb(var(--md-on-surface-variant));
+  margin: 0;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
 .completion-content {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
-.welcome-message {
-  text-align: center;
-  padding: 1.5rem;
-  background: linear-gradient(135deg, rgba(var(--md-primary), 0.1), rgba(var(--md-secondary), 0.05));
-  border: 1px solid rgba(var(--md-primary), 0.2);
+.completion-message {
+  background: linear-gradient(135deg, rgba(var(--md-primary-container), 0.4), rgba(var(--md-secondary-container), 0.2));
+  border: 1px solid rgba(var(--md-primary), 0.15);
   border-radius: 1rem;
+  padding: 1.5rem;
   position: relative;
   overflow: hidden;
 }
 
-.welcome-message::before {
+.completion-message::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: 2px;
+  height: 3px;
   background: linear-gradient(90deg, rgb(var(--md-primary)), rgb(var(--md-secondary)));
 }
 
-.welcome-message h3 {
+.message-content h3 {
   font-size: 1.25rem;
-  font-weight: 700;
-  color: rgb(var(--md-primary));
+  font-weight: 600;
+  color: rgb(var(--md-on-surface));
   margin: 0 0 0.75rem 0;
+  letter-spacing: -0.01em;
 }
 
-.welcome-message p {
-  font-size: 0.95rem;
+.message-content p {
+  font-size: 0.9375rem;
   line-height: 1.5;
   color: rgb(var(--md-on-surface-variant));
   margin: 0;
 }
 
-.features-quick-list {
+.feature-cards {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
 }
 
-.feature-quick {
+.feature-card {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.875rem 1rem;
-  background: rgba(var(--md-surface-container-low), 0.5);
-  border: 1px solid rgba(var(--md-outline-variant), 0.2);
-  border-radius: 0.75rem;
-  font-size: 0.9rem;
-  color: rgb(var(--md-on-surface));
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: rgba(var(--md-surface-container), 0.6);
+  border: 1px solid rgba(var(--md-outline-variant), 0.3);
+  border-radius: 0.875rem;
+  transition: all 0.2s ease;
 }
 
-.feature-quick svg {
-  color: rgb(var(--md-primary));
-  flex-shrink: 0;
+.feature-card:hover {
+  background: rgba(var(--md-surface-container-high), 0.8);
+  border-color: rgba(var(--md-primary), 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(var(--md-shadow), 0.1);
 }
 
-.acknowledgments-compact {
-  text-align: center;
-  padding: 1rem;
-  background: rgba(var(--md-tertiary-container), 0.1);
-  border: 1px solid rgba(var(--md-tertiary), 0.2);
-  border-radius: 0.75rem;
-}
-
-.ack-intro {
-  font-size: 0.875rem;
-  color: rgb(var(--md-on-surface-variant));
-  margin: 0 0 0.5rem 0;
-}
-
-.ack-list {
+.feature-icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-  font-size: 0.875rem;
-}
-
-.ack-credit {
-  color: rgb(var(--md-on-surface));
-}
-
-.ack-credit strong {
-  color: rgb(var(--md-tertiary));
-  font-weight: 600;
-}
-
-.ack-separator {
-  color: rgb(var(--md-outline));
-}
-
-.privacy-final {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.875rem;
-  background: rgba(var(--md-primary-container), 0.1);
+  width: 44px;
+  height: 44px;
+  background: linear-gradient(135deg, rgba(var(--md-primary), 0.1), rgba(var(--md-secondary), 0.05));
   border: 1px solid rgba(var(--md-primary), 0.2);
-  border-radius: 0.75rem;
-  font-size: 0.875rem;
-  color: rgb(var(--md-on-surface-variant));
+  border-radius: 12px;
+  flex-shrink: 0;
 }
 
-.privacy-final svg {
+.feature-icon svg {
   color: rgb(var(--md-primary));
+}
+
+.feature-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.feature-title {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: rgb(var(--md-on-surface));
+  line-height: 1.2;
+}
+
+.feature-desc {
+  font-size: 0.8125rem;
+  color: rgb(var(--md-on-surface-variant));
+  line-height: 1.3;
+  font-weight: 400;
+}
+
+.completion-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.privacy-assurance {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  background: linear-gradient(135deg, rgba(var(--md-tertiary-container), 0.3), rgba(var(--md-primary-container), 0.1));
+  border: 1px solid rgba(var(--md-tertiary), 0.2);
+  border-radius: 0.875rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: rgb(var(--md-on-surface));
+}
+
+.privacy-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: rgba(var(--md-tertiary), 0.1);
+  border-radius: 8px;
   flex-shrink: 0;
+}
+
+.privacy-icon svg {
+  color: rgb(var(--md-tertiary));
+}
+
+.acknowledgments {
+  text-align: center;
+  padding: 0.75rem;
+}
+
+.ack-text {
+  font-size: 0.8125rem;
+  color: rgb(var(--md-on-surface-variant));
+  font-weight: 400;
+  opacity: 0.8;
 }
 
 /* Remove old completion styles */
@@ -1727,6 +2057,74 @@ import OllamaHelper from './OllamaHelper.astro';
   
   .goals-grid {
     grid-template-columns: 1fr;
+  }
+
+  /* Completion page mobile styles */
+  .completion-icon-container {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 0.75rem;
+  }
+  
+  .completion-icon-bg {
+    width: 56px;
+    height: 56px;
+    border-radius: 28px;
+  }
+  
+  .completion-icon {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .completion-header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .completion-subtitle {
+    font-size: 0.9375rem;
+  }
+  
+  .completion-content {
+    gap: 1.25rem;
+  }
+  
+  .completion-message {
+    padding: 1.25rem;
+  }
+  
+  .message-content h3 {
+    font-size: 1.125rem;
+  }
+  
+  .feature-card {
+    padding: 0.875rem 1rem;
+    gap: 0.875rem;
+  }
+  
+  .feature-icon {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .feature-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .privacy-assurance {
+    padding: 0.875rem 1rem;
+    gap: 0.625rem;
+  }
+  
+  .privacy-icon {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .privacy-icon svg {
+    width: 16px;
+    height: 16px;
   }
   
   .security-header {
@@ -1919,6 +2317,1057 @@ import OllamaHelper from './OllamaHelper.astro';
   background: rgba(var(--md-surface-container), 0.5);
   border-color: rgba(var(--md-outline-variant), 0.2);
 }
+
+/* AI Engine Setup - Redesigned Styles */
+.ai-setup-redesigned {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  padding: 1rem 0;
+}
+
+/* Material Design 3 AI Status Row */
+
+.ai-status-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.125rem 1.25rem;
+  background: linear-gradient(135deg, 
+    rgba(var(--md-primary), 0.04) 0%, 
+    rgba(var(--md-secondary), 0.02) 100%
+  );
+  border: 1px solid rgba(var(--md-outline-variant), 0.3);
+  border-radius: 1rem;
+  margin-bottom: 1.25rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  position: relative;
+  overflow: hidden;
+}
+
+.ai-status-row::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(var(--md-primary), 0.4) 30%,
+    rgba(var(--md-secondary), 0.3) 70%,
+    transparent 100%
+  );
+}
+
+.ai-status-row:hover {
+  background: linear-gradient(135deg, 
+    rgba(var(--md-primary), 0.06) 0%, 
+    rgba(var(--md-secondary), 0.03) 100%
+  );
+  border-color: rgba(var(--md-outline), 0.4);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+.status-icon-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.status-icon-bg {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, 
+    rgba(var(--md-primary), 0.12) 0%, 
+    rgba(var(--md-secondary), 0.08) 100%
+  );
+  border: 1px solid rgba(var(--md-primary), 0.2);
+  border-radius: 0.875rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(var(--md-primary));
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(var(--md-primary), 0.15);
+}
+
+.status-icon-bg:hover {
+  background: linear-gradient(135deg, 
+    rgba(var(--md-primary), 0.16) 0%, 
+    rgba(var(--md-secondary), 0.12) 100%
+  );
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(var(--md-primary), 0.2);
+}
+
+.status-indicator {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  background: rgb(var(--md-surface));
+  border: 1px solid rgba(var(--md-outline-variant), 0.3);
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgb(var(--md-outline));
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 0 2px transparent;
+}
+
+.status-dot.checking {
+  background: rgb(var(--md-warning));
+  animation: material-pulse 2s infinite ease-in-out;
+  box-shadow: 0 0 0 2px rgba(var(--md-warning), 0.2);
+}
+
+.status-dot.connected {
+  background: rgb(var(--md-primary));
+  box-shadow: 0 0 0 2px rgba(var(--md-primary), 0.2);
+  animation: material-success 0.6s ease-out;
+}
+
+.status-dot.error {
+  background: rgb(var(--md-error));
+  box-shadow: 0 0 0 2px rgba(var(--md-error), 0.2);
+  animation: material-error 0.6s ease-out;
+}
+
+@keyframes material-pulse {
+  0%, 100% { 
+    opacity: 1; 
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 0.7; 
+    transform: scale(1.1);
+  }
+}
+
+@keyframes material-success {
+  0% { transform: scale(0.8); opacity: 0.7; }
+  50% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes material-error {
+  0%, 20%, 40%, 60%, 80% { transform: translateX(-2px); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(2px); }
+  100% { transform: translateX(0); }
+}
+
+.status-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.status-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.status-label {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: rgb(var(--md-on-surface));
+  line-height: 1.2;
+  letter-spacing: 0.025em;
+}
+
+.status-badge {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: rgb(var(--md-on-surface-variant));
+  background: rgba(var(--md-surface-container-highest), 0.8);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  border: 1px solid rgba(var(--md-outline-variant), 0.2);
+  line-height: 1.2;
+}
+
+.status-description {
+  font-size: 0.75rem;
+  color: rgb(var(--md-on-surface-variant));
+  line-height: 1.3;
+  font-weight: 400;
+  opacity: 0.8;
+}
+
+.check-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 1rem;
+  background: rgb(var(--md-primary-container));
+  color: rgb(var(--md-on-primary-container));
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+  box-shadow: 0 1px 3px rgba(var(--md-primary), 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.check-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgb(var(--md-on-primary-container));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: inherit;
+}
+
+.check-btn:hover::before {
+  opacity: 0.08;
+}
+
+.check-btn:active::before {
+  opacity: 0.16;
+}
+
+.check-btn:hover {
+  background: rgb(var(--md-primary-container));
+  box-shadow: 0 2px 8px rgba(var(--md-primary), 0.3);
+  transform: translateY(-1px) scale(1.02);
+}
+
+.check-btn:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 1px 4px rgba(var(--md-primary), 0.2);
+}
+
+.check-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: 0 1px 3px rgba(var(--md-primary), 0.1) !important;
+}
+
+.check-btn:disabled::before {
+  opacity: 0 !important;
+}
+
+.check-btn svg {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.check-btn:not(:disabled):hover svg {
+  transform: rotate(180deg) scale(1.1);
+}
+
+.check-btn:disabled svg {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.connection-center-icon {
+  position: relative;
+  z-index: 2;
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, rgb(var(--md-primary)), rgb(var(--md-secondary)));
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(var(--md-on-primary));
+  box-shadow: 0 8px 24px rgba(var(--md-primary), 0.3);
+  animation: gentle-bounce 4s infinite ease-in-out;
+}
+
+@keyframes gentle-bounce {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.connection-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.connection-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.connection-header h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: rgb(var(--md-on-surface));
+  background: linear-gradient(135deg, rgb(var(--md-primary)), rgb(var(--md-secondary)));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.connection-status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.status-dot-small {
+  width: 8px;
+  height: 8px;
+  background: rgb(var(--md-primary));
+  border-radius: 50%;
+  animation: pulse-dot 2s infinite ease-in-out;
+}
+
+@keyframes pulse-dot {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.2);
+  }
+}
+
+.status-text-small {
+  font-size: 0.875rem;
+  color: rgb(var(--md-on-surface-variant));
+  font-weight: 500;
+}
+
+.connection-description {
+  opacity: 0.8;
+}
+
+.connection-description p {
+  margin: 0;
+  font-size: 1rem;
+  color: rgb(var(--md-on-surface-variant));
+  line-height: 1.6;
+}
+
+/* Mobile Responsive Styles for Material AI Status Row */
+@media (max-width: 640px) {
+  .ai-status-row {
+    padding: 0.875rem 1rem;
+    gap: 0.875rem;
+  }
+
+  .status-indicator {
+    width: 28px;
+    height: 28px;
+  }
+
+  .status-dot {
+    width: 8px;
+    height: 8px;
+  }
+
+  .status-label {
+    font-size: 0.8125rem;
+  }
+
+  .status-text {
+    font-size: 0.6875rem;
+  }
+
+  .check-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .check-btn svg {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ai-status-row {
+    padding: 0.75rem 0.875rem;
+    gap: 0.75rem;
+  }
+
+  .status-indicator {
+    width: 24px;
+    height: 24px;
+  }
+
+  .check-btn {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+/* Dark Theme Support for Material AI Status Row */
+[data-theme="dark"] .ai-status-row,
+[data-theme$="-dark"] .ai-status-row {
+  background: rgba(var(--md-surface-container), 0.8);
+  border-color: rgba(var(--md-outline-variant), 0.2);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] .ai-status-row::before,
+[data-theme$="-dark"] .ai-status-row::before {
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(var(--md-primary), 0.15) 50%, 
+    transparent 100%
+  );
+}
+
+[data-theme="dark"] .ai-status-row:hover,
+[data-theme$="-dark"] .ai-status-row:hover {
+  background: rgba(var(--md-surface-container-high), 0.9);
+  border-color: rgba(var(--md-outline), 0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="dark"] .status-indicator,
+[data-theme$="-dark"] .status-indicator {
+  background: rgba(var(--md-surface-container-highest), 0.6);
+  border-color: rgba(var(--md-outline-variant), 0.15);
+}
+
+[data-theme="dark"] .status-indicator:hover,
+[data-theme$="-dark"] .status-indicator:hover {
+  background: rgba(var(--md-surface-container-highest), 0.8);
+  border-color: rgba(var(--md-outline), 0.25);
+}
+
+  .connection-actions-modern {
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .connection-btn-modern {
+    padding: 0.875rem 1.5rem;
+    font-size: 0.875rem;
+  }
+
+@media (max-width: 480px) {
+  .connection-status-modern {
+    padding: 1.5rem 1rem;
+    gap: 1.25rem;
+  }
+
+  .connection-animation-container {
+    width: 70px;
+    height: 70px;
+  }
+
+  .connection-center-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 1.125rem;
+  }
+
+  .connection-header h3 {
+    font-size: 1.125rem;
+  }
+
+  .connection-description p {
+    font-size: 0.875rem;
+  }
+
+  .connection-btn-modern {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .connection-actions-modern {
+    flex-direction: column;
+    width: 100%;
+  }
+}
+
+.ai-success-state {
+  background: rgba(var(--md-success-container), 0.1);
+  border: 1px solid rgba(var(--md-success), 0.2);
+  border-radius: 1.5rem;
+  padding: 2rem;
+  margin-top: 1.5rem;
+}
+
+.success-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.success-icon {
+  width: 3rem;
+  height: 3rem;
+  background: rgba(var(--md-success), 0.15);
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(var(--md-success));
+  flex-shrink: 0;
+}
+
+.success-content h3 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: rgb(var(--md-on-surface));
+}
+
+.success-content p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: rgb(var(--md-on-surface-variant));
+}
+
+.models-preview {
+  background: rgba(var(--md-surface-container), 0.4);
+  border: 1px solid rgba(var(--md-outline-variant), 0.2);
+  border-radius: 0.875rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.model-preview-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid rgba(var(--md-outline-variant), 0.1);
+}
+
+.model-preview-item:last-child {
+  border-bottom: none;
+}
+
+.model-preview-info h5 {
+  margin: 0 0 0.25rem 0;
+  font-size: 0.925rem;
+  font-weight: 600;
+  color: rgb(var(--md-on-surface));
+}
+
+.model-preview-info p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: rgb(var(--md-on-surface-variant));
+  opacity: 0.7;
+}
+
+.success-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  border-radius: 0.625rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.action-btn.secondary {
+  background: rgba(var(--md-surface-variant), 0.6);
+  color: rgb(var(--md-on-surface-variant));
+  border: 1px solid rgba(var(--md-outline), 0.3);
+}
+
+.action-btn.secondary:hover {
+  background: rgba(var(--md-surface-variant), 0.8);
+  transform: translateY(-1px);
+}
+
+.action-btn.primary {
+  background: rgb(var(--md-primary));
+  color: rgb(var(--md-on-primary));
+}
+
+.action-btn.primary:hover {
+  background: rgb(var(--md-primary-container));
+  color: rgb(var(--md-on-primary-container));
+  transform: translateY(-1px);
+}
+
+.ai-setup-instructions {
+  background: rgba(var(--md-surface-container-low), 0.5);
+  border: 1px solid rgba(var(--md-outline-variant), 0.2);
+  border-radius: 1.5rem;
+  padding: 2.5rem;
+}
+
+.setup-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.setup-header h3 {
+  margin: 0 0 0.75rem 0;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: rgb(var(--md-on-surface));
+}
+
+.setup-header p {
+  margin: 0;
+  font-size: 1.05rem;
+  color: rgb(var(--md-on-surface-variant));
+  opacity: 0.8;
+  line-height: 1.5;
+}
+
+.os-tabs {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 2.5rem;
+  background: rgba(var(--md-surface-variant), 0.3);
+  border-radius: 1rem;
+  padding: 0.5rem;
+}
+
+.os-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  background: transparent;
+  border: none;
+  border-radius: 0.75rem;
+  color: rgb(var(--md-on-surface-variant));
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.os-tab:hover {
+  background: rgba(var(--md-surface-variant), 0.5);
+}
+
+.os-tab.active {
+  background: rgb(var(--md-primary));
+  color: rgb(var(--md-on-primary));
+  box-shadow: 0 2px 8px rgba(var(--md-primary), 0.3);
+}
+
+.os-instructions {
+  position: relative;
+}
+
+.os-content {
+  display: none;
+}
+
+.os-content.active {
+  display: block;
+  animation: fadeInUp 0.4s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.install-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.install-step {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.step-number {
+  width: 2.75rem;
+  height: 2.75rem;
+  background: linear-gradient(135deg, rgb(var(--md-primary)), rgb(var(--md-secondary)));
+  color: rgb(var(--md-on-primary));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(var(--md-primary), 0.25);
+}
+
+.step-details {
+  flex: 1;
+}
+
+.step-details h4 {
+  margin: 0 0 0.75rem 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: rgb(var(--md-on-surface));
+}
+
+.step-details p {
+  margin: 0 0 1rem 0;
+  font-size: 1rem;
+  color: rgb(var(--md-on-surface-variant));
+  line-height: 1.6;
+}
+
+.download-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1.5rem;
+  background: rgb(var(--md-primary));
+  color: rgb(var(--md-on-primary));
+  text-decoration: none;
+  border-radius: 0.875rem;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(var(--md-primary), 0.2);
+}
+
+.download-link:hover {
+  background: rgb(var(--md-primary-container));
+  color: rgb(var(--md-on-primary-container));
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(var(--md-primary), 0.3);
+  text-decoration: none;
+}
+
+.command-block {
+  position: relative;
+  background: rgba(var(--md-surface-container-highest), 0.9);
+  border: 1px solid rgba(var(--md-outline-variant), 0.3);
+  border-radius: 0.875rem;
+  padding: 1.25rem 3.5rem 1.25rem 1.25rem;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+  margin: 0.75rem 0;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.command-block code {
+  color: rgb(var(--md-primary));
+  font-weight: 600;
+  font-size: 1rem;
+  flex: 1;
+}
+
+.copy-command {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: rgba(var(--md-surface), 0.9);
+  border: 1px solid rgba(var(--md-outline-variant), 0.3);
+  border-radius: 0.375rem;
+  padding: 0.5rem;
+  color: rgb(var(--md-on-surface-variant));
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.copy-command:hover {
+  background: rgba(var(--md-primary), 0.1);
+  color: rgb(var(--md-primary));
+  border-color: rgba(var(--md-primary), 0.3);
+  transform: translateY(-1px);
+}
+
+.setup-help {
+  margin-top: 2rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid rgba(var(--md-outline-variant), 0.2);
+}
+
+.help-links {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.help-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(var(--md-surface-variant), 0.5);
+  color: rgb(var(--md-on-surface-variant));
+  text-decoration: none;
+  border: 1px solid rgba(var(--md-outline), 0.3);
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.help-link:hover {
+  background: rgba(var(--md-surface-variant), 0.7);
+  color: rgb(var(--md-on-surface));
+  text-decoration: none;
+  transform: translateY(-1px);
+}
+
+.troubleshooting-section {
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  background: rgba(var(--md-warning-container), 0.1);
+  border: 1px solid rgba(var(--md-warning), 0.2);
+  border-radius: 1rem;
+}
+
+.troubleshooting-section h4 {
+  margin: 0 0 1rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: rgb(var(--md-on-surface));
+}
+
+.trouble-items {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.trouble-item {
+  padding: 1rem;
+  background: rgba(var(--md-surface-container), 0.4);
+  border: 1px solid rgba(var(--md-outline-variant), 0.2);
+  border-radius: 0.75rem;
+}
+
+.trouble-item h5 {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: rgb(var(--md-on-surface));
+}
+
+.trouble-item p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: rgb(var(--md-on-surface-variant));
+  line-height: 1.5;
+}
+
+.trouble-item code {
+  background: rgba(var(--md-surface-container-highest), 0.8);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.8rem;
+  color: rgb(var(--md-primary));
+  font-weight: 500;
+}
+
+.trouble-item a {
+  color: rgb(var(--md-primary));
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.trouble-item a:hover {
+  text-decoration: underline;
+}
+
+.skip-option {
+  background: rgba(var(--md-tertiary-container), 0.1);
+  border: 1px solid rgba(var(--md-tertiary), 0.2);
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.skip-content {
+  padding: 1.25rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.skip-content svg {
+  color: rgb(var(--md-tertiary));
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+}
+
+.skip-content p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: rgb(var(--md-on-surface-variant));
+  line-height: 1.5;
+}
+
+/* Mobile responsive adjustments for AI setup */
+@media (max-width: 768px) {
+  .ai-setup-redesigned {
+    gap: 2rem;
+    padding: 0.5rem 0;
+  }
+
+  .connection-status-card {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.5rem;
+    padding: 2rem;
+  }
+  
+  .connection-actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 1rem;
+  }
+  
+  .connection-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 1rem 1.25rem;
+  }
+  
+  .ai-setup-instructions {
+    padding: 2rem;
+  }
+  
+  .os-tabs {
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  .os-tab {
+    padding: 1rem;
+  }
+  
+  .install-steps {
+    gap: 1.5rem;
+  }
+  
+  .install-step {
+    gap: 1rem;
+  }
+  
+  .step-details h4 {
+    font-size: 1.05rem;
+  }
+  
+  .help-links {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .success-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+  
+  .success-actions {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .action-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .ai-setup-redesigned {
+    gap: 1.5rem;
+  }
+  
+  .connection-status-card {
+    padding: 1.5rem;
+  }
+  
+  .ai-setup-instructions {
+    padding: 1.5rem;
+  }
+  
+  .setup-header h3 {
+    font-size: 1.2rem;
+  }
+  
+  .command-block {
+    padding: 1rem 3rem 1rem 1rem;
+  }
+  
+  .command-block code {
+    font-size: 0.9rem;
+  }
+  
+  .copy-command {
+    top: 0.375rem;
+    right: 0.375rem;
+    padding: 0.375rem;
+  }
+  
+  .trouble-item {
+    padding: 0.875rem;
+  }
+  
+  .step-number {
+    width: 2rem;
+    height: 2rem;
+    font-size: 0.8rem;
+  }
+}
 </style>
 
 <script>
@@ -1985,8 +3434,40 @@ class OnboardingFlow {
     // Security settings
     const encryptionToggle = document.getElementById('onboarding-encryption');
     if (encryptionToggle) {
+      // Initialize from real security settings
+      try {
+        import('../utils/secure-storage.ts').then(mod => {
+          const storage = mod.default.getInstance();
+          const settings = storage.getSecuritySettings();
+          (encryptionToggle as HTMLInputElement).checked = !!settings.encryptionEnabled;
+          this.encryptionEnabled = !!settings.encryptionEnabled;
+        }).catch(() => {/* ignore */});
+      } catch {}
+
       encryptionToggle.addEventListener('change', () => {
-        this.encryptionEnabled = encryptionToggle.checked;
+        // Record intent; actual enablement occurs when password is set
+        this.encryptionEnabled = (encryptionToggle as HTMLInputElement).checked;
+
+        // If user toggles ON during onboarding, immediately prompt to set a password
+        if (this.encryptionEnabled) {
+          const tryShow = () => {
+            if (window.smileApp && typeof window.smileApp.showPasswordModal === 'function') {
+              window.smileApp.showPasswordModal('set');
+            } else {
+              // Poll briefly if app not ready yet
+              let attempts = 0;
+              const id = setInterval(() => {
+                attempts++;
+                if (window.smileApp && typeof window.smileApp.showPasswordModal === 'function') {
+                  clearInterval(id);
+                  window.smileApp.showPasswordModal('set');
+                }
+                if (attempts > 10) clearInterval(id);
+              }, 100);
+            }
+          };
+          tryShow();
+        }
       });
     }
 
@@ -2021,46 +3502,6 @@ class OnboardingFlow {
     // AI status check
     const checkBtn = document.getElementById('check-ai-status');
     if (checkBtn) checkBtn.addEventListener('click', () => this.checkAIStatus());
-
-    // Enhanced AI status check for onboarding
-    const statusCheckBtn = this.modal.querySelector('.status-check-btn');
-    const statusResult = this.modal.querySelector('.status-result');
-    
-    if (statusCheckBtn && statusResult) {
-      statusCheckBtn.addEventListener('click', async () => {
-        // Update button state
-        statusCheckBtn.disabled = true;
-        statusCheckBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12,4a8,8 0 0,1 7.89,6.7 1.53,1.53 0 0,0 1.49,1.3 1.5,1.5 0 0,0 1.48,-1.75 11,11 0 0,0 -21.72,0A1.5,1.5 0 0,0 2.62,11.5 1.53,1.53 0 0,0 4.11,10.7 8,8 0 0,1 12,4Z" fill="currentColor"><animateTransform attributeName="transform" type="rotate" dur="0.75s" values="0 12 12;360 12 12" repeatCount="indefinite"/></path></svg> Checking...';
-        
-        // Update result to show checking state
-        statusResult.innerHTML = '<div style="display: flex; align-items: center; gap: 0.5rem;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12,4a8,8 0 0,1 7.89,6.7 1.53,1.53 0 0,0 1.49,1.3 1.5,1.5 0 0,0 1.48,-1.75 11,11 0 0,0 -21.72,0A1.5,1.5 0 0,0 2.62,11.5 1.53,1.53 0 0,0 4.11,10.7 8,8 0 0,1 12,4Z" fill="currentColor"><animateTransform attributeName="transform" type="rotate" dur="0.75s" values="0 12 12;360 12 12" repeatCount="indefinite"/></path></svg> Checking AI engine status...</div>';
-        
-        try {
-          const response = await fetch('/api/ollama-health');
-          const result = await response.json();
-          
-          let statusMessage = '';
-          let statusIcon = '';
-          
-          if (result.status === 'connected') {
-            statusIcon = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="rgb(var(--md-success))" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>';
-            statusMessage = `<span style="color: rgb(var(--md-success)); font-weight: 500;">Connected!</span> Found ${result.models?.length || 0} AI models available.`;
-          } else {
-            statusIcon = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke="rgb(var(--md-warning))" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>';
-            statusMessage = `<span style="color: rgb(var(--md-warning)); font-weight: 500;">Not connected.</span> Follow the setup instructions below to get started.`;
-          }
-          
-          statusResult.innerHTML = `<div style="display: flex; align-items: center; gap: 0.75rem;">${statusIcon} ${statusMessage}</div>`;
-          
-        } catch (error) {
-          statusResult.innerHTML = '<div style="display: flex; align-items: center; gap: 0.75rem;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke="rgb(var(--md-error))" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> <span style="color: rgb(var(--md-error)); font-weight: 500;">Connection failed.</span> Please check the setup instructions below.</div>';
-        }
-        
-        // Reset button state
-        statusCheckBtn.disabled = false;
-        statusCheckBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg> Check Status';
-      });
-    }
 
     // Copy buttons
     const copyBtns = document.querySelectorAll('.copy-btn');
@@ -2225,11 +3666,7 @@ class OnboardingFlow {
     localStorage.setItem('smile-theme', themeName);
     localStorage.setItem('smile-onboarding', 'complete');
     localStorage.setItem('smile-onboarding-data', JSON.stringify(onboardingData));
-    
-    // Save individual settings
-    if (this.encryptionEnabled) {
-      localStorage.setItem('smile-encryption-enabled', 'true');
-    }
+    // Do not write fake encryption flags here; encryption is managed by secure-storage
     
     if (this.profileData.name) {
       localStorage.setItem('smile-user-name', this.profileData.name);
@@ -2258,11 +3695,22 @@ class OnboardingFlow {
       window.smileApp.showCustomNotification('Welcome to Smile AI! Setup complete.', 'success');
     }
 
-    // If encryption was enabled, show password setup modal
+    // If user toggled encryption during onboarding and it's not yet enabled, show setup modal
     if (this.encryptionEnabled && window.smileApp && typeof window.smileApp.showPasswordModal === 'function') {
-      setTimeout(() => {
-        window.smileApp.showPasswordModal('set');
-      }, 1000);
+      try {
+        import('../utils/secure-storage.ts').then(mod => {
+          const storage = mod.default.getInstance();
+          const alreadyEnabled = storage.getSecuritySettings().encryptionEnabled;
+          if (!alreadyEnabled) {
+            setTimeout(() => window.smileApp.showPasswordModal('set'), 400);
+          }
+        }).catch(() => {
+          // Fallback: attempt to show modal
+          setTimeout(() => window.smileApp.showPasswordModal('set'), 400);
+        });
+      } catch {
+        setTimeout(() => window.smileApp.showPasswordModal('set'), 400);
+      }
     }
   }
 }
@@ -2278,4 +3726,238 @@ document.addEventListener('DOMContentLoaded', () => {
 const style = document.createElement('style');
 style.textContent = `@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`;
 document.head.appendChild(style);
+
+// New AI Setup Functions for Redesigned Interface
+
+// Global function to check Ollama connection
+window.checkOllamaConnection = async function() {
+  // Updated selectors for minimal AI status row
+  const statusDot = document.getElementById('status-dot');
+  const statusMessage = document.getElementById('connection-message');
+  const successState = document.getElementById('ai-success-state');
+  const setupInstructions = document.getElementById('ai-setup-instructions');
+  const checkBtn = document.getElementById('check-connection-btn');
+  
+  if (!statusDot || !statusMessage) return;
+  
+  // Show checking state
+  statusDot.className = 'status-dot checking';
+  statusMessage.textContent = 'Checking...';
+  
+  if (checkBtn) {
+    checkBtn.disabled = true;
+    checkBtn.innerHTML = `
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation: spin 1s linear infinite;">
+        <path d="M21 12a9 9 0 11-6.219-8.56"/>
+      </svg>
+    `;
+  }
+  
+  try {
+    const response = await fetch('http://localhost:11434/api/tags');
+    
+    if (response.ok) {
+      const data = await response.json();
+      const models = data.models || [];
+      
+      // Show success state
+      setTimeout(() => {
+        statusDot.className = 'status-dot connected';
+        statusMessage.textContent = `Connected • ${models.length} models`;
+        
+        // Show success state and hide instructions
+        if (successState) {
+          successState.classList.remove('hidden');
+          updateModelsDisplay(models);
+        }
+        if (setupInstructions) {
+          setupInstructions.classList.add('hidden');
+        }
+        
+        // Reset button
+        if (checkBtn) {
+          checkBtn.disabled = false;
+          checkBtn.innerHTML = `
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          `;
+        }
+        
+        // Enable next step
+        const nextBtn = document.querySelector('.nav-btn.primary[onclick*="nextStep"]');
+        if (nextBtn) {
+          nextBtn.disabled = false;
+          nextBtn.textContent = 'Continue';
+        }
+      }, 800);
+      
+    } else {
+      throw new Error('Ollama not responding');
+    }
+  } catch (error) {
+    // Show error state
+    setTimeout(() => {
+      statusDot.className = 'status-dot error';
+      statusMessage.textContent = 'Not found';
+      
+      // Hide success state and show instructions
+      if (successState) {
+        successState.classList.add('hidden');
+      }
+      if (setupInstructions) {
+        setupInstructions.classList.remove('hidden');
+      }
+      
+      // Reset button
+      if (checkBtn) {
+        checkBtn.disabled = false;
+        checkBtn.innerHTML = `
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+          </svg>
+        `;
+      }
+    }, 800);
+  }
+};
+
+// Function to show setup instructions
+window.showSetupInstructions = function() {
+  const setupInstructions = document.getElementById('ai-setup-instructions');
+  const successState = document.getElementById('ai-success-state');
+  
+  if (setupInstructions) {
+    setupInstructions.classList.remove('hidden');
+  }
+  if (successState) {
+    successState.classList.add('hidden');
+  }
+};
+
+// Function to update models display
+function updateModelsDisplay(models) {
+  const modelCountDisplay = document.getElementById('model-count-display');
+  const modelsPreview = document.getElementById('models-preview');
+  const downloadModelBtn = document.getElementById('download-model-btn');
+  
+  if (modelCountDisplay) {
+    modelCountDisplay.textContent = models.length.toString();
+  }
+  
+  if (modelsPreview) {
+    if (models.length === 0) {
+      modelsPreview.innerHTML = `
+        <div style="text-align: center; padding: 1.5rem; color: rgb(var(--md-on-surface-variant)); font-size: 0.875rem;">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-bottom: 0.75rem; opacity: 0.5;">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+            <circle cx="9" cy="9" r="2"/>
+            <path d="M21 15l-3.086-3.086a2 2 0 00-2.828 0L6 21"/>
+          </svg>
+          <p>No models downloaded yet. Download a model to get started with AI conversations.</p>
+        </div>
+      `;
+    } else {
+      modelsPreview.innerHTML = models.map(model => `
+        <div class="model-preview-item">
+          <div class="model-preview-info">
+            <h5>${model.name}</h5>
+            <p>Size: ${formatBytes(model.size)} • Modified: ${formatDate(model.modified_at)}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+  }
+  
+  if (downloadModelBtn) {
+    downloadModelBtn.style.display = models.length === 0 ? 'block' : 'none';
+  }
+}
+
+// Helper function to format bytes
+function formatBytes(bytes) {
+  if (bytes === 0) return '0 B';
+  const k = 1024;
+  const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+}
+
+// Helper function to format date
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  return date.toLocaleDateString();
+}
+
+// Function to switch OS tabs
+window.switchOSTab = function(os) {
+  const tabs = document.querySelectorAll('.os-tab');
+  const contents = document.querySelectorAll('.os-content');
+  
+  tabs.forEach(tab => {
+    tab.classList.remove('active');
+    if (tab.getAttribute('data-os') === os) {
+      tab.classList.add('active');
+    }
+  });
+  
+  contents.forEach(content => {
+    content.classList.remove('active');
+    if (content.getAttribute('data-os') === os) {
+      content.classList.add('active');
+    }
+  });
+};
+
+// Function to copy text to clipboard
+window.copyToClipboard = async function(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    if (window.smileApp && typeof window.smileApp.showCustomNotification === 'function') {
+      window.smileApp.showCustomNotification('Copied to clipboard!', 'success');
+    }
+  } catch (err) {
+    console.error('Failed to copy text:', err);
+    if (window.smileApp && typeof window.smileApp.showCustomNotification === 'function') {
+      window.smileApp.showCustomNotification('Failed to copy text', 'error');
+    }
+  }
+};
+
+// Function to refresh Ollama models
+window.refreshOllamaModels = function() {
+  window.checkOllamaConnection();
+};
+
+// Function to download recommended model
+window.downloadRecommendedModel = function() {
+  const command = 'ollama pull llama3.2';
+  window.copyToClipboard(command);
+  if (window.smileApp && typeof window.smileApp.showCustomNotification === 'function') {
+    window.smileApp.showCustomNotification('Command copied! Run it in your terminal to download the model.', 'info');
+  }
+};
+
+// Function to toggle troubleshooting section
+window.toggleTroubleshooting = function() {
+  const troubleshootingSection = document.getElementById('troubleshooting-section');
+  if (troubleshootingSection) {
+    troubleshootingSection.classList.toggle('hidden');
+  }
+};
+
+// Auto-detect OS and select appropriate tab
+document.addEventListener('DOMContentLoaded', () => {
+  const userAgent = navigator.userAgent.toLowerCase();
+  let detectedOS = 'windows'; // default
+  
+  if (userAgent.includes('mac')) {
+    detectedOS = 'mac';
+  } else if (userAgent.includes('linux')) {
+    detectedOS = 'linux';
+  }
+  
+  // Switch to detected OS tab
+  window.switchOSTab(detectedOS);
+});
 </script>
