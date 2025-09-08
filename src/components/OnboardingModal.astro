@@ -574,87 +574,124 @@ import OllamaHelper from './OllamaHelper.astro';
           </div>
         </div>
 
-        <!-- Step 6: Thank You & Completion -->
+        <!-- Step 6: Welcome & Completion -->
         <div class="step-content" data-step="6">
           <div class="step-header">
             <div class="completion-icon-container">
               <div class="completion-icon-bg">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" class="completion-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" class="completion-icon">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" fill="currentColor" opacity="0.1"/>
                   <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                  <path d="M8 12l3 3 5-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                  <path d="M8 14.5s1.5 2.5 4 2.5 4-2.5 4-2.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                  <circle cx="9" cy="9" r="1.5" fill="currentColor"/>
+                  <circle cx="15" cy="9" r="1.5" fill="currentColor"/>
                 </svg>
               </div>
             </div>
             <div class="completion-header">
-              <h2>Welcome to SmileyApp!</h2>
-              <p class="completion-subtitle">Your personal wellness companion is ready</p>
+              <h2>Welcome to Your Wellness Space</h2>
+              <p class="completion-subtitle">Everything is set up and ready for you</p>
             </div>
           </div>
 
           <div class="completion-content">
-            <div class="completion-message">
-              <div class="message-content">
-                <h3>Ready to Begin Your Journey</h3>
-                <p>We're here to support you, listen to you, and help you navigate life's moments with confidence and care.</p>
+            <!-- Welcome Message -->
+            <div class="welcome-section">
+              <div class="welcome-card">
+                <h3>We're here to support you</h3>
+                <p>SmileyApp is designed to be a gentle companion on your wellness journey. Whether you need someone to listen, want to reflect through journaling, or explore mindfulness exercises, we're here to help in whatever way feels right for you.</p>
               </div>
             </div>
 
-            <div class="feature-cards">
-              <div class="feature-card">
-                <div class="feature-icon">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
+            <!-- What You Can Do -->
+            <div class="features-section">
+              <h3 class="section-title">What you can do</h3>
+              <div class="feature-cards">
+                <div class="feature-card">
+                  <div class="feature-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+                    </svg>
+                  </div>
+                  <div class="feature-content">
+                    <span class="feature-title">Chat & Reflect</span>
+                    <span class="feature-desc">Have conversations whenever you need support</span>
+                  </div>
                 </div>
-                <div class="feature-content">
-                  <span class="feature-title">Start Conversations</span>
-                  <span class="feature-desc">Chat anytime you need support</span>
+                
+                <div class="feature-card">
+                  <div class="feature-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                      <polyline points="14,2 14,8 20,8"/>
+                      <line x1="16" y1="13" x2="8" y2="13"/>
+                      <line x1="16" y1="17" x2="8" y2="17"/>
+                    </svg>
+                  </div>
+                  <div class="feature-content">
+                    <span class="feature-title">Personal Journal</span>
+                    <span class="feature-desc">Write down thoughts and track your progress</span>
+                  </div>
                 </div>
-              </div>
-              
-              <div class="feature-card">
-                <div class="feature-icon">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" stroke-width="2"/>
-                    <polyline points="14,2 14,8 20,8" stroke="currentColor" stroke-width="2"/>
-                    <line x1="16" y1="13" x2="8" y2="13" stroke="currentColor" stroke-width="2"/>
-                    <line x1="16" y1="17" x2="8" y2="17" stroke="currentColor" stroke-width="2"/>
-                  </svg>
-                </div>
-                <div class="feature-content">
-                  <span class="feature-title">Journal Thoughts</span>
-                  <span class="feature-desc">Reflect and track your wellness</span>
-                </div>
-              </div>
-              
-              <div class="feature-card">
-                <div class="feature-icon">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" stroke="currentColor" stroke-width="2"/>
-                    <polyline points="22,4 12,14.01 9,11.01" stroke="currentColor" stroke-width="2"/>
-                  </svg>
-                </div>
-                <div class="feature-content">
-                  <span class="feature-title">Explore Tools</span>
-                  <span class="feature-desc">Discover wellness exercises</span>
+                
+                <div class="feature-card">
+                  <div class="feature-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/>
+                    </svg>
+                  </div>
+                  <div class="feature-content">
+                    <span class="feature-title">Wellness Exercises</span>
+                    <span class="feature-desc">Explore mindfulness and relaxation tools</span>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div class="completion-footer">
-              <div class="privacy-assurance">
-                <div class="privacy-icon">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" stroke="currentColor" stroke-width="2"/>
-                    <circle cx="12" cy="16" r="1" fill="currentColor"/>
-                    <path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="currentColor" stroke-width="2"/>
+            <!-- Important Notes -->
+            <div class="notes-section">
+              <h3 class="section-title">Important to know</h3>
+              <div class="note-cards">
+                <div class="note-card privacy-note">
+                  <div class="note-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                      <circle cx="12" cy="16" r="1" fill="currentColor"/>
+                      <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                    </svg>
+                  </div>
+                  <div class="note-content">
+                    <h4>100% Private & Offline</h4>
+                    <p>Everything stays on your device. No data is sent anywhere, no analytics, no tracking. Your privacy is completely protected.</p>
+                  </div>
+                </div>
+                
+                <div class="note-card care-note">
+                  <div class="note-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l8.84 8.84a.5.5 0 0 0 .71 0l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/>
+                    </svg>
+                  </div>
+                  <div class="note-content">
+                    <h4>We're Here to Support, Not Replace</h4>
+                    <p>SmileyApp complements your wellbeing but isn't a substitute for professional mental health care. For serious concerns, please reach out to licensed professionals.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Get Started -->
+            <div class="get-started-section">
+              <div class="get-started-card">
+                <div class="get-started-content">
+                  <h3>Ready when you are</h3>
+                  <p>Take your time exploring. There's no pressure to do anything specific - just use what feels helpful to you.</p>
+                </div>
+                <div class="get-started-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 18l6-6-6-6"/>
                   </svg>
                 </div>
-                <span>All conversations stay private on your device</span>
-              </div>
-              
-              <div class="acknowledgments">
-                <span class="ack-text">Powered by OpenAI & NVIDIA technologies</span>
               </div>
             </div>
           </div>
@@ -1612,7 +1649,7 @@ import OllamaHelper from './OllamaHelper.astro';
 }
 
 .setup-steps li {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0;
   color: rgb(var(--md-on-surface-variant));
   line-height: 1.5;
 }
@@ -1756,80 +1793,120 @@ import OllamaHelper from './OllamaHelper.astro';
   line-height: 1.4;
 }
 
+/* New Completion Page Design */
 .completion-content {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 2rem;
 }
 
-.completion-message {
-  background: linear-gradient(135deg, rgba(var(--md-primary-container), 0.4), rgba(var(--md-secondary-container), 0.2));
-  border: 1px solid rgba(var(--md-primary), 0.15);
-  border-radius: 1rem;
-  padding: 1.5rem;
+/* Welcome Section */
+.welcome-section {
+  margin-bottom: 0.5rem;
+}
+
+.welcome-card {
+  background: linear-gradient(135deg, 
+    rgba(var(--md-primary), 0.04) 0%, 
+    rgba(var(--md-secondary), 0.02) 100%
+  );
+  border: 1px solid rgba(var(--md-outline-variant), 0.2);
+  border-radius: 1.25rem;
+  padding: 1.75rem;
   position: relative;
   overflow: hidden;
 }
 
-.completion-message::before {
+.welcome-card::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, rgb(var(--md-primary)), rgb(var(--md-secondary)));
+  height: 2px;
+  background: linear-gradient(90deg, 
+    rgba(var(--md-primary), 0.6) 0%, 
+    rgba(var(--md-secondary), 0.4) 100%
+  );
 }
 
-.message-content h3 {
+.welcome-card h3 {
   font-size: 1.25rem;
   font-weight: 600;
   color: rgb(var(--md-on-surface));
-  margin: 0 0 0.75rem 0;
-  letter-spacing: -0.01em;
+  margin: 0 0 1rem 0;
+  letter-spacing: -0.02em;
 }
 
-.message-content p {
+.welcome-card p {
   font-size: 0.9375rem;
-  line-height: 1.5;
+  line-height: 1.6;
   color: rgb(var(--md-on-surface-variant));
   margin: 0;
 }
 
+/* Section Titles */
+.section-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgb(var(--md-on-surface));
+  margin: 0 0 1rem 0;
+  letter-spacing: 0.025em;
+  text-transform: none;
+}
+
+/* Features Section */
+.features-section {
+  margin-bottom: 0.5rem;
+}
+
 .feature-cards {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.875rem;
 }
 
 .feature-card {
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 1rem 1.25rem;
-  background: rgba(var(--md-surface-container), 0.6);
-  border: 1px solid rgba(var(--md-outline-variant), 0.3);
-  border-radius: 0.875rem;
-  transition: all 0.2s ease;
+  padding: 1.125rem 1.25rem;
+  background: rgba(var(--md-surface-container-low), 0.6);
+  border: 1px solid rgba(var(--md-outline-variant), 0.25);
+  border-radius: 1rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .feature-card:hover {
-  background: rgba(var(--md-surface-container-high), 0.8);
+  background: rgba(var(--md-surface-container), 0.8);
   border-color: rgba(var(--md-primary), 0.3);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(var(--md-shadow), 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(var(--md-shadow), 0.12);
 }
 
 .feature-icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
-  background: linear-gradient(135deg, rgba(var(--md-primary), 0.1), rgba(var(--md-secondary), 0.05));
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, 
+    rgba(var(--md-primary), 0.1) 0%, 
+    rgba(var(--md-secondary), 0.05) 100%
+  );
   border: 1px solid rgba(var(--md-primary), 0.2);
-  border-radius: 12px;
+  border-radius: 14px;
   flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover .feature-icon {
+  background: linear-gradient(135deg, 
+    rgba(var(--md-primary), 0.15) 0%, 
+    rgba(var(--md-secondary), 0.08) 100%
+  );
+  border-color: rgba(var(--md-primary), 0.3);
+  transform: scale(1.05);
 }
 
 .feature-icon svg {
@@ -1844,77 +1921,203 @@ import OllamaHelper from './OllamaHelper.astro';
 }
 
 .feature-title {
-  font-size: 0.9375rem;
+  font-size: 1rem;
   font-weight: 600;
   color: rgb(var(--md-on-surface));
   line-height: 1.2;
 }
 
 .feature-desc {
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
   color: rgb(var(--md-on-surface-variant));
-  line-height: 1.3;
+  line-height: 1.4;
   font-weight: 400;
 }
 
-.completion-footer {
+/* Notes Section */
+.notes-section {
+  margin-bottom: 0.5rem;
+}
+
+.note-cards {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-.privacy-assurance {
+.note-card {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  padding: 1rem 1.25rem;
-  background: linear-gradient(135deg, rgba(var(--md-tertiary-container), 0.3), rgba(var(--md-primary-container), 0.1));
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.privacy-note {
+  background: linear-gradient(135deg, 
+    rgba(var(--md-tertiary), 0.06) 0%, 
+    rgba(var(--md-primary), 0.03) 100%
+  );
   border: 1px solid rgba(var(--md-tertiary), 0.2);
-  border-radius: 0.875rem;
-  font-size: 0.9375rem;
-  font-weight: 500;
-  color: rgb(var(--md-on-surface));
 }
 
-.privacy-icon {
+.care-note {
+  background: linear-gradient(135deg, 
+    rgba(var(--md-secondary), 0.06) 0%, 
+    rgba(var(--md-primary), 0.03) 100%
+  );
+  border: 1px solid rgba(var(--md-secondary), 0.2);
+}
+
+.note-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(var(--md-shadow), 0.1);
+}
+
+.privacy-note:hover {
+  border-color: rgba(var(--md-tertiary), 0.3);
+}
+
+.care-note:hover {
+  border-color: rgba(var(--md-secondary), 0.3);
+}
+
+.note-icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
-  background: rgba(var(--md-tertiary), 0.1);
-  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
   flex-shrink: 0;
+  margin-top: 0.125rem;
 }
 
-.privacy-icon svg {
+.privacy-note .note-icon {
+  background: rgba(var(--md-tertiary), 0.1);
   color: rgb(var(--md-tertiary));
 }
 
-.acknowledgments {
-  text-align: center;
-  padding: 0.75rem;
+.care-note .note-icon {
+  background: rgba(var(--md-secondary), 0.1);
+  color: rgb(var(--md-secondary));
 }
 
-.ack-text {
+.note-content h4 {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: rgb(var(--md-on-surface));
+  margin: 0 0 0.5rem 0;
+  line-height: 1.3;
+}
+
+.note-content p {
   font-size: 0.8125rem;
+  line-height: 1.5;
   color: rgb(var(--md-on-surface-variant));
-  font-weight: 400;
-  opacity: 0.8;
+  margin: 0;
 }
 
-/* Remove old completion styles */
-.completion-message,
-.welcome-card,
-.completion-features,
-.completion-item,
-.completion-icon,
-.acknowledgments,
-.ack-section,
-.ack-items,
-.ack-item {
-  /* These are now unused - replaced with compact versions */
+/* Get Started Section */
+.get-started-section {
+  margin-top: 0.5rem;
+}
+
+.get-started-card {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, 
+    rgba(var(--md-primary), 0.08) 0%, 
+    rgba(var(--md-secondary), 0.04) 100%
+  );
+  border: 1px solid rgba(var(--md-primary), 0.2);
+  border-radius: 1.25rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.get-started-card:hover {
+  background: linear-gradient(135deg, 
+    rgba(var(--md-primary), 0.12) 0%, 
+    rgba(var(--md-secondary), 0.06) 100%
+  );
+  border-color: rgba(var(--md-primary), 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(var(--md-primary), 0.15);
+}
+
+.get-started-content {
+  flex: 1;
+}
+
+.get-started-content h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: rgb(var(--md-on-surface));
+  margin: 0 0 0.5rem 0;
+  letter-spacing: -0.01em;
+}
+
+.get-started-content p {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: rgb(var(--md-on-surface-variant));
+  margin: 0;
+}
+
+.get-started-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: rgba(var(--md-primary), 0.1);
+  border: 1px solid rgba(var(--md-primary), 0.2);
+  border-radius: 12px;
+  color: rgb(var(--md-primary));
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.get-started-card:hover .get-started-icon {
+  background: rgba(var(--md-primary), 0.15);
+  border-color: rgba(var(--md-primary), 0.3);
+  transform: scale(1.1);
+}
+
+/* Mobile responsiveness for new completion design */
+@media (max-width: 640px) {
+  .welcome-card {
+    padding: 1.5rem;
+  }
+  
+  .feature-icon {
+    width: 44px;
+    height: 44px;
+  }
+  
+  .note-cards {
+    gap: 0.875rem;
+  }
+  
+  .note-card {
+    padding: 1rem;
+  }
+  
+  .get-started-card {
+    padding: 1.25rem;
+    gap: 1rem;
+  }
+  
+  .get-started-icon {
+    width: 40px;
+    height: 40px;
+  }
 }
 
 .privacy-reminder {
@@ -2318,6 +2521,68 @@ import OllamaHelper from './OllamaHelper.astro';
   border-color: rgba(var(--md-outline-variant), 0.2);
 }
 
+/* Dark theme disclaimer styles */
+[data-theme="dark"] .disclaimer-item,
+[data-theme$="-dark"] .disclaimer-item {
+  background: rgba(var(--md-surface-container), 0.6);
+  border-color: rgba(var(--md-outline-variant), 0.2);
+}
+
+[data-theme="dark"] .disclaimer-item:hover,
+[data-theme$="-dark"] .disclaimer-item:hover {
+  background: rgba(var(--md-surface-container-high), 0.8);
+  border-color: rgba(var(--md-outline), 0.3);
+}
+
+/* Dark theme support for new completion design */
+[data-theme="dark"] .welcome-card,
+[data-theme$="-dark"] .welcome-card {
+  background: rgba(var(--md-surface-container), 0.8);
+  border-color: rgba(var(--md-outline-variant), 0.2);
+}
+
+[data-theme="dark"] .feature-card,
+[data-theme$="-dark"] .feature-card {
+  background: rgba(var(--md-surface-container), 0.7);
+  border-color: rgba(var(--md-outline-variant), 0.2);
+}
+
+[data-theme="dark"] .feature-card:hover,
+[data-theme$="-dark"] .feature-card:hover {
+  background: rgba(var(--md-surface-container-high), 0.9);
+  border-color: rgba(var(--md-primary), 0.3);
+}
+
+[data-theme="dark"] .note-card,
+[data-theme$="-dark"] .note-card {
+  background: rgba(var(--md-surface-container), 0.7);
+  border-color: rgba(var(--md-outline-variant), 0.2);
+}
+
+[data-theme="dark"] .privacy-note,
+[data-theme$="-dark"] .privacy-note {
+  background: rgba(var(--md-surface-container), 0.8);
+  border-color: rgba(var(--md-tertiary), 0.15);
+}
+
+[data-theme="dark"] .care-note,
+[data-theme$="-dark"] .care-note {
+  background: rgba(var(--md-surface-container), 0.8);
+  border-color: rgba(var(--md-secondary), 0.15);
+}
+
+[data-theme="dark"] .get-started-card,
+[data-theme$="-dark"] .get-started-card {
+  background: rgba(var(--md-surface-container), 0.8);
+  border-color: rgba(var(--md-primary), 0.15);
+}
+
+[data-theme="dark"] .get-started-card:hover,
+[data-theme$="-dark"] .get-started-card:hover {
+  background: rgba(var(--md-surface-container-high), 0.9);
+  border-color: rgba(var(--md-primary), 0.25);
+}
+
 /* AI Engine Setup - Redesigned Styles */
 .ai-setup-redesigned {
   display: flex;
@@ -2332,6 +2597,7 @@ import OllamaHelper from './OllamaHelper.astro';
   display: flex;
   align-items: center;
   gap: 1rem;
+  justify-content: flex-start;
   padding: 1.125rem 1.25rem;
   background: linear-gradient(135deg, 
     rgba(var(--md-primary), 0.04) 0%, 
@@ -2339,7 +2605,7 @@ import OllamaHelper from './OllamaHelper.astro';
   );
   border: 1px solid rgba(var(--md-outline-variant), 0.3);
   border-radius: 1rem;
-  margin-bottom: 1.25rem;
+  margin-bottom: 0.5rem;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   position: relative;
@@ -2477,12 +2743,19 @@ import OllamaHelper from './OllamaHelper.astro';
   flex-direction: column;
   gap: 0.25rem;
   min-width: 0;
+  align-items: flex-start;
 }
 
 .status-header {
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  /* keep label and badge grouped on the left */
+  justify-content: flex-start;
+}
+
+.status-badge {
+  margin-left: 0.5rem;
 }
 
 .status-label {
@@ -2528,6 +2801,8 @@ import OllamaHelper from './OllamaHelper.astro';
   box-shadow: 0 1px 3px rgba(var(--md-primary), 0.2);
   position: relative;
   overflow: hidden;
+  /* push the button to the far right of the status row */
+  margin-left: auto;
 }
 
 .check-btn::before {
@@ -2564,6 +2839,23 @@ import OllamaHelper from './OllamaHelper.astro';
   cursor: not-allowed;
   transform: none !important;
   box-shadow: 0 1px 3px rgba(var(--md-primary), 0.1) !important;
+}
+
+/* Tidy up inline SVGs inside the small action button to match Material-style icons */
+.check-btn svg {
+  display: block;
+  width: 18px;
+  height: 18px;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  color: inherit;
+}
+
+/* Ensure status text is explicitly left aligned */
+.status-info,
+.status-info * {
+  text-align: left !important;
 }
 
 .check-btn:disabled::before {
@@ -3621,7 +3913,7 @@ class OnboardingFlow {
   async checkAIStatus() {
     const resultEl = document.getElementById('ai-status-result');
     if (!resultEl) return;
-    resultEl.innerHTML = `<div style="display:flex;align-items:center;gap:.5rem;color:rgb(var(--md-primary));"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation: spin 1s linear infinite;"><path d="M21 12a9 9 0 11-6.219-8.56"/></svg>Checking AI status...</div>`;
+  resultEl.innerHTML = `<div style="display:flex;align-items:flex-start;gap:.75rem;color:rgb(var(--md-primary));"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="animation: spin 1s linear infinite; opacity:0.9; flex-shrink:0;"><path d="M21 12a9 9 0 11-6.219-8.56"/></svg><div style="line-height:1.25;">Checking AI status...</div></div>`;
     try {
       const response = await fetch('/api/ollama-health');
       if (!response.ok) throw new Error('Ollama not running');
@@ -3629,14 +3921,14 @@ class OnboardingFlow {
       const models = data.models || [];
   const hasRecommendedModel = models.some((/** @type {any} */m) => (m.name||'').includes('llama') || (m.name||'').includes('gpt') || (m.name||'').includes('mistral'));
       if (hasRecommendedModel) {
-        resultEl.innerHTML = `<div style="display:flex;align-items:center;gap:.5rem;color:rgb(var(--md-success));"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20,6 9,17 4,12"/></svg>AI engine ready! Found ${models.length} model(s).</div>`;
+  resultEl.innerHTML = `<div style="display:flex;align-items:flex-start;gap:.75rem;color:rgb(var(--md-success));"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><polyline points="20,6 9,17 4,12"/></svg><div style="line-height:1.25;">AI engine ready! Found ${models.length} model(s).</div></div>`;
       } else if (models.length > 0) {
-        resultEl.innerHTML = `<div style="display:flex;align-items:center;gap:.5rem;color:rgb(var(--md-warning));"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>Ollama running with ${models.length} model(s), but no recommended models found.</div>`;
+  resultEl.innerHTML = `<div style="display:flex;align-items:flex-start;gap:.75rem;color:rgb(var(--md-warning));"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg><div style="line-height:1.25;">Ollama running with ${models.length} model(s), but no recommended models found.</div></div>`;
       } else {
-        resultEl.innerHTML = `<div style="display:flex;align-items:center;gap:.5rem;color:rgb(var(--md-warning));"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>Ollama running, but no models found. Please download a model.</div>`;
+  resultEl.innerHTML = `<div style="display:flex;align-items:flex-start;gap:.75rem;color:rgb(var(--md-warning));"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg><div style="line-height:1.25;">Ollama running, but no models found. Please download a model.</div></div>`;
       }
     } catch (err) {
-      resultEl.innerHTML = `<div style="display:flex;align-items:center;gap:.5rem;color:rgb(var(--md-error));"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>Ollama not found. Please install and set up Ollama.</div>`;
+  resultEl.innerHTML = `<div style="display:flex;align-items:flex-start;gap:.75rem;color:rgb(var(--md-error));"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg><div style="line-height:1.25;color:rgb(var(--md-on-surface));">Ollama not found. Please install and set up Ollama.</div></div>`;
     }
   }
 
@@ -3848,13 +4140,16 @@ function updateModelsDisplay(models) {
   if (modelsPreview) {
     if (models.length === 0) {
       modelsPreview.innerHTML = `
-        <div style="text-align: center; padding: 1.5rem; color: rgb(var(--md-on-surface-variant)); font-size: 0.875rem;">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-bottom: 0.75rem; opacity: 0.5;">
+        <div style="text-align: left; padding: 1.25rem; color: rgb(var(--md-on-surface-variant)); font-size: 0.875rem; display:flex; gap:0.75rem; align-items:flex-start;">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity: 0.6; flex-shrink:0;">
             <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
             <circle cx="9" cy="9" r="2"/>
             <path d="M21 15l-3.086-3.086a2 2 0 00-2.828 0L6 21"/>
           </svg>
-          <p>No models downloaded yet. Download a model to get started with AI conversations.</p>
+          <div style="line-height:1.4;">
+            <p style="margin:0; font-weight:600; color: rgb(var(--md-on-surface));">No models downloaded yet</p>
+            <p style="margin:0; color: rgb(var(--md-on-surface-variant));">Download a model to get started with AI conversations.</p>
+          </div>
         </div>
       `;
     } else {
