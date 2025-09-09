@@ -2,16 +2,147 @@
 <div id="panel-chat" class="flex-1 flex flex-col chat-panel app-panel">
   <!-- Messages area -->
   <div id="messages-container" class="flex-1 overflow-y-auto px-6 py-8 space-y-4 min-h-[60vh]">
-    <!-- Empty state -->
-    <div id="empty-state" class="flex-1 flex flex-col items-center justify-center text-center max-w-md mx-auto">
-      <div class="mb-8">
-        <div class="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center mb-6">
-          <svg class="w-12 h-12 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
-          </svg>
+    <!-- Subtle mindfulness flash cards floating subtly -->
+    <div class="mindfulness-cards-container absolute inset-0 pointer-events-none z-0">
+      <div class="mindfulness-card card-1">
+        <div class="card-content">
+          <span class="card-icon">🌸</span>
+          <span class="card-text">Breathe deeply</span>
         </div>
+      </div>
+      <div class="mindfulness-card card-2">
+        <div class="card-content">
+          <span class="card-icon">✨</span>
+          <span class="card-text">You are enough</span>
+        </div>
+      </div>
+      <div class="mindfulness-card card-3">
+        <div class="card-content">
+          <span class="card-icon">🍃</span>
+          <span class="card-text">This moment matters</span>
+        </div>
+      </div>
+      <div class="mindfulness-card card-4">
+        <div class="card-content">
+          <span class="card-icon">💫</span>
+          <span class="card-text">Peace within</span>
+        </div>
+      </div>
+      <div class="mindfulness-card card-5">
+        <div class="card-content">
+          <span class="card-icon">🌙</span>
+          <span class="card-text">Gentle thoughts</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty state -->
+    <div id="empty-state" class="flex-1 flex flex-col items-center justify-center text-center w-full max-w-3xl mx-auto px-6">
+      <!-- Centered breathing circle animation -->
+      <div class="breathing-circle-container mb-8 flex flex-col items-center justify-center">
+        <div class="breathing-circle-large">
+          <div class="breathing-inner-large">
+            <div class="chat-icon-background-large">
+              <svg class="wellness-icon-large" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+                <line x1="9" y1="9" x2="9.01" y2="9"/>
+                <line x1="15" y1="9" x2="15.01" y2="9"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="mb-8 flex flex-col items-center">
         <h2 class="text-2xl font-medium text-on-surface mb-3">Start a conversation</h2>
         <p class="text-on-surface-variant">Share what's on your mind and let's explore it together</p>
+        
+        <!-- Gentle suggestion cards -->
+        <div class="suggestion-cards mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-2xl">
+          <button class="suggestion-card" onclick="fillMessage('How can I feel more peaceful today?')">
+            <span class="suggestion-icon">🕯️</span>
+            <span class="suggestion-text">Find peace</span>
+          </button>
+          <button class="suggestion-card" onclick="fillMessage('I\'d like to practice gratitude')">
+            <span class="suggestion-icon">🙏</span>
+            <span class="suggestion-text">Practice gratitude</span>
+          </button>
+          <button class="suggestion-card" onclick="fillMessage('Help me with mindful breathing')">
+            <span class="suggestion-icon">🌬️</span>
+            <span class="suggestion-text">Mindful breathing</span>
+          </button>
+          <button class="suggestion-card" onclick="fillMessage('I want to reflect on my day')">
+            <span class="suggestion-icon">🌅</span>
+            <span class="suggestion-text">Daily reflection</span>
+          </button>
+        </div>
+        
+        <!-- More practices button -->
+        <div class="more-practices-container mt-6">
+          <button id="more-practices-btn" class="more-practices-btn">
+            <span class="more-practices-icon">✨</span>
+            <span class="more-practices-text">More practices</span>
+            <svg id="more-practices-arrow" class="more-practices-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6,9 12,15 18,9"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Collapsible practices list -->
+        <div id="practices-list" class="practices-list-container hidden mt-6 w-full max-w-4xl">
+          <div class="expanded-suggestion-cards grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-6">
+            <!-- Additional suggestion cards in the same style -->
+            <button class="suggestion-card" onclick="fillMessage('What am I most grateful for today?')">
+              <span class="suggestion-icon">🌟</span>
+              <span class="suggestion-text">Daily gratitude</span>
+            </button>
+            <button class="suggestion-card" onclick="fillMessage('What emotions am I feeling right now, and why?')">
+              <span class="suggestion-icon">💭</span>
+              <span class="suggestion-text">Emotion check-in</span>
+            </button>
+            <button class="suggestion-card" onclick="fillMessage('What challenge can I reframe as an opportunity?')">
+              <span class="suggestion-icon">🔄</span>
+              <span class="suggestion-text">Reframe perspective</span>
+            </button>
+            <button class="suggestion-card" onclick="fillMessage('Guide me through a 5-minute breathing meditation')">
+              <span class="suggestion-icon">🌬️</span>
+              <span class="suggestion-text">5-min breathing</span>
+            </button>
+            <button class="suggestion-card" onclick="fillMessage('Help me with a body scan meditation')">
+              <span class="suggestion-icon">🧘‍♀️</span>
+              <span class="suggestion-text">Body scan</span>
+            </button>
+            <button class="suggestion-card" onclick="fillMessage('I need a loving-kindness meditation')">
+              <span class="suggestion-icon">💝</span>
+              <span class="suggestion-text">Loving-kindness</span>
+            </button>
+            <button class="suggestion-card" onclick="fillMessage('Help me create personal affirmations for confidence')">
+              <span class="suggestion-icon">✨</span>
+              <span class="suggestion-text">Confidence boost</span>
+            </button>
+            <button class="suggestion-card" onclick="fillMessage('I need affirmations for self-love and acceptance')">
+              <span class="suggestion-icon">💖</span>
+              <span class="suggestion-text">Self-love</span>
+            </button>
+            <button class="suggestion-card" onclick="fillMessage('Give me affirmations for stress relief')">
+              <span class="suggestion-icon">🌊</span>
+              <span class="suggestion-text">Stress relief</span>
+            </button>
+            <button class="suggestion-card" onclick="fillMessage('Teach me the 5-4-3-2-1 grounding technique')">
+              <span class="suggestion-icon">🔢</span>
+              <span class="suggestion-text">5-4-3-2-1 grounding</span>
+            </button>
+            <button class="suggestion-card" onclick="fillMessage('Help me practice mindful eating')">
+              <span class="suggestion-icon">🍎</span>
+              <span class="suggestion-text">Mindful eating</span>
+            </button>
+            <button class="suggestion-card" onclick="fillMessage('Guide me through a walking meditation')">
+              <span class="suggestion-icon">🚶‍♀️</span>
+              <span class="suggestion-text">Walking meditation</span>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -35,3 +166,106 @@
     </div>
   </div>
 </div>
+
+<!-- More Practices Modal -->
+<!-- Modal removed - using inline collapsible list instead -->
+
+<script>
+  // Function to fill message input from suggestion cards
+  function fillMessage(message: string) {
+    const messageInput = document.getElementById('message-input') as HTMLTextAreaElement;
+    if (messageInput) {
+      messageInput.value = message;
+      messageInput.focus();
+      
+      // Trigger auto-resize if the textarea has that functionality
+      const event = new Event('input', { bubbles: true });
+      messageInput.dispatchEvent(event);
+      
+      // Add a gentle pulse to the send button to draw attention
+      const sendBtn = document.getElementById('send-btn');
+      if (sendBtn) {
+        sendBtn.style.animation = 'gentlePulse 1s ease-in-out';
+        setTimeout(() => {
+          sendBtn.style.animation = '';
+        }, 1000);
+      }
+    }
+  }
+
+  // Collapsible practices list functionality
+  function initializePracticesList() {
+    const morePracticesBtn = document.getElementById('more-practices-btn');
+    const practicesList = document.getElementById('practices-list');
+    const arrow = document.getElementById('more-practices-arrow');
+
+    if (morePracticesBtn && practicesList && arrow) {
+      morePracticesBtn.addEventListener('click', () => {
+        const isHidden = practicesList.classList.contains('hidden');
+        
+        if (isHidden) {
+          // Show with smooth animation
+          practicesList.classList.remove('hidden');
+          practicesList.style.maxHeight = '0px';
+          practicesList.style.opacity = '0';
+          practicesList.style.transform = 'translateY(-10px)';
+          
+          // Force reflow
+          practicesList.offsetHeight;
+          
+          // Animate to full height
+          practicesList.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+          practicesList.style.maxHeight = '800px';
+          practicesList.style.opacity = '1';
+          practicesList.style.transform = 'translateY(0)';
+          
+          // Rotate arrow
+          arrow.style.transition = 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+          arrow.style.transform = 'rotate(180deg)';
+        } else {
+          // Hide with smooth animation
+          practicesList.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+          practicesList.style.maxHeight = '0px';
+          practicesList.style.opacity = '0';
+          practicesList.style.transform = 'translateY(-10px)';
+          
+          // Hide completely after animation
+          setTimeout(() => {
+            practicesList.classList.add('hidden');
+            practicesList.style.maxHeight = '';
+            practicesList.style.opacity = '';
+            practicesList.style.transform = '';
+            practicesList.style.transition = '';
+          }, 300);
+          
+          // Rotate arrow back
+          arrow.style.transform = 'rotate(0deg)';
+        }
+      });
+    }
+  }
+  
+  // Make functions available globally
+  (window as any).fillMessage = fillMessage;
+  
+  // Initialize when DOM is loaded
+  document.addEventListener('DOMContentLoaded', initializePracticesList);
+  
+  // Add animations
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes gentlePulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    
+    .practices-list-container {
+      overflow: hidden;
+    }
+    
+    .expanded-suggestion-cards {
+      transition: opacity 0.2s ease-out;
+    }
+  `;
+  document.head.appendChild(style);
+</script>
