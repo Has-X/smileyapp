@@ -1,49 +1,27 @@
 <!-- Chat panel -->
-<div id="panel-chat" class="flex-1 flex flex-col chat-panel app-panel">
+<div id="panel-chat" class="flex-1 flex flex-col chat-panel app-panel cursor-pointer" onclick="focusMessageInput()">
+  <!-- Debug Mode Indicator -->
+  <div id="debug-indicator" class="fixed top-4 right-4 bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-medium z-50" style="display: none;">
+    DEBUG MODE
+  </div>
   <!-- Messages area -->
   <div id="messages-container" class="flex-1 overflow-y-auto px-6 py-8 space-y-4 min-h-[60vh]">
-    <!-- Subtle mindfulness flash cards floating subtly -->
-    <div class="mindfulness-cards-container absolute inset-0 pointer-events-none z-0">
-      <div class="mindfulness-card card-1">
-        <div class="card-content">
-          <span class="card-icon">🌸</span>
-          <span class="card-text">Breathe deeply</span>
-        </div>
-      </div>
-      <div class="mindfulness-card card-2">
-        <div class="card-content">
-          <span class="card-icon">✨</span>
-          <span class="card-text">You are enough</span>
-        </div>
-      </div>
-      <div class="mindfulness-card card-3">
-        <div class="card-content">
-          <span class="card-icon">🍃</span>
-          <span class="card-text">This moment matters</span>
-        </div>
-      </div>
-      <div class="mindfulness-card card-4">
-        <div class="card-content">
-          <span class="card-icon">💫</span>
-          <span class="card-text">Peace within</span>
-        </div>
-      </div>
-      <div class="mindfulness-card card-5">
-        <div class="card-content">
-          <span class="card-icon">🌙</span>
-          <span class="card-text">Gentle thoughts</span>
-        </div>
-      </div>
-    </div>
+  <!-- Background intentionally left clean (mindfulness cards removed) -->
 
     <!-- Empty state -->
-    <div id="empty-state" class="flex-1 flex flex-col items-center justify-center text-center w-full max-w-3xl mx-auto px-6">
-      <!-- Centered breathing circle animation -->
-      <div class="breathing-circle-container mb-8 flex flex-col items-center justify-center">
-        <div class="breathing-circle-large">
-          <div class="breathing-inner-large">
-            <div class="chat-icon-background-large">
-              <svg class="wellness-icon-large" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <div id="empty-state" class="flex-1 flex flex-col items-center justify-center text-center w-full max-w-4xl mx-auto px-8 py-12">
+      <!-- Enhanced visual backdrop -->
+      <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-radial from-primary/5 to-transparent rounded-full blur-3xl animate-pulse-slow"></div>
+        <div class="absolute bottom-1/3 right-1/4 w-80 h-80 bg-gradient-radial from-secondary/4 to-transparent rounded-full blur-3xl animate-pulse-slow" style="animation-delay: 2s;"></div>
+      </div>
+      
+      <!-- Centered breathing circle animation with enhanced presentation -->
+      <div class="breathing-circle-container mb-16 flex flex-col items-center justify-center relative z-10">
+        <div class="breathing-circle-extra-large relative">
+          <div class="breathing-inner-extra-large">
+            <div class="chat-icon-background-extra-large">
+              <svg class="wellness-icon-extra-large" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                 <circle cx="12" cy="12" r="10"/>
                 <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
                 <line x1="9" y1="9" x2="9.01" y2="9"/>
@@ -54,94 +32,17 @@
         </div>
       </div>
       
-      <div class="mb-8 flex flex-col items-center">
-        <h2 class="text-2xl font-medium text-on-surface mb-3">Start a conversation</h2>
-        <p class="text-on-surface-variant">Share what's on your mind and let's explore it together</p>
-        
-        <!-- Gentle suggestion cards -->
-        <div class="suggestion-cards mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-2xl">
-          <button class="suggestion-card" onclick="fillMessage('How can I feel more peaceful today?')">
-            <span class="suggestion-icon">🕯️</span>
-            <span class="suggestion-text">Find peace</span>
-          </button>
-          <button class="suggestion-card" onclick="fillMessage('I\'d like to practice gratitude')">
-            <span class="suggestion-icon">🙏</span>
-            <span class="suggestion-text">Practice gratitude</span>
-          </button>
-          <button class="suggestion-card" onclick="fillMessage('Help me with mindful breathing')">
-            <span class="suggestion-icon">🌬️</span>
-            <span class="suggestion-text">Mindful breathing</span>
-          </button>
-          <button class="suggestion-card" onclick="fillMessage('I want to reflect on my day')">
-            <span class="suggestion-icon">🌅</span>
-            <span class="suggestion-text">Daily reflection</span>
-          </button>
-        </div>
-        
-        <!-- More practices button -->
-        <div class="more-practices-container mt-6">
-          <button id="more-practices-btn" class="more-practices-btn">
-            <span class="more-practices-icon">✨</span>
-            <span class="more-practices-text">More practices</span>
-            <svg id="more-practices-arrow" class="more-practices-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="6,9 12,15 18,9"/>
-            </svg>
-          </button>
-        </div>
-
-        <!-- Collapsible practices list -->
-        <div id="practices-list" class="practices-list-container hidden mt-6 w-full max-w-4xl">
-          <div class="expanded-suggestion-cards grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-6">
-            <!-- Additional suggestion cards in the same style -->
-            <button class="suggestion-card" onclick="fillMessage('What am I most grateful for today?')">
-              <span class="suggestion-icon">🌟</span>
-              <span class="suggestion-text">Daily gratitude</span>
-            </button>
-            <button class="suggestion-card" onclick="fillMessage('What emotions am I feeling right now, and why?')">
-              <span class="suggestion-icon">💭</span>
-              <span class="suggestion-text">Emotion check-in</span>
-            </button>
-            <button class="suggestion-card" onclick="fillMessage('What challenge can I reframe as an opportunity?')">
-              <span class="suggestion-icon">🔄</span>
-              <span class="suggestion-text">Reframe perspective</span>
-            </button>
-            <button class="suggestion-card" onclick="fillMessage('Guide me through a 5-minute breathing meditation')">
-              <span class="suggestion-icon">🌬️</span>
-              <span class="suggestion-text">5-min breathing</span>
-            </button>
-            <button class="suggestion-card" onclick="fillMessage('Help me with a body scan meditation')">
-              <span class="suggestion-icon">🧘‍♀️</span>
-              <span class="suggestion-text">Body scan</span>
-            </button>
-            <button class="suggestion-card" onclick="fillMessage('I need a loving-kindness meditation')">
-              <span class="suggestion-icon">💝</span>
-              <span class="suggestion-text">Loving-kindness</span>
-            </button>
-            <button class="suggestion-card" onclick="fillMessage('Help me create personal affirmations for confidence')">
-              <span class="suggestion-icon">✨</span>
-              <span class="suggestion-text">Confidence boost</span>
-            </button>
-            <button class="suggestion-card" onclick="fillMessage('I need affirmations for self-love and acceptance')">
-              <span class="suggestion-icon">💖</span>
-              <span class="suggestion-text">Self-love</span>
-            </button>
-            <button class="suggestion-card" onclick="fillMessage('Give me affirmations for stress relief')">
-              <span class="suggestion-icon">🌊</span>
-              <span class="suggestion-text">Stress relief</span>
-            </button>
-            <button class="suggestion-card" onclick="fillMessage('Teach me the 5-4-3-2-1 grounding technique')">
-              <span class="suggestion-icon">🔢</span>
-              <span class="suggestion-text">5-4-3-2-1 grounding</span>
-            </button>
-            <button class="suggestion-card" onclick="fillMessage('Help me practice mindful eating')">
-              <span class="suggestion-icon">🍎</span>
-              <span class="suggestion-text">Mindful eating</span>
-            </button>
-            <button class="suggestion-card" onclick="fillMessage('Guide me through a walking meditation')">
-              <span class="suggestion-icon">🚶‍♀️</span>
-              <span class="suggestion-text">Walking meditation</span>
-            </button>
-          </div>
+      <!-- Enhanced typography with fancy misty reveal animation -->
+      <div class="mb-16 flex flex-col items-center relative z-10">
+        <div class="text-reveal-container">
+          <h2 class="text-5xl font-extralight text-on-surface text-center leading-tight tracking-wide mb-4 misty-text-reveal">
+            <span class="word-reveal" data-delay="0">Share</span>
+            <span class="word-reveal" data-delay="200">what</span>
+            <span class="word-reveal" data-delay="400">is</span>
+            <span class="word-reveal" data-delay="600">on</span>
+            <span class="word-reveal" data-delay="800">your</span>
+            <span class="word-reveal" data-delay="1000">mind</span>
+          </h2>
         </div>
       </div>
     </div>
@@ -170,7 +71,98 @@
 <!-- More Practices Modal -->
 <!-- Modal removed - using inline collapsible list instead -->
 
+<style>
+  /* Misty text reveal - static CSS included in head of component */
+  .text-reveal-container {
+    position: relative;
+    overflow: hidden;
+    opacity: 0; /* base hidden to avoid any flash */
+  }
+
+  /* Only show container once reveal is about to start */
+  .text-reveal-container.reveal-ready {
+    opacity: 1;
+    transition: opacity 150ms ease-out;
+  }
+
+  /* Extra guard: if panel is hidden, force container hidden */
+  #panel-chat.hidden .text-reveal-container {
+    opacity: 0 !important;
+  }
+
+  /* Base: always hidden, NO transition so first paint doesn't flash */
+  .word-reveal {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(30px) scale(0.8);
+    filter: blur(10px);
+    transition: none; /* important: prevents initial fade-out flash */
+    margin-right: 0.08em;
+    position: relative;
+  }
+
+  /* Enable transitions only after paint */
+  .word-reveal.ready {
+    transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .word-reveal::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(45deg, transparent 30%, rgba(var(--md-primary), 0.3) 50%, transparent 70%);
+    transform: translateX(-100%);
+    transition: transform 0.8s ease-in-out;
+    pointer-events: none;
+  }
+
+  .word-reveal.reveal-active {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+
+  .word-reveal.reveal-active::before {
+    transform: translateX(100%);
+  }
+
+  .word-reveal.reveal-active::after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    width: 4px;
+    height: 4px;
+    background: rgb(var(--md-primary));
+    border-radius: 50%;
+    opacity: 0;
+    animation: sparkle-fade 1.5s ease-out;
+    pointer-events: none;
+  }
+
+  @keyframes sparkle-fade {
+    0%   { opacity:0; transform: translateX(-50%) translateY(0)   scale(0); }
+    20%  { opacity:1; transform: translateX(-50%) translateY(-10px) scale(1); }
+    100% { opacity:0; transform: translateX(-50%) translateY(-20px) scale(0); }
+  }
+
+  .word-reveal:hover {
+    color: rgb(var(--md-primary));
+    transform: translateY(-2px) scale(1.05);
+    text-shadow: 0 4px 12px rgba(var(--md-primary), 0.3);
+    transition: all 0.3s ease;
+  }
+</style>
+
 <script>
+  // Function to focus on message input when clicking anywhere in chat panel
+  function focusMessageInput() {
+    const messageInput = document.getElementById('message-input') as HTMLTextAreaElement;
+    if (messageInput) {
+      messageInput.focus();
+    }
+  }
+
   // Function to fill message input from suggestion cards
   function fillMessage(message: string) {
     const messageInput = document.getElementById('message-input') as HTMLTextAreaElement;
@@ -193,79 +185,77 @@
     }
   }
 
-  // Collapsible practices list functionality
-  function initializePracticesList() {
-    const morePracticesBtn = document.getElementById('more-practices-btn');
-    const practicesList = document.getElementById('practices-list');
-    const arrow = document.getElementById('more-practices-arrow');
+  // Initialize misty text reveal animation
+  // Initialize misty text reveal animation
+  // NOTE: this function only toggles classes. CSS controls the
+  // transition enabling via the .ready class so elements start
+  // fully hidden (no transition) and then transition in only forward.
+  function initMistyTextReveal() {
+    const container = document.querySelector('#panel-chat .text-reveal-container') as HTMLElement | null;
+    const words = Array.from(document.querySelectorAll('.word-reveal')) as HTMLElement[];
 
-    if (morePracticesBtn && practicesList && arrow) {
-      morePracticesBtn.addEventListener('click', () => {
-        const isHidden = practicesList.classList.contains('hidden');
-        
-        if (isHidden) {
-          // Show with smooth animation
-          practicesList.classList.remove('hidden');
-          practicesList.style.maxHeight = '0px';
-          practicesList.style.opacity = '0';
-          practicesList.style.transform = 'translateY(-10px)';
-          
-          // Force reflow
-          practicesList.offsetHeight;
-          
-          // Animate to full height
-          practicesList.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
-          practicesList.style.maxHeight = '800px';
-          practicesList.style.opacity = '1';
-          practicesList.style.transform = 'translateY(0)';
-          
-          // Rotate arrow
-          arrow.style.transition = 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
-          arrow.style.transform = 'rotate(180deg)';
-        } else {
-          // Hide with smooth animation
-          practicesList.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
-          practicesList.style.maxHeight = '0px';
-          practicesList.style.opacity = '0';
-          practicesList.style.transform = 'translateY(-10px)';
-          
-          // Hide completely after animation
-          setTimeout(() => {
-            practicesList.classList.add('hidden');
-            practicesList.style.maxHeight = '';
-            practicesList.style.opacity = '';
-            practicesList.style.transform = '';
-            practicesList.style.transition = '';
-          }, 300);
-          
-          // Rotate arrow back
-          arrow.style.transform = 'rotate(0deg)';
-        }
+    // Ensure clean state
+    words.forEach(w => {
+      w.classList.remove('reveal-active');
+      w.classList.remove('ready');
+    });
+    // Hide container until we begin the reveal sequence
+    container?.classList.remove('reveal-ready');
+
+    // Next frame, enable transitions (.ready) and then stagger reveal
+    requestAnimationFrame(() => {
+      // Allow container to become visible (no flash because words are hidden by default)
+      container?.classList.add('reveal-ready');
+      words.forEach(w => w.classList.add('ready'));
+
+      words.forEach((w) => {
+        const delay = parseInt(w.getAttribute('data-delay') || '0', 10) || 0;
+        setTimeout(() => {
+          w.classList.add('reveal-active');
+        }, 300 + delay);
       });
+    });
+  }
+
+  // Function to trigger animation when panel becomes visible
+  function triggerTextAnimation() {
+    const chatPanel = document.getElementById('panel-chat');
+    if (chatPanel && !chatPanel.classList.contains('hidden')) {
+      initMistyTextReveal();
     }
   }
-  
+
   // Make functions available globally
   (window as any).fillMessage = fillMessage;
-  
-  // Initialize when DOM is loaded
-  document.addEventListener('DOMContentLoaded', initializePracticesList);
-  
-  // Add animations
-  const style = document.createElement('style');
-  style.textContent = `
-    @keyframes gentlePulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-    }
-    
-    .practices-list-container {
-      overflow: hidden;
-    }
-    
-    .expanded-suggestion-cards {
-      transition: opacity 0.2s ease-out;
-    }
-  `;
-  document.head.appendChild(style);
+  (window as any).focusMessageInput = focusMessageInput;
+  (window as any).triggerTextAnimation = triggerTextAnimation;
+
+  // Initialize animation when page loads
+  document.addEventListener('DOMContentLoaded', initMistyTextReveal);
+
+  // Reset reveal state when the chat panel gets hidden to avoid showing old state on next show
+  document.addEventListener('DOMContentLoaded', () => {
+    const panel = document.getElementById('panel-chat');
+    if (!panel) return;
+
+    const resetRevealState = () => {
+      const container = panel.querySelector('.text-reveal-container') as HTMLElement | null;
+      container?.classList.remove('reveal-ready');
+      const words = panel.querySelectorAll('.word-reveal') as NodeListOf<HTMLElement>;
+      words.forEach(w => { w.classList.remove('ready', 'reveal-active'); });
+    };
+
+    const observer = new MutationObserver((muts) => {
+      for (const m of muts) {
+        if (m.type === 'attributes' && m.attributeName === 'class') {
+          if (panel.classList.contains('hidden')) {
+            resetRevealState();
+          }
+        }
+      }
+    });
+    observer.observe(panel, { attributes: true });
+  });
+
+  // NOTE: CSS for the text reveal is provided as a static <style> block below
 </script>

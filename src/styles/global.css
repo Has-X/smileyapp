@@ -8839,89 +8839,131 @@ body {
    ENHANCED CHAT PANEL STYLES
    ======================================== */
 
-/* Mindfulness flash cards - subtle floating elements */
-.mindfulness-cards-container {
-  pointer-events: none;
-  overflow: hidden;
-}
+/* Mindfulness cards removed: background kept clean intentionally */
 
-.mindfulness-card {
-  position: absolute;
-  opacity: 0.15;
-  transition: all 0.6s ease-in-out;
-  animation: mindfulFloat 20s ease-in-out infinite;
-  will-change: transform, opacity;
-}
-
-.mindfulness-card .card-content {
+/* Enhanced frontpage design elements */
+.breathing-circle-extra-large {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, 
+    rgba(var(--md-primary), 0.15),
+    rgba(var(--md-secondary), 0.1),
+    rgba(var(--md-tertiary), 0.08)
+  );
+  border: 2px solid rgba(var(--md-primary), 0.25);
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1rem;
-  background: rgba(var(--md-primary), 0.08);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(var(--md-primary), 0.2);
-  border-radius: 2rem;
-  font-size: 0.875rem;
-  font-weight: 500;
+  justify-content: center;
+  animation: breathe 6s ease-in-out infinite;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 
+    0 0 40px rgba(var(--md-primary), 0.2),
+    inset 0 2px 0 rgba(255, 255, 255, 0.1);
+}
+
+.breathing-inner-extra-large {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background: rgba(var(--md-primary), 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: breatheInner 6s ease-in-out infinite;
+  box-shadow: inset 0 2px 8px rgba(var(--md-primary), 0.2);
+}
+
+.chat-icon-background-extra-large {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, 
+    rgba(var(--md-primary), 0.18),
+    rgba(var(--md-secondary), 0.12)
+  );
+  border: 2px solid rgba(var(--md-primary), 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 
+    0 8px 24px rgba(var(--md-primary), 0.25),
+    inset 0 2px 0 rgba(255, 255, 255, 0.15);
+}
+
+.wellness-icon-extra-large {
+  width: 4rem;
+  height: 4rem;
   color: rgb(var(--md-primary));
-  white-space: nowrap;
-  box-shadow: 0 4px 20px rgba(var(--md-primary), 0.1);
+  filter: drop-shadow(0 4px 8px rgba(var(--md-primary), 0.4));
 }
 
-.mindfulness-card .card-icon {
-  font-size: 1rem;
-  filter: grayscale(0.3);
-}
-
-/* Positioning for each card */
-.mindfulness-card.card-1 {
-  top: 15%;
-  left: 10%;
-  animation-delay: 0s;
-}
-
-.mindfulness-card.card-2 {
-  top: 25%;
-  right: 15%;
-  animation-delay: -5s;
-}
-
-.mindfulness-card.card-3 {
-  bottom: 30%;
-  left: 20%;
-  animation-delay: -10s;
-}
-
-.mindfulness-card.card-4 {
-  top: 60%;
-  right: 25%;
-  animation-delay: -15s;
-}
-
-.mindfulness-card.card-5 {
-  bottom: 15%;
-  right: 10%;
-  animation-delay: -8s;
-}
-
-@keyframes mindfulFloat {
+/* Floating ring animations */
+@keyframes ring-float {
   0%, 100% {
-    transform: translateY(0) translateX(0) rotate(0deg);
-    opacity: 0.08;
-  }
-  25% {
-    transform: translateY(-20px) translateX(10px) rotate(1deg);
-    opacity: 0.15;
+    transform: scale(1) rotate(0deg);
+    opacity: 0.3;
   }
   50% {
-    transform: translateY(-10px) translateX(-15px) rotate(-0.5deg);
-    opacity: 0.12;
+    transform: scale(1.15) rotate(180deg);
+    opacity: 0.6;
   }
-  75% {
-    transform: translateY(-25px) translateX(8px) rotate(0.8deg);
-    opacity: 0.18;
+}
+
+@keyframes ring-float-reverse {
+  0%, 100% {
+    transform: scale(1.1) rotate(360deg);
+    opacity: 0.2;
   }
+  50% {
+    transform: scale(1.25) rotate(180deg);
+    opacity: 0.5;
+  }
+}
+
+.animate-ring-float {
+  animation: ring-float 8s ease-in-out infinite;
+}
+
+.animate-ring-float-reverse {
+  animation: ring-float-reverse 10s ease-in-out infinite reverse;
+}
+
+/* Subtle gradient backgrounds */
+.bg-gradient-radial {
+  background: radial-gradient(circle, var(--tw-gradient-stops));
+}
+
+/* Slow pulse animation */
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(0.95);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 6s ease-in-out infinite;
+}
+
+/* Text shimmer effect */
+@keyframes text-shimmer {
+  0%, 100% {
+    background-position: -200% center;
+  }
+  50% {
+    background-position: 200% center;
+  }
+}
+
+.animate-text-shimmer {
+  background-size: 200% auto;
+  animation: text-shimmer 8s ease-in-out infinite;
 }
 
 /* Breathing circle animation */
@@ -9280,11 +9322,38 @@ body {
 }
 
 /* Dark theme adjustments */
-[data-theme="dark"] .mindfulness-card .card-content,
-[data-theme$="-dark"] .mindfulness-card .card-content {
-  background: rgba(var(--md-primary), 0.12);
-  border-color: rgba(var(--md-primary), 0.25);
-  box-shadow: 0 4px 20px rgba(var(--md-primary), 0.15);
+/* Dark-theme mindfulness card styles removed along with DOM elements */
+
+/* Dark theme styles for enhanced breathing circle */
+[data-theme="dark"] .breathing-circle-extra-large,
+[data-theme$="-dark"] .breathing-circle-extra-large {
+  background: linear-gradient(135deg, 
+    rgba(var(--md-primary), 0.25),
+    rgba(var(--md-secondary), 0.18),
+    rgba(var(--md-tertiary), 0.15)
+  );
+  border-color: rgba(var(--md-primary), 0.4);
+  box-shadow: 
+    0 0 50px rgba(var(--md-primary), 0.3),
+    inset 0 2px 0 rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .breathing-inner-extra-large,
+[data-theme$="-dark"] .breathing-inner-extra-large {
+  background: rgba(var(--md-primary), 0.2);
+  box-shadow: inset 0 2px 8px rgba(var(--md-primary), 0.3);
+}
+
+[data-theme="dark"] .chat-icon-background-extra-large,
+[data-theme$="-dark"] .chat-icon-background-extra-large {
+  background: linear-gradient(135deg, 
+    rgba(var(--md-primary), 0.28),
+    rgba(var(--md-secondary), 0.20)
+  );
+  border-color: rgba(var(--md-primary), 0.5);
+  box-shadow: 
+    0 8px 32px rgba(var(--md-primary), 0.35),
+    inset 0 2px 0 rgba(255, 255, 255, 0.1);
 }
 
 [data-theme="dark"] .breathing-circle,
@@ -9378,9 +9447,7 @@ body {
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .mindfulness-cards-container {
-    display: none; /* Hide floating cards on mobile for cleaner look */
-  }
+  /* Mindfulness cards removed */
   
   .suggestion-cards {
     grid-template-columns: 1fr;
@@ -9417,6 +9484,27 @@ body {
     height: 2.5rem;
   }
   
+  /* Enhanced responsive styles */
+  .breathing-circle-extra-large {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .breathing-inner-extra-large {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .chat-icon-background-extra-large {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .wellness-icon-extra-large {
+    width: 3rem;
+    height: 3rem;
+  }
+  
   .practices-list-container {
     border-radius: 1rem;
   }
@@ -9430,18 +9518,13 @@ body {
 
 /* Accessibility - reduce motion for users who prefer it */
 @media (prefers-reduced-motion: reduce) {
-  .mindfulness-card,
+  /* Mindfulness-card selectors removed */
   .breathing-circle,
   .breathing-circle::before,
   .breathing-inner,
   .breathing-instruction {
     animation: none;
   }
-  
-  .mindfulness-card {
-    opacity: 0.1;
-  }
-  
   .breathing-circle {
     transform: none;
   }

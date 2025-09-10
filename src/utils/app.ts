@@ -4,6 +4,7 @@ class SmileApp {
   private models: string[] = [];
   private selectedModel: string = '';
   private isOnboardingComplete: boolean = false;
+  private debugMode: boolean = false;
 
   constructor() {
     this.init();
@@ -24,6 +25,9 @@ class SmileApp {
     
     // Initialize ambient background interactions
     this.initAmbientBackground();
+    
+    // Initialize debug mode keyboard shortcut
+    this.initDebugShortcut();
     
     // Load models
     await this.loadModels();
@@ -580,6 +584,16 @@ class SmileApp {
     if (targetPanel) {
       targetPanel.classList.remove('hidden');
       console.log('[switchPanel] showed', targetPanel.id);
+      
+      // Trigger text animation for chat panel
+      if (panelId === 'chat') {
+        setTimeout(() => {
+          const triggerAnimation = (window as any).triggerTextAnimation;
+          if (triggerAnimation && typeof triggerAnimation === 'function') {
+            triggerAnimation();
+          }
+        }, 100);
+      }
     } else {
       console.warn('[switchPanel] target panel not found', panelId);
     }
@@ -734,6 +748,12 @@ class SmileApp {
     const message = messageInput.value.trim();
     if (!message) return;
 
+    // Check if debug mode is enabled
+    if (this.debugMode) {
+      await this.sendDemoMessage(message);
+      return;
+    }
+
     if (!this.selectedModel) {
       this.showCustomNotification('Please select a model first', 'error');
       return;
@@ -803,6 +823,73 @@ class SmileApp {
       this.updateMessage(assistantMessageId, 'Sorry, I encountered an error. Please make sure Ollama is running and try again.');
       this.showCustomNotification('Connection error. Check if Ollama is running.', 'error');
     }
+  }
+
+  private async sendDemoMessage(message: string) {
+    const messageInput = document.getElementById('message-input') as HTMLTextAreaElement;
+    if (!messageInput) return;
+
+    // Clear input and reset height
+    messageInput.value = '';
+    messageInput.style.height = 'auto';
+
+    // Hide empty state
+    const emptyState = document.getElementById('empty-state');
+    if (emptyState) {
+      emptyState.style.display = 'none';
+    }
+
+    // Add user message to UI
+    this.addMessage('user', message);
+
+    // Add assistant placeholder
+    const assistantMessageId = this.addMessage('assistant', '');
+
+    try {
+      // Import demo streamer dynamically
+      const { default: DemoStreamer } = await import('./demo-streamer.ts');
+      const streamer = DemoStreamer.getInstance();
+
+      // Stream the demo response
+      await streamer.streamResponse(
+        message,
+        (chunk: string) => {
+          this.updateMessage(assistantMessageId, chunk);
+        },
+        () => {
+          console.log('Demo streaming complete');
+        }
+      );
+    } catch (error) {
+      console.error('Error in demo streaming:', error);
+      this.updateMessage(assistantMessageId, 'Demo streaming error occurred.');
+      this.showCustomNotification('Demo streaming error', 'error');
+    }
+  }
+
+  private toggleDebugMode() {
+    this.debugMode = !this.debugMode;
+    const status = this.debugMode ? 'ENABLED' : 'DISABLED';
+    this.showCustomNotification(`Debug Mode ${status}`, this.debugMode ? 'success' : 'info');
+    console.log(`Debug Mode ${status}`);
+    this.updateDebugIndicator();
+  }
+
+  private updateDebugIndicator() {
+    const indicator = document.getElementById('debug-indicator');
+    if (indicator) {
+      indicator.style.display = this.debugMode ? 'block' : 'none';
+    }
+  }
+
+  private initDebugShortcut() {
+    document.addEventListener('keydown', (e) => {
+      // Toggle debug mode with Ctrl+Shift+D
+      if (e.ctrlKey && e.shiftKey && e.key === 'D') {
+        e.preventDefault();
+        this.toggleDebugMode();
+      }
+    });
   }
 
   private addMessage(role: 'user' | 'assistant', content: string): string {
@@ -2574,8 +2661,12 @@ if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
     const app = new SmileApp();
     (window as any).smileApp = app;
+    // Expose debug mode toggle globally
+    (window as any).toggleDebugMode = () => app['toggleDebugMode']();
   });
 } else {
   const app = new SmileApp();
   (window as any).smileApp = app;
+  // Expose debug mode toggle globally
+  (window as any).toggleDebugMode = () => app['toggleDebugMode']();
 }
