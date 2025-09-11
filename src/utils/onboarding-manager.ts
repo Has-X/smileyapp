@@ -309,7 +309,7 @@ class OnboardingManager {
         }
       }
       // Notify + initialize
-      window.smileApp?.showCustomNotification?.('Welcome to Smile AI! Your setup is complete.', 'success');
+      window.smileApp?.showCustomNotification?.('Welcome to Smiley! Your setup is complete.', 'success');
       this.initializeAppWithPreferences(onboardingData);
     } catch (err) {
       console.error('Failed to complete onboarding:', err);

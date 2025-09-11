@@ -1,5 +1,7 @@
 // app.ts - Main application controller
 
+import stateManager from './state-manager.js';
+
 class SmileApp {
   private models: string[] = [];
   private selectedModel: string = '';
@@ -7,6 +9,7 @@ class SmileApp {
   private debugMode: boolean = false;
   private hasRevealedChat: boolean = false;
   private isStreaming: boolean = false;
+  private stateUnsubscribe: (() => void) | null = null;
 
   constructor() {
     this.init();
@@ -16,11 +19,17 @@ class SmileApp {
     // Initialize theme
     this.initTheme();
     
+    // Initialize secure storage (this will auto-check for unlock modal)
+    await this.initSecureStorage();
+    
     // Load user preferences
     await this.loadPreferences();
     
     // Check if onboarding is complete
     this.isOnboardingComplete = localStorage.getItem('smile-onboarding') === 'complete';
+    
+    // Setup state management
+    this.setupStateManagement();
     
     // Setup event listeners
     this.setupEventListeners();
@@ -39,8 +48,12 @@ class SmileApp {
       this.showOnboarding();
     }
 
-    // Initialize panels
-    this.switchPanel('chat');
+    // Initialize panels based on current state
+    const currentState = stateManager.getState();
+    this.switchPanel(currentState.currentPanel);
+    
+    // Restore scroll position
+    stateManager.restoreScrollPosition();
   }
 
   private initTheme() {
@@ -77,6 +90,19 @@ class SmileApp {
     return normalizedAccent;
   }
 
+  private async initSecureStorage() {
+    try {
+      // Initialize secure storage - this will automatically check and show unlock modal if needed
+      const { default: SecureStorage } = await import('./secure-storage.ts');
+      const storage = SecureStorage.getInstance();
+      
+      // The constructor will automatically call checkAndShowUnlockModal
+      // No additional action needed here
+    } catch (error) {
+      console.error('Failed to initialize secure storage:', error);
+    }
+  }
+
   private setTheme(theme: string) {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('smile-theme', theme);
@@ -101,9 +127,114 @@ class SmileApp {
     }
   }
 
+  private setupStateManagement() {
+    // Subscribe to state changes
+    this.stateUnsubscribe = stateManager.subscribe((state) => {
+      // Update UI based on state changes
+      this.handleStateChange(state);
+    });
+
+    // Load persisted data into components
+    this.loadPersistedData();
+  }
+
+  private handleStateChange(state: any) {
+    // Update current panel if needed
+    if (state.currentPanel) {
+      this.switchPanel(state.currentPanel, false); // Don't update state again
+    }
+
+    // Handle specific actions
+    if (state.currentAction) {
+      this.handleAction(state.currentAction);
+    }
+
+    // Update view if needed
+    if (state.currentView && state.currentView !== 'default') {
+      this.handleViewChange(state.currentView);
+    }
+  }
+
+  private handleAction(action: string) {
+    switch (action) {
+      case 'new':
+        if (stateManager.getState().currentPanel === 'journal') {
+          this.showNewEntryForm();
+        }
+        break;
+      case 'edit':
+        // Handle edit actions based on current panel
+        break;
+    }
+  }
+
+  private handleViewChange(view: string) {
+    const currentPanel = stateManager.getState().currentPanel;
+    
+    // Update view toggles
+    const viewToggle = document.querySelector(`[data-panel="${currentPanel}"] .view-toggle`);
+    if (viewToggle) {
+      const buttons = viewToggle.querySelectorAll('button');
+      buttons.forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.view === view);
+      });
+    }
+  }
+
+  private loadPersistedData() {
+    const state = stateManager.getState();
+    
+    // Restore chat messages
+    if (state.chatMessages && state.chatMessages.length > 0) {
+      this.restoreChatMessages(state.chatMessages);
+    }
+
+    // Restore journal entries
+    if (state.journalEntries && state.journalEntries.length > 0) {
+      this.restoreJournalEntries(state.journalEntries);
+    }
+
+    // Restore form data
+    this.restoreFormData();
+  }
+
+  private restoreChatMessages(messages: any[]) {
+    const chatContainer = document.getElementById('chat-messages');
+    if (chatContainer && messages.length > 0) {
+      chatContainer.innerHTML = '';
+      messages.forEach(message => {
+        this.addMessage(message.role, message.content);
+      });
+    }
+  }
+
+  private restoreJournalEntries(entries: any[]) {
+    entries.forEach(entry => {
+      this.addJournalEntryToDOM(entry);
+    });
+    this.updateJournalEntryCount();
+  }
+
+  private restoreFormData() {
+    // Restore journal form data if exists
+    const journalFormData = stateManager.getFormData('journal-form');
+    if (journalFormData && Object.keys(journalFormData).length > 0) {
+      this.populateJournalForm(journalFormData);
+    }
+  }
+
+  private populateJournalForm(data: any) {
+    Object.keys(data).forEach(key => {
+      const element = document.getElementById(key) as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
+      if (element) {
+        element.value = data[key];
+      }
+    });
+  }
+
   private setupEventListeners() {
-  // Navigation buttons (only top-level sidebar buttons)
-  const navButtons = document.querySelectorAll('.nav-button[data-panel]');
+    // Navigation buttons (only top-level sidebar buttons)
+    const navButtons = document.querySelectorAll('.nav-button[data-panel]');
     
     navButtons.forEach(button => {
       button.addEventListener('click', (e) => {
@@ -147,6 +278,9 @@ class SmileApp {
 
     // Settings event listeners
     this.setupSettingsListeners();
+
+    // Security event listeners  
+    this.setupSecurityListeners();
 
     // Onboarding event listeners
     this.setupOnboardingListeners();
@@ -282,16 +416,34 @@ class SmileApp {
       });
     }
 
-    // Initialize security UI from current storage state
-    import('./secure-storage.ts').then(module => {
-      const storage = module.default.getInstance();
+    // Initialize security UI from current storage state (try enhanced first)
+    this.updateSecurityUI();
+  }
+
+  private async updateSecurityUI() {
+    try {
+      const StorageModule = await import('./secure-storage.ts');
+      const storage = StorageModule.default.getInstance();
       const settings = storage.getSecuritySettings();
-      if (encryptionToggle) encryptionToggle.checked = !!settings.encryptionEnabled;
-      if (autoLockSelect) autoLockSelect.value = String(settings.autoLockInterval ?? 30);
-      if (setPasswordBtn) setPasswordBtn.style.display = settings.encryptionEnabled ? 'none' : '';
-      if (changePasswordBtn) changePasswordBtn.style.display = settings.encryptionEnabled ? '' : 'none';
-      if (testUnlockBtn) testUnlockBtn.style.display = settings.encryptionEnabled ? '' : 'none';
-    }).catch(() => {/* ignore */});
+      this.syncSecurityUI(settings);
+    } catch (err) {
+      console.error('Failed to load secure storage:', err);
+      // Silent fallback - UI will use defaults
+    }
+  }
+
+  private syncSecurityUI(settings: any) {
+    const encryptionToggle = document.getElementById('encryption-enabled') as HTMLInputElement;
+    const autoLockSelect = document.getElementById('auto-lock-select') as HTMLSelectElement;
+    const setPasswordBtn = document.getElementById('set-password-btn') as HTMLButtonElement;
+    const changePasswordBtn = document.getElementById('change-password-btn') as HTMLButtonElement;
+    const testUnlockBtn = document.getElementById('test-unlock-btn') as HTMLButtonElement;
+
+    if (encryptionToggle) encryptionToggle.checked = !!settings.encryptionEnabled;
+    if (autoLockSelect) autoLockSelect.value = String(settings.autoLockInterval ?? 30);
+    if (setPasswordBtn) setPasswordBtn.style.display = settings.encryptionEnabled ? 'none' : '';
+    if (changePasswordBtn) changePasswordBtn.style.display = settings.encryptionEnabled ? '' : 'none';
+    if (testUnlockBtn) testUnlockBtn.style.display = settings.encryptionEnabled ? '' : 'none';
   }
 
   private setupOnboardingListeners() {
@@ -389,7 +541,7 @@ class SmileApp {
     this.updateModelSelects();
     
     // Show success notification
-    this.showCustomNotification('Welcome to Smile AI! 🎉', 'success');
+    this.showCustomNotification('Welcome to Smiley! 🎉', 'success');
   }
 
   private showClearDataModal() {
@@ -574,8 +726,13 @@ class SmileApp {
     }, 50);
   }
 
-  private switchPanel(panelId: string) {
-  // Switching to panel
+  private switchPanel(panelId: string, updateState = true) {
+    // Save current scroll position and update state if needed
+    if (updateState) {
+      stateManager.saveScrollPosition();
+      stateManager.navigateToPanel(panelId);
+    }
+
     // Hide all panels
     const panels = document.querySelectorAll('[id^="panel-"]');
     
@@ -614,8 +771,8 @@ class SmileApp {
     }
 
     // Update navigation buttons
-  // Only affect actual navigation buttons
-  const navButtons = document.querySelectorAll('.nav-button[data-panel]');
+    // Only affect actual navigation buttons
+    const navButtons = document.querySelectorAll('.nav-button[data-panel]');
     navButtons.forEach(button => {
       button.classList.remove('nav-button-active');
       const buttonPanelId = button.getAttribute('data-panel');
@@ -624,28 +781,35 @@ class SmileApp {
       }
     });
 
-    // Initialize memories panel if it's being opened
-    if (panelId === 'memories') {
-      this.initMemoriesPanel();
-    }
+    // Initialize panel-specific functionality
+    this.initializePanelContent(panelId);
 
-    // Initialize history panel if it's being opened
-    if (panelId === 'history') {
-      this.initHistoryPanel();
+    // Restore scroll position after navigation (if not updating state)
+    if (!updateState) {
+      setTimeout(() => {
+        stateManager.restoreScrollPosition();
+      }, 100);
     }
+  }
 
-    // Initialize journal panel if it's being opened
-    if (panelId === 'journal') {
-      this.initJournalPanel();
+  private initializePanelContent(panelId: string) {
+    switch (panelId) {
+      case 'journal':
+        this.initJournalPanel();
+        break;
+      case 'memories':
+        this.initMemoriesPanel();
+        break;
+      case 'history':
+        this.initHistoryPanel();
+        break;
+      case 'profile':
+        this.initProfilePanel();
+        break;
+      case 'settings':
+        this.setupSettingsListeners();
+        break;
     }
-
-    // Initialize profile panel if it's being opened
-    if (panelId === 'profile') {
-      this.initProfilePanel();
-    }
-
-    // Reinitialize view toggles for the current panel
-    this.initViewToggles();
   }
 
   private switchSettingsTab(tabId: string) {
@@ -968,7 +1132,7 @@ class SmileApp {
         sendBtn.classList.remove('streaming');
         messageInput.disabled = false;
         messageInput.classList.remove('streaming');
-        messageInput.placeholder = 'Message Smile AI...';
+        messageInput.placeholder = 'Message Smiley...';
         
         // Auto-refocus if it was focused before
         if (messageInput.dataset.wasFocused === 'true') {
@@ -2535,13 +2699,15 @@ class SmileApp {
     }
   }
 
-  private updateAutoLock(minutes: number) {
-    import('./secure-storage.ts').then(module => {
-      const storage = module.default.getInstance();
+  private async updateAutoLock(minutes: number) {
+    try {
+      const StorageModule = await import('./secure-storage.ts');
+      const storage = StorageModule.default.getInstance();
       storage.updateSecuritySettings({ autoLockInterval: minutes });
-    }).finally(() => {
-      this.showCustomNotification(`Auto-lock set to ${minutes === 0 ? 'never' : minutes + ' minutes'}`, 'success');
-    });
+    } catch (err) {
+      console.error('Failed to update auto-lock setting:', err);
+    }
+    this.showCustomNotification(`Auto-lock set to ${minutes === 0 ? 'never' : minutes + ' minutes'}`, 'success');
   }
 
   private showPasswordModal(mode: 'set' | 'change' = 'set') {
@@ -2596,27 +2762,7 @@ class SmileApp {
           if (!isShown) {
             // when closing, sync UI from real storage state
             setTimeout(async () => {
-              try {
-                const SecureStorageModule = await import('./secure-storage.ts');
-                const storage = SecureStorageModule.default.getInstance();
-                const settings = storage.getSecuritySettings();
-                const encEnabled = !!settings.encryptionEnabled;
-
-                const encToggle = document.getElementById('encryption-enabled') as HTMLInputElement | null;
-                if (encToggle) encToggle.checked = encEnabled;
-
-                const obToggle = document.getElementById('onboarding-encryption') as HTMLInputElement | null;
-                if (obToggle) obToggle.checked = encEnabled;
-
-                const setBtn = document.getElementById('set-password-btn') as HTMLButtonElement | null;
-                const changeBtn = document.getElementById('change-password-btn') as HTMLButtonElement | null;
-                const testBtn = document.getElementById('test-unlock-btn') as HTMLButtonElement | null;
-                if (setBtn) setBtn.style.display = encEnabled ? 'none' : '';
-                if (changeBtn) changeBtn.style.display = encEnabled ? '' : 'none';
-                if (testBtn) testBtn.style.display = encEnabled ? '' : 'none';
-              } catch {
-                /* ignore */
-              }
+              this.updateSecurityUI();
             }, 0);
 
             // Also restore onboarding modal if we hid it for password entry
@@ -2636,9 +2782,11 @@ class SmileApp {
     }
   }
 
-  private testUnlock() {
-    import('./secure-storage.ts').then(module => {
-      const storage = module.default.getInstance();
+  private async testUnlock() {
+    try {
+      const StorageModule = await import('./secure-storage.ts');
+      const storage = StorageModule.default.getInstance();
+
       if (!storage.isEncryptionAvailable()) {
         this.showCustomNotification('Encryption not available in this browser', 'error');
         return;
@@ -2659,7 +2807,10 @@ class SmileApp {
       } else {
         this.showCustomNotification('Unlock UI not ready yet', 'error');
       }
-    });
+    } catch (err) {
+      console.error('testUnlock error:', err);
+      this.showCustomNotification('An error occurred testing unlock', 'error');
+    }
   }
 }
 

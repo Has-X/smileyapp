@@ -1,5 +1,5 @@
 ---
-// Security Unlock Modal - Password entry for encrypted storage
+// Enhanced Security Unlock Modal - Password entry for encrypted storage with routing preservation
 ---
 
 <!-- Security Unlock Modal -->
@@ -7,7 +7,6 @@
   <div class="confirm-modal-backdrop"></div>
   <div class="confirm-modal-container">
     <div class="confirm-modal-content security-modal-content">
-      
       
       <!-- Modal Header -->
       <div class="confirm-modal-header">
@@ -17,8 +16,8 @@
           </svg>
         </div>
         <div class="confirm-modal-text">
-          <h3 class="confirm-modal-title">Enter Password</h3>
-          <p class="confirm-modal-message">Your data is encrypted. Please enter your password to unlock.</p>
+          <h3 class="confirm-modal-title">Unlock Required</h3>
+          <p class="confirm-modal-message">Enter your password to access encrypted data</p>
         </div>
       </div>
 
@@ -31,30 +30,29 @@
               <input 
                 type="password" 
                 id="unlock-password" 
-                name="password" 
                 class="form-input password-input" 
                 placeholder="Enter your password"
-                required
                 autocomplete="current-password"
+                required
               />
-              <button type="button" class="password-toggle-btn" id="unlock-password-toggle">
-                <svg width="20" height="20" class="password-icon-show" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <button type="button" id="unlock-password-toggle" class="password-toggle-btn" title="Toggle password visibility">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                 </svg>
-                <svg width="20" height="20" class="password-icon-hide hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"/>
-                </svg>
               </button>
             </div>
-            <div id="unlock-error" class="form-error hidden"></div>
           </div>
-
+          
+          <div class="form-error hidden" id="unlock-error">
+            Invalid password. Please try again.
+          </div>
+          
           <div class="security-options">
             <label class="security-checkbox">
-              <input type="checkbox" id="remember-session" />
+              <input type="checkbox" id="remember-session" checked>
               <span class="checkbox-mark"></span>
-              <span class="checkbox-label">Keep unlocked during this session</span>
+              <span class="checkbox-label">Remember for this session</span>
             </label>
           </div>
         </form>
@@ -62,18 +60,17 @@
 
       <!-- Modal Actions -->
       <div class="confirm-modal-actions">
-        <button type="button" id="unlock-reset" class="confirm-btn confirm-btn-danger">
-          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+        <button type="button" class="confirm-btn confirm-btn-secondary" id="unlock-cancel">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
           </svg>
-          <span>Reset & Delete All Data</span>
+          Cancel
         </button>
-        <button type="submit" id="unlock-submit" class="confirm-btn confirm-btn-primary" form="unlock-form">
-          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <rect x="6" y="11" width="12" height="9" rx="2" ry="2" stroke-width="2"/>
-            <path d="M10 11V7a2 2 0 0 1 4 0" stroke-width="2" stroke-linecap="round"/>
+        <button type="submit" form="unlock-form" class="confirm-btn confirm-btn-primary" id="unlock-submit">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"/>
           </svg>
-          <span>Unlock</span>
+          <span id="unlock-submit-text">Unlock</span>
         </button>
       </div>
     </div>
@@ -81,7 +78,7 @@
 </div>
 
 <style>
-/* Security Modal Styles */
+/* Enhanced Security Modal Styles */
 .security-modal-content {
   width: 100%;
   max-width: 420px;
@@ -192,7 +189,6 @@
   transform: rotate(-45deg) scale(1);
 }
 
-/* Subtle contrast and focus improvements for checkbox */
 .checkbox-mark:hover {
   border-color: rgb(var(--md-primary));
   background: rgba(var(--md-primary-container), 0.08);
@@ -233,7 +229,6 @@
   animation: spin 1s linear infinite;
 }
 
-/* Ensure perfect icon alignment */
 .confirm-btn svg {
   flex-shrink: 0;
   display: block;
@@ -245,362 +240,467 @@
 }
 
 /* Dark theme adjustments */
-  [data-theme="dark"] .security-modal-content,
-  [data-theme$="-dark"] .security-modal-content {
+[data-theme="dark"] .security-modal-content,
+[data-theme$="-dark"] .security-modal-content {
   background: rgb(var(--md-surface-container));
   border: 1px solid rgb(var(--md-outline-variant));
 }
 
-/* Improve checkbox contrast in dark mode */
-  [data-theme="dark"] .checkbox-mark,
-  [data-theme$="-dark"] .checkbox-mark {
+[data-theme="dark"] .checkbox-mark,
+[data-theme$="-dark"] .checkbox-mark {
   border-color: rgb(var(--md-outline));
   background: rgb(var(--md-surface-container));
 }
 
-  [data-theme="dark"] .checkbox-mark:hover,
-  [data-theme$="-dark"] .checkbox-mark:hover {
+[data-theme="dark"] .checkbox-mark:hover,
+[data-theme$="-dark"] .checkbox-mark:hover {
   border-color: rgb(var(--md-primary));
   background: rgba(var(--md-primary-container), 0.15);
 }
 
-  [data-theme="dark"] .checkbox-label,
-  [data-theme$="-dark"] .checkbox-label {
+[data-theme="dark"] .checkbox-label,
+[data-theme$="-dark"] .checkbox-label {
   color: rgb(var(--md-on-surface));
 }
 
-  [data-theme="dark"] .security-checkbox input[type="checkbox"]:checked + .checkbox-mark,
-  [data-theme$="-dark"] .security-checkbox input[type="checkbox"]:checked + .checkbox-mark {
+[data-theme="dark"] .security-checkbox input[type="checkbox"]:checked + .checkbox-mark,
+[data-theme$="-dark"] .security-checkbox input[type="checkbox"]:checked + .checkbox-mark {
   background: rgb(var(--md-primary));
   border-color: rgb(var(--md-primary));
 }
 
-  [data-theme="dark"] .password-toggle-btn:hover,
-  [data-theme$="-dark"] .password-toggle-btn:hover {
+[data-theme="dark"] .password-toggle-btn:hover,
+[data-theme$="-dark"] .password-toggle-btn:hover {
   background: rgba(var(--md-surface-variant), 0.2);
 }
 </style>
 
 <script>
-// Security Unlock Modal - Provides password entry interface for unlocking encrypted storage
+// Enhanced Security Unlock Modal - Provides password entry interface with routing preservation
 
-  class SecurityUnlockModal {
-    private modal: HTMLElement | null = null;
-    private passwordInput: HTMLInputElement | null = null;
-    private toggleBtn: HTMLElement | null = null;
-    private errorDiv: HTMLElement | null = null;
-    private submitBtn: HTMLElement | null = null;
-    private form: HTMLFormElement | null = null;
-    private secureStorage: any;
-    private onUnlockCallback: (() => void) | null = null;
+class EnhancedSecurityUnlockModal {
+  private modal: HTMLElement | null = null;
+  private passwordInput: HTMLInputElement | null = null;
+  private toggleBtn: HTMLElement | null = null;
+  private errorDiv: HTMLElement | null = null;
+  private submitBtn: HTMLElement | null = null;
+  private cancelBtn: HTMLElement | null = null;
+  private form: HTMLFormElement | null = null;
+  private rememberCheckbox: HTMLInputElement | null = null;
+  private secureStorage: any;
+  private onUnlockCallback: (() => void) | null = null;
+  private countdownInterval: number | null = null;
+  private routingContext: any = null; // Store routing state
+  private lockStatusIndicator: HTMLElement | null = null;
+  private lockCountdown: HTMLElement | null = null;
 
-    constructor() {
-      this.init();
-    }
+  constructor() {
+    this.init();
+  }
 
-    private async init() {
-      this.modal = document.getElementById('security-unlock-modal');
-      this.passwordInput = document.getElementById('unlock-password') as HTMLInputElement;
-      this.toggleBtn = document.getElementById('unlock-password-toggle');
-      this.errorDiv = document.getElementById('unlock-error');
-      this.submitBtn = document.getElementById('unlock-submit');
-      this.form = document.getElementById('unlock-form') as HTMLFormElement;
+  private async init() {
+    this.modal = document.getElementById('security-unlock-modal');
+    this.passwordInput = document.getElementById('unlock-password') as HTMLInputElement;
+    this.toggleBtn = document.getElementById('unlock-password-toggle');
+    this.errorDiv = document.getElementById('unlock-error');
+    this.submitBtn = document.getElementById('unlock-submit');
+    this.cancelBtn = document.getElementById('unlock-cancel');
+    this.form = document.getElementById('unlock-form') as HTMLFormElement;
+    this.rememberCheckbox = document.getElementById('remember-session') as HTMLInputElement;
 
-      if (!this.modal || !this.passwordInput || !this.form) return;
+    if (!this.modal || !this.passwordInput || !this.form) return;
 
-      // Import and initialize secure storage
+    // Import and initialize secure storage
+    try {
       const SecureStorageModule = await import('../utils/secure-storage.ts');
       this.secureStorage = SecureStorageModule.default.getInstance();
-
-      this.bindEvents();
-      this.checkIfUnlockNeeded();
+    } catch (err) {
+      console.error('Failed to load secure storage:', err);
     }
 
-    private bindEvents() {
-      if (!this.modal || !this.passwordInput || !this.toggleBtn || !this.form) return;
+    this.bindEvents();
+    this.checkIfUnlockNeeded();
+    this.setupStorageListeners();
+  }
 
-      // Password toggle
-      this.toggleBtn.addEventListener('click', () => this.togglePasswordVisibility());
+  private bindEvents() {
+    if (!this.form || !this.passwordInput) return;
 
-      // Form submission (Enter key or programmatic submit)
-      this.form.addEventListener('submit', (e) => this.handleUnlock(e));
+    // Form submission
+    this.form.addEventListener('submit', (e) => this.handleUnlock(e));
 
-      // Explicit click handler for Unlock button to improve reliability across browsers
-      this.submitBtn = document.getElementById('unlock-submit');
-      this.submitBtn?.addEventListener('click', (e) => {
+    // Password toggle
+    this.toggleBtn?.addEventListener('click', () => this.togglePasswordVisibility());
+
+    // Cancel button
+    this.cancelBtn?.addEventListener('click', () => this.handleCancel());
+
+    // Input events
+    this.passwordInput.addEventListener('input', () => this.clearError());
+    this.passwordInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
-        // Prefer form.requestSubmit if available
-        if (this.form && (this.form as any).requestSubmit) {
-          (this.form as any).requestSubmit();
-        } else {
-          this.handleUnlock(e);
-        }
-      });
+        this.form?.requestSubmit();
+      }
+    });
 
-      // Reset and delete all data
-      const resetBtn = document.getElementById('unlock-reset');
-      resetBtn?.addEventListener('click', async () => {
-        const confirmModal: any = (window as any).confirmModal;
-        const proceed = async () => {
-          try {
-            const SecureStorageModule = await import('../utils/secure-storage.ts');
-            const storage = SecureStorageModule.default.getInstance();
-            await storage.resetAndDeleteAllData();
-            // Reload app to fresh state
-            window.location.reload();
-          } catch (err) {
-            console.error('Reset failed:', err);
-            // Use global notification system if available, else fallback to console
-            if ((window as any).smileApp && typeof (window as any).smileApp.showCustomNotification === 'function') {
-              (window as any).smileApp.showCustomNotification('Failed to reset data. Please try again.', 'error');
-            } else {
-              console.warn('Failed to reset data. Please try again.');
-            }
+    // Auto-focus when modal becomes visible
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+          const target = mutation.target as HTMLElement;
+          if (target === this.modal && !target.classList.contains('hidden')) {
+            setTimeout(() => this.passwordInput?.focus(), 100);
           }
-        };
-        if (confirmModal && confirmModal.show) {
-          confirmModal.show({
-            title: 'Delete All Data?',
-            message: 'This will permanently erase all local data and reset the app. This action cannot be undone.',
-            onConfirm: proceed,
-          });
-        } else {
-          // Use global helper to prefer app confirm modal and fallback to native confirm
-          (window as any).showAppConfirm('Delete All Data?', 'Delete all local data and reset the app? This cannot be undone.', proceed);
         }
       });
+    });
 
-      // Enter key in password field
-      this.passwordInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          this.handleUnlock(e);
-        }
-      });
-
-      // Auto-focus password input when modal shows
-      const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-          if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-            const target = mutation.target as HTMLElement;
-            if (target === this.modal && !target.classList.contains('hidden')) {
-              setTimeout(() => this.passwordInput?.focus(), 100);
-            }
-          }
-        });
-      });
-
+    if (this.modal) {
       observer.observe(this.modal, { attributes: true });
-
-      // Listen for storage lock events
-      window.addEventListener('smile:storage-locked', () => {
-        this.show();
-      });
-    }
-
-    private async checkIfUnlockNeeded() {
-      if (!this.secureStorage) return;
-
-      if (this.secureStorage.isEncryptionEnabled() && !this.secureStorage.isStorageUnlocked()) {
-        this.show();
-      }
-    }
-
-    public show(onUnlock?: () => void) {
-      if (!this.modal) return;
-
-      this.onUnlockCallback = onUnlock || null;
-      const mm = (window as any).modalManager;
-      if (mm && typeof mm.show === 'function') {
-        mm.show(this.modal);
-      } else {
-        // Fallback: ensure modal portals to body and appears above other layers
-        if (this.modal.parentElement !== document.body) {
-          document.body.appendChild(this.modal);
-        }
-        (this.modal as HTMLElement).style.zIndex = '21000';
-        const backdrop = this.modal.querySelector('.confirm-modal-backdrop') as HTMLElement | null;
-        const container = this.modal.querySelector('.confirm-modal-container') as HTMLElement | null;
-        const content = this.modal.querySelector('.confirm-modal-content') as HTMLElement | null;
-        if (backdrop) backdrop.style.zIndex = '20990';
-        if (container) container.style.zIndex = '21000';
-        if (content) content.style.zIndex = '21010';
-        this.modal.classList.remove('hidden');
-        (this.modal as HTMLElement).style.display = 'flex';
-        setTimeout(() => this.modal?.classList.add('show'), 10);
-      }
-      this.clearError();
-      this.resetForm();
-      
-      // Focus password input
-      setTimeout(() => this.passwordInput?.focus(), 100);
-    }
-
-    public hide() {
-      if (!this.modal) return;
-
-      const mm = (window as any).modalManager;
-      if (mm && typeof mm.hide === 'function') {
-        mm.hide(this.modal);
-      } else {
-        this.modal.classList.remove('show');
-        setTimeout(() => {
-          this.modal?.classList.add('hidden');
-          (this.modal as HTMLElement).style.display = 'none';
-        }, 200);
-      }
-      this.clearError();
-      this.resetForm();
-    }
-
-    private togglePasswordVisibility() {
-      if (!this.passwordInput || !this.toggleBtn) return;
-
-      const isPassword = this.passwordInput.type === 'password';
-      this.passwordInput.type = isPassword ? 'text' : 'password';
-
-      const showIcon = this.toggleBtn.querySelector('.password-icon-show');
-      const hideIcon = this.toggleBtn.querySelector('.password-icon-hide');
-
-      if (showIcon && hideIcon) {
-        showIcon.classList.toggle('hidden', !isPassword);
-        hideIcon.classList.toggle('hidden', isPassword);
-      }
-    }
-
-    private async handleUnlock(e: Event) {
-      e.preventDefault();
-      
-      if (!this.passwordInput || !this.submitBtn || !this.secureStorage) return;
-
-      const password = this.passwordInput.value.trim();
-      if (!password) {
-        this.showError('Please enter your password');
-        return;
-      }
-
-      this.setLoading(true);
-      this.clearError();
-
-      try {
-        const remember = (document.getElementById('remember-session') as HTMLInputElement)?.checked ?? false;
-        const success = await this.secureStorage.unlock(password, remember);
-        
-        if (success) {
-          this.hide();
-          if (this.onUnlockCallback) {
-            this.onUnlockCallback();
-          }
-          
-          // Dispatch unlock event
-          window.dispatchEvent(new CustomEvent('smile:storage-unlocked'));
-          
-          // Show success notification
-          this.showNotification('Storage unlocked successfully', 'success');
-        } else {
-          this.showError('Incorrect password. Please try again.');
-          this.passwordInput.focus();
-          this.passwordInput.select();
-        }
-      } catch (error) {
-        console.error('Unlock error:', error);
-        this.showError('Failed to unlock storage. Please try again.');
-      } finally {
-        this.setLoading(false);
-      }
-    }
-
-    private showError(message: string) {
-      if (!this.errorDiv) return;
-
-      this.errorDiv.textContent = message;
-      this.errorDiv.classList.remove('hidden');
-      
-      // Auto-hide error after 5 seconds
-      setTimeout(() => this.clearError(), 5000);
-    }
-
-    private clearError() {
-      if (!this.errorDiv) return;
-
-      this.errorDiv.classList.add('hidden');
-      this.errorDiv.textContent = '';
-    }
-
-    private resetForm() {
-      if (!this.passwordInput) return;
-
-      this.passwordInput.value = '';
-      this.passwordInput.type = 'password';
-      const remember = document.getElementById('remember-session') as HTMLInputElement | null;
-      if (remember) remember.checked = false;
-      
-      // Reset toggle button to show the "show password" icon (open eye) when password is hidden
-      if (this.toggleBtn) {
-        const showIcon = this.toggleBtn.querySelector('.password-icon-show');
-        const hideIcon = this.toggleBtn.querySelector('.password-icon-hide');
-        showIcon?.classList.remove('hidden');
-        hideIcon?.classList.add('hidden');
-      }
-    }
-
-    private setLoading(loading: boolean) {
-      if (!this.submitBtn) return;
-
-      const submitButton = this.submitBtn as HTMLButtonElement;
-      if (loading) {
-        submitButton.classList.add('loading');
-        submitButton.disabled = true;
-      } else {
-        submitButton.classList.remove('loading');
-        submitButton.disabled = false;
-      }
-    }
-
-    private showNotification(message: string, type: 'success' | 'error' | 'info' = 'info') {
-      // Prefer the global notification system so messages stack correctly above modals
-      const globalApp = (window as any).smileApp;
-      if (globalApp && typeof globalApp.showCustomNotification === 'function') {
-        globalApp.showCustomNotification(message, type);
-        return;
-      }
-
-      // Fallback: create a quick notification with very high z-index so it's visible above modals/backdrop
-      const notification = document.createElement('div');
-      notification.className = `security-notification security-notification-${type}`;
-      notification.textContent = message;
-      Object.assign(notification.style, {
-        position: 'fixed',
-        top: '2rem',
-        right: '2rem',
-        background: type === 'success' ? 'hsl(var(--success-container))' : 
-                   type === 'error' ? 'hsl(var(--error-container))' : 'hsl(var(--primary-container))',
-        color: type === 'success' ? 'hsl(var(--on-success-container))' : 
-               type === 'error' ? 'hsl(var(--on-error-container))' : 'hsl(var(--on-primary-container))',
-        padding: '1rem 1.5rem',
-        borderRadius: '0.5rem',
-        boxShadow: '0 6px 20px rgba(0, 0, 0, 0.25)',
-        // Above all modal layers
-        zIndex: '24000',
-        maxWidth: '400px',
-        fontSize: '0.875rem',
-        fontWeight: '500',
-        transform: 'translateX(100%)',
-        transition: 'transform 0.3s ease'
-      });
-
-      document.body.appendChild(notification);
-      setTimeout(() => notification.style.transform = 'translateX(0)', 10);
-      setTimeout(() => {
-        notification.style.transform = 'translateX(100%)';
-        setTimeout(() => notification.remove(), 300);
-      }, 3000);
     }
   }
 
-  // Initialize when DOM is loaded
-  document.addEventListener('DOMContentLoaded', () => {
-    const inst = new SecurityUnlockModal();
-    (window as any).securityUnlockModal = inst;
-  });
+  private setupStorageListeners() {
+    // Listen for storage events
+    window.addEventListener('smile:storage-locked', () => {
+      // Storage locked - modal will auto-show via unlock-required event
+    });
+
+    window.addEventListener('smile:storage-unlocked', () => {
+      this.hide();
+    });
+
+    window.addEventListener('smile:storage-unlock-required', () => {
+      this.preserveRoutingContext();
+      this.show();
+    });
+  }
+
+  private preserveRoutingContext() {
+    // Store current routing state to restore after unlock
+    try {
+      const stateManager = (window as any).stateManager;
+      if (stateManager) {
+        this.routingContext = {
+          panel: stateManager.getState().currentPanel,
+          view: stateManager.getState().currentView,
+          action: stateManager.getState().currentAction,
+          scrollPosition: window.scrollY,
+          timestamp: Date.now()
+        };
+      }
+    } catch (error) {
+      console.warn('Could not preserve routing context:', error);
+    }
+  }
+
+  private restoreRoutingContext() {
+    // Restore routing state after successful unlock
+    if (!this.routingContext) return;
+
+    try {
+      const stateManager = (window as any).stateManager;
+      if (stateManager && this.routingContext) {
+        // Restore the panel/view/action state
+        stateManager.navigateToPanel(
+          this.routingContext.panel,
+          this.routingContext.view,
+          this.routingContext.action
+        );
+
+        // Restore scroll position
+        setTimeout(() => {
+          window.scrollTo(0, this.routingContext.scrollPosition);
+        }, 100);
+
+        this.routingContext = null;
+      }
+    } catch (error) {
+      console.warn('Could not restore routing context:', error);
+    }
+  }
+
+  private async checkIfUnlockNeeded() {
+    if (this.secureStorage?.needsUnlock?.()) {
+      this.updateLockStatus(true);
+      // Don't auto-show modal on load, wait for user action
+    } else {
+      this.updateLockStatus(false);
+      this.startCountdownMonitoring();
+    }
+  }
+
+  public show(onUnlock?: () => void) {
+    if (!this.modal) return;
+
+    this.onUnlockCallback = onUnlock || null;
+    this.resetForm();
+    this.modal.classList.remove('hidden');
+    
+    // Use modal manager if available
+    const modalManager = (window as any).modalManager;
+    if (modalManager && typeof modalManager.show === 'function') {
+      modalManager.show(this.modal);
+    }
+
+    setTimeout(() => this.passwordInput?.focus(), 100);
+  }
+
+  public hide() {
+    if (!this.modal) return;
+
+    this.modal.classList.add('hidden');
+    
+    // Use modal manager if available
+    const modalManager = (window as any).modalManager;
+    if (modalManager && typeof modalManager.hide === 'function') {
+      modalManager.hide(this.modal);
+    }
+
+    this.resetForm();
+  }
+
+  private handleCancel() {
+    // Show wipe data confirmation instead of blocking
+    const confirmMessage = 'Unable to unlock? You can wipe all data to start fresh.\n\n' +
+                          'This will:\n' +
+                          '• Delete all chat history\n' +
+                          '• Clear all journal entries\n' +
+                          '• Remove all memories\n' +
+                          '• Disable encryption\n' +
+                          '• Reset all settings\n\n' +
+                          'This action cannot be undone. Wipe all data?';
+    
+    if (confirm(confirmMessage)) {
+      this.wipeAllData();
+    } else {
+      // Focus back on password input if they chose not to wipe
+      if (this.passwordInput) {
+        this.passwordInput.focus();
+      }
+    }
+  }
+
+  private async wipeAllData() {
+    try {
+      // Clear all localStorage
+      Object.keys(localStorage).forEach(key => {
+        if (key.startsWith('smile-')) {
+          localStorage.removeItem(key);
+        }
+      });
+      
+      // Clear sessionStorage
+      sessionStorage.clear();
+      
+      // Clear IndexedDB if exists
+      if ('indexedDB' in window) {
+        try {
+          const dbs = await indexedDB.databases();
+          await Promise.all(
+            dbs.map(db => {
+              if (db.name && db.name.startsWith('smile')) {
+                return new Promise<void>((resolve) => {
+                  const deleteRequest = indexedDB.deleteDatabase(db.name as string);
+                  deleteRequest.onsuccess = () => resolve();
+                  deleteRequest.onerror = () => resolve(); // Continue even if error
+                });
+              }
+            })
+          );
+        } catch (e) {
+          console.log('IndexedDB cleanup completed');
+        }
+      }
+      
+      // Show success message and reload
+      alert('All data has been wiped. The page will now reload.');
+      window.location.reload();
+      
+    } catch (error) {
+      console.error('Error wiping data:', error);
+      alert('There was an error wiping data. Please manually clear your browser data for this site.');
+    }
+  }
+
+  private togglePasswordVisibility() {
+    if (!this.passwordInput || !this.toggleBtn) return;
+
+    const isPasswordHidden = this.passwordInput.type === 'password';
+    this.passwordInput.type = isPasswordHidden ? 'text' : 'password';
+    
+    // Update icon - when password is visible (text), show hide icon (eye-slash)
+    // when password is hidden (password), show show icon (eye)
+    const svg = this.toggleBtn.querySelector('svg');
+    if (svg) {
+      svg.innerHTML = isPasswordHidden
+        ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L12 12m-3.122-3.122l4.242 4.242M12 12l3 3m-6.878-6.878l3.121 3.121"/>'
+        : '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>';
+    }
+  }
+
+  private async handleUnlock(e: Event) {
+    e.preventDefault();
+    if (!this.passwordInput || !this.secureStorage) return;
+
+    const password = this.passwordInput.value.trim();
+    if (!password) {
+      this.showError('Please enter your password');
+      return;
+    }
+
+    this.setLoading(true);
+    this.clearError();
+
+    try {
+      const rememberSession = this.rememberCheckbox?.checked ?? true;
+      const success = await this.secureStorage.unlock(password, rememberSession);
+
+      if (success) {
+        this.showNotification('Storage unlocked successfully', 'success');
+        this.hide();
+        
+        // Restore routing context after successful unlock
+        this.restoreRoutingContext();
+
+        // Call unlock callback if provided
+        if (this.onUnlockCallback) {
+          this.onUnlockCallback();
+        }
+      } else {
+        this.showError('Invalid password. Please try again.');
+        this.passwordInput.focus();
+        this.passwordInput.select();
+      }
+    } catch (error) {
+      console.error('Unlock failed:', error);
+      this.showError('Unlock failed. Please try again.');
+    } finally {
+      this.setLoading(false);
+    }
+  }
+
+  private showError(message: string) {
+    if (!this.errorDiv) return;
+    this.errorDiv.textContent = message;
+    this.errorDiv.classList.remove('hidden');
+  }
+
+  private clearError() {
+    if (!this.errorDiv) return;
+    this.errorDiv.classList.add('hidden');
+  }
+
+  private resetForm() {
+    if (!this.form || !this.passwordInput) return;
+    this.form.reset();
+    this.clearError();
+    this.setLoading(false);
+    this.passwordInput.type = 'password';
+    
+    // Reset the toggle button icon to show eye (password hidden state)
+    const svg = this.toggleBtn?.querySelector('svg');
+    if (svg) {
+      svg.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>';
+    }
+  }
+
+  private setLoading(loading: boolean) {
+    if (!this.submitBtn) return;
+    
+    const submitText = document.getElementById('unlock-submit-text');
+    
+    if (loading) {
+      this.submitBtn.classList.add('loading');
+      (this.submitBtn as HTMLButtonElement).disabled = true;
+      if (submitText) submitText.textContent = 'Unlocking...';
+    } else {
+      this.submitBtn.classList.remove('loading');
+      (this.submitBtn as HTMLButtonElement).disabled = false;
+      if (submitText) submitText.textContent = 'Unlock';
+    }
+  }
+
+  private startCountdownMonitoring() {
+    if (!this.secureStorage?.getTimeUntilAutoLock) return;
+
+    this.countdownInterval = window.setInterval(() => {
+      const timeRemaining = this.secureStorage.getTimeUntilAutoLock();
+      
+      if (timeRemaining <= 0) {
+        this.stopCountdown();
+        return;
+      }
+
+      // Show warning when less than 5 minutes remain
+      if (timeRemaining <= 300) { // 5 minutes
+        this.showAutoLockWarning(timeRemaining);
+      }
+    }, 1000);
+  }
+
+  private showAutoLockWarning(seconds: number) {
+    if (!this.lockStatusIndicator || !this.lockCountdown) return;
+
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    const timeText = minutes > 0 
+      ? `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`
+      : `${remainingSeconds}s`;
+
+    this.lockCountdown.textContent = `Auto-lock in ${timeText}`;
+    this.lockCountdown.classList.remove('hidden');
+    this.lockStatusIndicator.classList.remove('hidden');
+    this.lockStatusIndicator.classList.add('warning');
+  }
+
+  private stopCountdown() {
+    if (this.countdownInterval) {
+      clearInterval(this.countdownInterval);
+      this.countdownInterval = null;
+    }
+    
+    if (this.lockCountdown) {
+      this.lockCountdown.classList.add('hidden');
+    }
+  }
+
+  private updateLockStatus(isLocked: boolean) {
+    // This method was referenced but not implemented
+    // Implementation depends on UI requirements
+  }
+
+  private togglePasswordVisibility() {
+    if (!this.passwordInput || !this.toggleBtn) return;
+
+    const isPasswordHidden = this.passwordInput.type === 'password';
+    this.passwordInput.type = isPasswordHidden ? 'text' : 'password';
+    
+    // Update icon - when password is visible (text), show hide icon (eye-slash)
+    // when password is hidden (password), show show icon (eye)
+    const svg = this.toggleBtn.querySelector('svg');
+    if (svg) {
+      svg.innerHTML = isPasswordHidden
+        ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L12 12m-3.122-3.122l4.242 4.242M12 12l3 3m-6.878-6.878l3.121 3.121"/>'
+        : '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>';
+    }
+  }
+
+  private showNotification(message: string, type: 'success' | 'error' | 'info' = 'info') {
+    // Use existing notification system if available
+    const app = (window as any).smileApp;
+    if (app && typeof app.showCustomNotification === 'function') {
+      app.showCustomNotification(message, type);
+    } else {
+      console.log(`${type.toUpperCase()}: ${message}`);
+    }
+  }
+}
+
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+  const inst = new EnhancedSecurityUnlockModal();
+  (window as any).securityUnlockModal = inst;
+});
 </script>

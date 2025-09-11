@@ -27,7 +27,7 @@ export default defineConfig({
         }]
       },
       manifest: {
-        name: 'Smile AI',
+        name: 'Smiley',
         short_name: 'Smile',
         description: 'Chat-first PWA with local open-weight AI models',
         theme_color: '#3b82f6',

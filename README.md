@@ -1,4 +1,4 @@
-# Smile AI
+# Smiley
 
 A privacy-first chat application that runs powerful open-weight AI models locally using Ollama. Built with Astro, Preact, Tailwind CSS, and daisyUI as a Progressive Web App.
 
@@ -128,7 +128,7 @@ Health check and model discovery.
 
 ## 🎨 Theming
 
-Smile AI includes three built-in themes:
+Smiley includes three built-in themes:
 - **Smile**: Custom Material-inspired theme (default)
 - **Light**: Clean light theme
 - **Dark**: Dark mode
@@ -176,4 +176,4 @@ Powered by open models. Thanks to:
 
 ---
 
-*Smile AI runs local-only. Your conversations never leave your device.*
+*Smiley runs local-only. Your conversations never leave your device.*

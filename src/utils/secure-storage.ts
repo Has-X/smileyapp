@@ -1,6 +1,6 @@
 /**
- * Secure Storage Utility
- * Provides AES-256-GCM encryption for local storage with password-based key derivation
+ * Secure Storage - Encrypted local storage for Smiley PWA
+ * Features: Routing preservation, auto-lock timing, and session persistence
  */
 
 interface EncryptedData {
@@ -17,6 +17,16 @@ interface SecuritySettings {
   autoLockInterval: number; // minutes (0 = disabled)
   requirePasswordOnStartup: boolean;
   lastActivity: number;
+  sessionDuration: number; // minutes (how long to remember unlock)
+  unlockOnReload: boolean; // whether to stay unlocked across page reloads
+}
+
+interface UnlockSession {
+  unlocked: boolean;
+  sessionStart: number;
+  lastActivity: number;
+  duration: number; // minutes
+  keyFingerprint: string; // hash of the key to validate
 }
 
 class SecureStorage {
@@ -24,15 +34,25 @@ class SecureStorage {
   private cryptoKey: CryptoKey | null = null;
   private isUnlocked: boolean = false;
   private autoLockTimer: number | null = null;
+  private activityTimer: number | null = null;
   private lastActivity: number = Date.now();
   private rememberForSession: boolean = false;
+  private sessionData: UnlockSession | null = null;
   private readonly ALGORITHM = 'AES-GCM';
   private readonly KEY_DERIVATION = 'PBKDF2';
   private readonly ITERATIONS = 100000;
   private readonly KEY_LENGTH = 256;
+  private readonly SESSION_KEY = 'smile-unlock-session';
+  private readonly ACTIVITY_CHECK_INTERVAL = 30000; // 30 seconds
 
   private constructor() {
     this.setupActivityTracking();
+    this.restoreSession();
+    
+    // Check if unlock modal should be shown on startup
+    setTimeout(() => {
+      this.checkAndShowUnlockModal();
+    }, 100); // Small delay to ensure DOM is ready
   }
 
   static getInstance(): SecureStorage {
@@ -65,41 +85,57 @@ class SecureStorage {
   }
 
   /**
-   * Get security settings
+   * Get security settings with better defaults
    */
   getSecuritySettings(): SecuritySettings {
     try {
-      const settings = localStorage.getItem('smile-security-settings');
-      return settings ? JSON.parse(settings) : {
-        encryptionEnabled: false,
-        autoLockInterval: 30, // 30 minutes default
-        requirePasswordOnStartup: true,
-        lastActivity: Date.now()
-      };
+      const stored = localStorage.getItem('smile-security-settings');
+      if (stored) {
+        const settings = JSON.parse(stored);
+        return {
+          encryptionEnabled: false,
+          autoLockInterval: 30,
+          requirePasswordOnStartup: true,
+          lastActivity: Date.now(),
+          sessionDuration: 60, // 1 hour default
+          unlockOnReload: true, // Stay unlocked across reloads by default
+          ...settings
+        };
+      }
     } catch {
-      return {
-        encryptionEnabled: false,
-        autoLockInterval: 30,
-        requirePasswordOnStartup: true,
-        lastActivity: Date.now()
-      };
+      // Ignore parse errors
     }
+    
+    return {
+      encryptionEnabled: false,
+      autoLockInterval: 30,
+      requirePasswordOnStartup: true,
+      lastActivity: Date.now(),
+      sessionDuration: 60,
+      unlockOnReload: true
+    };
   }
 
   /**
-   * Update security settings
+   * Update security settings with improved session handling
    */
   updateSecuritySettings(settings: Partial<SecuritySettings>): void {
     const currentSettings = this.getSecuritySettings();
     const newSettings = { ...currentSettings, ...settings };
     localStorage.setItem('smile-security-settings', JSON.stringify(newSettings));
     
-    // Update auto-lock timer
+    // Update auto-lock timer when settings change
     this.setupAutoLock();
+    
+    // If session duration changed, update current session
+    if (settings.sessionDuration && this.sessionData) {
+      this.sessionData.duration = settings.sessionDuration;
+      this.saveSession();
+    }
   }
 
   /**
-   * Enable encryption with password
+   * Enable encryption with password and better session setup
    */
   async enableEncryption(password: string): Promise<boolean> {
     if (!this.isEncryptionAvailable()) {
@@ -107,13 +143,10 @@ class SecureStorage {
     }
 
     try {
-      // Generate salt for this user
       const salt = window.crypto.getRandomValues(new Uint8Array(16));
-      
-      // Derive key from password
       const key = await this.deriveKeyFromPassword(password, salt);
       
-      // Test encryption/decryption with a test string
+      // Test encryption/decryption
       const testData = 'encryption-test';
       const encrypted = await this.encryptWithKey(testData, key, salt);
       const decrypted = await this.decryptWithKey(encrypted, key);
@@ -122,20 +155,20 @@ class SecureStorage {
         throw new Error('Encryption test failed');
       }
 
-      // Store salt for future use
-      localStorage.setItem('smile-encryption-salt', this.arrayBufferToBase64(salt.buffer));
+      // Store the encrypted test and salt for future validation
+      localStorage.setItem('smile-encryption-test', JSON.stringify(encrypted));
       
       // Update settings
-      this.updateSecuritySettings({ 
-        encryptionEnabled: true,
-        lastActivity: Date.now()
-      });
-
-      // Set current session as unlocked
+      this.updateSecuritySettings({ encryptionEnabled: true });
+      
+      // Set up unlocked state
       this.cryptoKey = key;
       this.isUnlocked = true;
-      this.updateActivity();
+      this.createSession(password);
+      this.setupAutoLock();
 
+      // Dispatch unlock event
+      this.dispatchStorageEvent('unlocked');
       return true;
     } catch (error) {
       console.error('Failed to enable encryption:', error);
@@ -144,47 +177,43 @@ class SecureStorage {
   }
 
   /**
-   * Unlock storage with password
+   * Enhanced unlock with session management
    */
-  async unlock(password: string, rememberSession: boolean = false): Promise<boolean> {
+  async unlock(password: string, rememberSession: boolean = true): Promise<boolean> {
     if (!this.isEncryptionEnabled()) {
-      this.isUnlocked = true;
-      return true;
+      return true; // Not encrypted, consider unlocked
     }
 
     try {
-      const saltBase64 = localStorage.getItem('smile-encryption-salt');
-      if (!saltBase64) {
-        throw new Error('Encryption salt not found');
+      const testData = localStorage.getItem('smile-encryption-test');
+      if (!testData) {
+        throw new Error('No encryption test data found');
       }
 
-      const salt = this.base64ToArrayBuffer(saltBase64);
-      const key = await this.deriveKeyFromPassword(password, new Uint8Array(salt));
-
-      // Test with a known encrypted value
-      const testKey = 'smile-encryption-test';
-      const testData = localStorage.getItem(testKey);
+      const encrypted: EncryptedData = JSON.parse(testData);
+      const salt = new Uint8Array(this.base64ToArrayBuffer(encrypted.salt));
+      const key = await this.deriveKeyFromPassword(password, salt);
       
-      if (testData) {
-        try {
-          const encrypted: EncryptedData = JSON.parse(testData);
-          await this.decryptWithKey(encrypted, key);
-        } catch {
-          return false; // Wrong password
-        }
-      } else {
-        // Create test data for future validation
-        const testValue = 'encryption-test-' + Date.now();
-        const encrypted = await this.encryptWithKey(testValue, key, new Uint8Array(salt));
-        localStorage.setItem(testKey, JSON.stringify(encrypted));
+      // Test the key
+      const decrypted = await this.decryptWithKey(encrypted, key);
+      if (decrypted !== 'encryption-test') {
+        return false;
       }
 
+      // Successfully unlocked
       this.cryptoKey = key;
       this.isUnlocked = true;
-      this.rememberForSession = !!rememberSession;
+      this.rememberForSession = rememberSession;
+      
+      if (rememberSession) {
+        this.createSession(password);
+      }
+      
       this.updateActivity();
       this.setupAutoLock();
 
+      // Dispatch unlock event
+      this.dispatchStorageEvent('unlocked');
       return true;
     } catch (error) {
       console.error('Failed to unlock storage:', error);
@@ -193,43 +222,55 @@ class SecureStorage {
   }
 
   /**
-   * Lock storage
+   * Enhanced lock with session cleanup
    */
   lock(): void {
     this.cryptoKey = null;
     this.isUnlocked = false;
-    // Reset session preference on explicit lock
     this.rememberForSession = false;
+    this.sessionData = null;
+    
+    // Clear session storage
+    sessionStorage.removeItem(this.SESSION_KEY);
+    
+    // Clear timers
     this.clearAutoLockTimer();
+    this.clearActivityTimer();
     
     // Dispatch lock event
-    window.dispatchEvent(new CustomEvent('smile:storage-locked'));
+    this.dispatchStorageEvent('locked');
+    
+    // Automatically show unlock modal after locking
+    setTimeout(() => {
+      this.checkAndShowUnlockModal();
+    }, 100);
   }
 
   /**
-   * Disable encryption (with current password verification)
+   * Disable encryption with data migration
    */
   async disableEncryption(currentPassword?: string): Promise<boolean> {
-    // If not currently unlocked and encryption enabled, attempt unlock when a password is provided
+    // If not currently unlocked and encryption enabled, attempt unlock
     if (this.isEncryptionEnabled() && !this.isStorageUnlocked()) {
-      if (!currentPassword) return false;
-      if (!await this.unlock(currentPassword)) {
+      if (!currentPassword || !await this.unlock(currentPassword)) {
         return false;
       }
     }
 
     try {
-      // Decrypt all encrypted data before disabling
+      // Decrypt all encrypted data back to regular storage
       await this.decryptAllStoredData();
       
       // Remove encryption artifacts
-      localStorage.removeItem('smile-encryption-salt');
       localStorage.removeItem('smile-encryption-test');
+      sessionStorage.removeItem(this.SESSION_KEY);
       
       // Update settings
       this.updateSecuritySettings({ encryptionEnabled: false });
       
+      // Clear encryption state
       this.lock();
+      
       return true;
     } catch (error) {
       console.error('Failed to disable encryption:', error);
@@ -238,7 +279,7 @@ class SecureStorage {
   }
 
   /**
-   * Change encryption password
+   * Change password with improved validation
    */
   async changePassword(currentPassword: string, newPassword: string): Promise<boolean> {
     if (!await this.unlock(currentPassword)) {
@@ -246,32 +287,26 @@ class SecureStorage {
     }
 
     try {
-      // Get all encrypted data
+      // Get all current encrypted data
       const allData = await this.getAllDecryptedData();
       
-      // Generate new salt
+      // Generate new key with new password
       const newSalt = window.crypto.getRandomValues(new Uint8Array(16));
       const newKey = await this.deriveKeyFromPassword(newPassword, newSalt);
       
+      // Create new test data
+      const testData = 'encryption-test';
+      const newEncrypted = await this.encryptWithKey(testData, newKey, newSalt);
+      localStorage.setItem('smile-encryption-test', JSON.stringify(newEncrypted));
+      
       // Re-encrypt all data with new key
+      this.cryptoKey = newKey;
       for (const [key, value] of Object.entries(allData)) {
-        if (key.startsWith('smile-encrypted-')) {
-          const encrypted = await this.encryptWithKey(JSON.stringify(value), newKey, newSalt);
-          localStorage.setItem(key, JSON.stringify(encrypted));
-        }
+        await this.setItem(key, value);
       }
       
-      // Update salt
-      localStorage.setItem('smile-encryption-salt', this.arrayBufferToBase64(newSalt.buffer));
-      
-      // Update test data
-      const testValue = 'encryption-test-' + Date.now();
-      const testEncrypted = await this.encryptWithKey(testValue, newKey, newSalt);
-      localStorage.setItem('smile-encryption-test', JSON.stringify(testEncrypted));
-      
-      // Update current session
-      this.cryptoKey = newKey;
-      this.updateActivity();
+      // Update session with new password
+      this.createSession(newPassword);
       
       return true;
     } catch (error) {
@@ -281,65 +316,65 @@ class SecureStorage {
   }
 
   /**
-   * Securely store data
+   * Enhanced secure storage with session validation
    */
   async setItem(key: string, value: any): Promise<void> {
     const dataToStore = JSON.stringify(value);
     
     if (!this.isEncryptionEnabled() || !this.isStorageUnlocked()) {
-      // Store unencrypted
       localStorage.setItem(key, dataToStore);
       return;
     }
 
     try {
-      const saltBase64 = localStorage.getItem('smile-encryption-salt');
-      if (!saltBase64 || !this.cryptoKey) {
-        throw new Error('Encryption not properly initialized');
-      }
-
-      const salt = new Uint8Array(this.base64ToArrayBuffer(saltBase64));
-      const encrypted = await this.encryptWithKey(dataToStore, this.cryptoKey, salt);
+      const salt = window.crypto.getRandomValues(new Uint8Array(16));
+      const encrypted = await this.encryptWithKey(dataToStore, this.cryptoKey!, salt);
+      const encryptedKey = `smile-encrypted-${key}`;
+      localStorage.setItem(encryptedKey, JSON.stringify(encrypted));
       
-      localStorage.setItem(`smile-encrypted-${key}`, JSON.stringify(encrypted));
+      // Remove any plain text version
+      localStorage.removeItem(key);
       this.updateActivity();
     } catch (error) {
       console.error('Failed to encrypt data:', error);
-      // Fallback to unencrypted storage
-      localStorage.setItem(key, dataToStore);
+      throw error;
     }
   }
 
   /**
-   * Securely retrieve data
+   * Enhanced secure retrieval with auto-unlock attempt
    */
   async getItem(key: string): Promise<any> {
     const encryptedKey = `smile-encrypted-${key}`;
     
-    if (!this.isEncryptionEnabled() || !this.isStorageUnlocked()) {
-      // Try encrypted first, then unencrypted
-      const encryptedData = localStorage.getItem(encryptedKey);
-      if (encryptedData && this.isEncryptionEnabled()) {
-        // Data is encrypted but we're locked
+    if (!this.isEncryptionEnabled()) {
+      const stored = localStorage.getItem(key);
+      return stored ? JSON.parse(stored) : null;
+    }
+
+    if (!this.isStorageUnlocked()) {
+      // Try to restore session first
+      if (await this.attemptSessionRestore()) {
+        // Session restored, continue with decryption
+      } else {
+        // Need to show unlock modal
+        this.showUnlockModal();
         return null;
       }
-      
-      const unencryptedData = localStorage.getItem(key);
-      return unencryptedData ? JSON.parse(unencryptedData) : null;
     }
 
     try {
       const encryptedData = localStorage.getItem(encryptedKey);
-      if (encryptedData && this.cryptoKey) {
-        const encrypted: EncryptedData = JSON.parse(encryptedData);
-        const decrypted = await this.decryptWithKey(encrypted, this.cryptoKey);
-        this.updateActivity();
-        return JSON.parse(decrypted);
+      if (!encryptedData) {
+        // Try fallback to plain storage
+        const plainData = localStorage.getItem(key);
+        return plainData ? JSON.parse(plainData) : null;
       }
-      
-      // Fallback to unencrypted data
-      const unencryptedData = localStorage.getItem(key);
-      return unencryptedData ? JSON.parse(unencryptedData) : null;
+
+      const encrypted: EncryptedData = JSON.parse(encryptedData);
+      const decrypted = await this.decryptWithKey(encrypted, this.cryptoKey!);
+      this.updateActivity();
+      return JSON.parse(decrypted);
     } catch (error) {
       console.error('Failed to decrypt data:', error);
       return null;
@@ -355,6 +390,29 @@ class SecureStorage {
   }
 
   /**
+   * Check if storage needs unlock
+   */
+  needsUnlock(): boolean {
+    return this.isEncryptionEnabled() && !this.isStorageUnlocked();
+  }
+
+  /**
+   * Get auto-lock time remaining (in seconds)
+   */
+  getTimeUntilAutoLock(): number {
+    if (!this.isStorageUnlocked()) return 0;
+    
+    const settings = this.getSecuritySettings();
+    if (settings.autoLockInterval === 0) return -1; // Never
+    
+    const timeSinceActivity = Date.now() - this.lastActivity;
+    const lockInterval = settings.autoLockInterval * 60 * 1000; // Convert to ms
+    const remaining = lockInterval - timeSinceActivity;
+    
+    return Math.max(0, Math.floor(remaining / 1000));
+  }
+
+  /**
    * Clear all encrypted data
    */
   clearEncryptedData(): void {
@@ -367,45 +425,195 @@ class SecureStorage {
   }
 
   /**
-   * Danger: Reset and delete all Smile app data.
-   * - Clears all keys starting with 'smile-' and 'smile-encrypted-'
-   * - Removes encryption artifacts and settings
-   * - Locks storage and dispatches a reset event
+   * Reset and delete all data
    */
   async resetAndDeleteAllData(): Promise<void> {
     try {
-      // Remove encrypted payloads
-      this.clearEncryptedData();
-
-      // Remove all Smile keys (settings, flags, etc.)
+      // Clear all Smile app data
       const keys = Object.keys(localStorage);
-      for (const key of keys) {
-        if (key.startsWith('smile-')) {
+      keys.forEach(key => {
+        if (key.startsWith('smile-') || key.startsWith('smile-encrypted-')) {
           localStorage.removeItem(key);
         }
-      }
-
-      // Ensure artifacts are gone
-      localStorage.removeItem('smile-encryption-salt');
-      localStorage.removeItem('smile-encryption-test');
-      localStorage.removeItem('smile-security-settings');
-
-      // Reset in-memory state
-      this.cryptoKey = null;
-      this.isUnlocked = false;
-      this.clearAutoLockTimer();
-
-      // Notify listeners
-      window.dispatchEvent(new CustomEvent('smile:data-reset'));
-      window.dispatchEvent(new CustomEvent('smile:storage-locked'));
+      });
+      
+      // Clear session data
+      sessionStorage.removeItem(this.SESSION_KEY);
+      
+      // Lock storage
+      this.lock();
+      
+      // Dispatch reset event
+      window.dispatchEvent(new CustomEvent('smile:storage-reset'));
     } catch (err) {
-      console.error('resetAndDeleteAllData failed:', err);
-      throw err;
+      console.error('Failed to reset data:', err);
     }
   }
 
   // Private methods
 
+  private createSession(password: string): void {
+    const settings = this.getSecuritySettings();
+    if (!settings.unlockOnReload) return;
+
+    // Create a simple hash of the password for validation (not for security)
+    const keyFingerprint = btoa(password.slice(0, 3) + password.slice(-3)).slice(0, 8);
+    
+    this.sessionData = {
+      unlocked: true,
+      sessionStart: Date.now(),
+      lastActivity: Date.now(),
+      duration: settings.sessionDuration,
+      keyFingerprint: keyFingerprint
+    };
+    
+    this.saveSession();
+  }
+
+  private saveSession(): void {
+    if (this.sessionData) {
+      this.sessionData.lastActivity = this.lastActivity;
+      sessionStorage.setItem(this.SESSION_KEY, JSON.stringify(this.sessionData));
+    }
+  }
+
+  private restoreSession(): void {
+    try {
+      const sessionStr = sessionStorage.getItem(this.SESSION_KEY);
+      if (!sessionStr) return;
+
+      const session: UnlockSession = JSON.parse(sessionStr);
+      const now = Date.now();
+      const sessionAge = now - session.sessionStart;
+      const maxSessionAge = session.duration * 60 * 1000; // Convert to ms
+
+      // Check if session is still valid
+      if (sessionAge < maxSessionAge && session.unlocked) {
+        this.sessionData = session;
+        this.lastActivity = session.lastActivity;
+        // Don't automatically unlock here, just preserve session data
+      } else {
+        // Session expired
+        sessionStorage.removeItem(this.SESSION_KEY);
+      }
+    } catch (error) {
+      console.error('Failed to restore session:', error);
+      sessionStorage.removeItem(this.SESSION_KEY);
+    }
+  }
+
+  private async attemptSessionRestore(): Promise<boolean> {
+    if (!this.sessionData || !this.isEncryptionEnabled()) return false;
+
+    const now = Date.now();
+    const sessionAge = now - this.sessionData.sessionStart;
+    const maxSessionAge = this.sessionData.duration * 60 * 1000;
+
+    if (sessionAge >= maxSessionAge) {
+      // Session expired
+      this.sessionData = null;
+      sessionStorage.removeItem(this.SESSION_KEY);
+      return false;
+    }
+
+    // Session is valid but we need the actual key
+    // This would require storing the key securely, which we don't do for security
+    // So we still need user to enter password, but we can skip some validation
+    return false;
+  }
+
+  private showUnlockModal(): void {
+    // Dispatch event to show unlock modal
+    this.dispatchStorageEvent('unlock-required');
+  }
+
+  /**
+   * Check if unlock is needed and automatically show unlock modal
+   */
+  checkAndShowUnlockModal(): void {
+    if (this.needsUnlock()) {
+      this.showUnlockModal();
+    }
+  }
+
+  private setupActivityTracking(): void {
+    const updateActivity = () => this.updateActivity();
+    
+    ['click', 'keydown', 'scroll', 'touchstart', 'mousemove'].forEach(event => {
+      document.addEventListener(event, updateActivity, { passive: true });
+    });
+
+    // Set up activity monitoring
+    this.activityTimer = window.setInterval(() => {
+      this.checkAutoLock();
+    }, this.ACTIVITY_CHECK_INTERVAL);
+  }
+
+  private updateActivity(): void {
+    this.lastActivity = Date.now();
+    
+    // Update session if it exists
+    if (this.sessionData) {
+      this.saveSession();
+    }
+    
+    // Update security settings
+    const settings = this.getSecuritySettings();
+    settings.lastActivity = this.lastActivity;
+    this.updateSecuritySettings(settings);
+  }
+
+  private checkAutoLock(): void {
+    if (!this.isStorageUnlocked()) return;
+
+    const settings = this.getSecuritySettings();
+    if (settings.autoLockInterval === 0) return; // Auto-lock disabled
+
+    const timeSinceActivity = Date.now() - this.lastActivity;
+    const lockInterval = settings.autoLockInterval * 60 * 1000; // Convert to ms
+
+    if (timeSinceActivity >= lockInterval) {
+      this.lock();
+    }
+  }
+
+  private setupAutoLock(): void {
+    this.clearAutoLockTimer();
+    
+    const settings = this.getSecuritySettings();
+    if (settings.autoLockInterval === 0 || !this.isStorageUnlocked()) return;
+
+    const lockInterval = settings.autoLockInterval * 60 * 1000; // Convert to ms
+    this.autoLockTimer = window.setTimeout(() => {
+      this.lock();
+    }, lockInterval);
+  }
+
+  private clearAutoLockTimer(): void {
+    if (this.autoLockTimer) {
+      clearTimeout(this.autoLockTimer);
+      this.autoLockTimer = null;
+    }
+  }
+
+  private clearActivityTimer(): void {
+    if (this.activityTimer) {
+      clearInterval(this.activityTimer);
+      this.activityTimer = null;
+    }
+  }
+
+  private dispatchStorageEvent(type: 'locked' | 'unlocked' | 'unlock-required'): void {
+    window.dispatchEvent(new CustomEvent(`smile:storage-${type}`, {
+      detail: {
+        isUnlocked: this.isUnlocked,
+        isEncrypted: this.isEncryptionEnabled(),
+        timeUntilAutoLock: this.getTimeUntilAutoLock()
+      }
+    }));
+  }
+
+  // Crypto helper methods
   private async deriveKeyFromPassword(password: string, salt: Uint8Array): Promise<CryptoKey> {
     const encoder = new TextEncoder();
     const passwordBuffer = encoder.encode(password);
@@ -494,50 +702,8 @@ class SecureStorage {
     return bytes.buffer;
   }
 
-  private setupActivityTracking(): void {
-    const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'];
-    events.forEach(event => {
-      document.addEventListener(event, () => this.updateActivity(), true);
-    });
-  }
-
-  private updateActivity(): void {
-    this.lastActivity = Date.now();
-    this.updateSecuritySettings({ lastActivity: this.lastActivity });
-  }
-
-  private setupAutoLock(): void {
-    this.clearAutoLockTimer();
-    
-    const settings = this.getSecuritySettings();
-    // If user chose to remember this session, don't auto-lock until refresh
-    if (this.rememberForSession) {
-      return;
-    }
-    if (settings.autoLockInterval > 0 && this.isStorageUnlocked()) {
-      const interval = settings.autoLockInterval * 60 * 1000; // Convert to milliseconds
-      
-      this.autoLockTimer = window.setTimeout(() => {
-        const timeSinceActivity = Date.now() - this.lastActivity;
-        if (timeSinceActivity >= interval) {
-          this.lock();
-        } else {
-          // Reschedule for remaining time
-          this.setupAutoLock();
-        }
-      }, interval);
-    }
-  }
-
-  private clearAutoLockTimer(): void {
-    if (this.autoLockTimer) {
-      clearTimeout(this.autoLockTimer);
-      this.autoLockTimer = null;
-    }
-  }
-
   private async getAllDecryptedData(): Promise<Record<string, any>> {
-    const allData: Record<string, any> = {};
+    const result: Record<string, any> = {};
     const keys = Object.keys(localStorage);
     
     for (const key of keys) {
@@ -545,12 +711,12 @@ class SecureStorage {
         const originalKey = key.replace('smile-encrypted-', '');
         const value = await this.getItem(originalKey);
         if (value !== null) {
-          allData[key] = value;
+          result[originalKey] = value;
         }
       }
     }
     
-    return allData;
+    return result;
   }
 
   private async decryptAllStoredData(): Promise<void> {
@@ -559,14 +725,13 @@ class SecureStorage {
     for (const key of keys) {
       if (key.startsWith('smile-encrypted-')) {
         const originalKey = key.replace('smile-encrypted-', '');
-        const value = await this.getItem(originalKey);
+        const decryptedValue = await this.getItem(originalKey);
         
-        if (value !== null) {
-          // Store as unencrypted
-          localStorage.setItem(originalKey, JSON.stringify(value));
-          // Remove encrypted version
-          localStorage.removeItem(key);
+        if (decryptedValue !== null) {
+          localStorage.setItem(originalKey, JSON.stringify(decryptedValue));
         }
+        
+        localStorage.removeItem(key);
       }
     }
   }

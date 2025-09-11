@@ -1,0 +1,129 @@
+{
+  "name": "Smiley - Mental Wellbeing Companion",
+  "short_name": "Smiley",
+  "description": "Your personal AI companion for mental wellbeing. Chat, journal, and explore mindfulness with privacy-first AI technology.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f1115",
+  "theme_color": "#3b82f6",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": [
+    "health",
+    "lifestyle",
+    "productivity",
+    "medical",
+    "wellness"
+  ],
+  "icons": [
+    {
+      "src": "/pwa-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/pwa-512x512.png", 
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/smileyback-min.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/ocean-min.png",
+      "sizes": "48x48",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/forest-min.png",
+      "sizes": "48x48", 
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/orange-min.png",
+      "sizes": "48x48",
+      "type": "image/png", 
+      "purpose": "any"
+    },
+    {
+      "src": "/purple-min.png",
+      "sizes": "48x48",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Start Chat Session",
+      "short_name": "Chat",
+      "description": "Begin a new conversation with your AI companion",
+      "url": "/?panel=chat",
+      "icons": [
+        {
+          "src": "/ocean-min.png",
+          "sizes": "48x48"
+        }
+      ]
+    },
+    {
+      "name": "New Journal Entry",
+      "short_name": "Journal",
+      "description": "Write a new journal entry",
+      "url": "/?panel=journal&action=new",
+      "icons": [
+        {
+          "src": "/forest-min.png", 
+          "sizes": "48x48"
+        }
+      ]
+    },
+    {
+      "name": "Mindfulness Exercises",
+      "short_name": "Exercises",
+      "description": "Access breathing and relaxation exercises",
+      "url": "/?panel=exercises",
+      "icons": [
+        {
+          "src": "/purple-min.png",
+          "sizes": "48x48"
+        }
+      ]
+    },
+    {
+      "name": "View Memories",
+      "short_name": "Memories",
+      "description": "Browse your personal memories and insights",
+      "url": "/?panel=memories",
+      "icons": [
+        {
+          "src": "/orange-min.png",
+          "sizes": "48x48"
+        }
+      ]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  },
+  "protocol_handlers": [
+    {
+      "protocol": "web+smile",
+      "url": "/?action=%s"
+    }
+  ],
+  "capture_links": "existing-client-navigate"
+}

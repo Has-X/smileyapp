@@ -63,7 +63,7 @@ class DemoStreamer {
     // Context-aware responses
     if (lowerMessage.includes('hello') || lowerMessage.includes('hi')) {
       return [
-        "Hello! I'm Smile AI, your wellness-focused companion. How are you feeling today?",
+        "Hello! I'm Smiley, your wellness-focused companion. How are you feeling today?",
         "Hi there! Welcome to our conversation. I'm here to listen and support you.",
         "Greetings! I'm excited to chat with you. What's on your mind?"
       ];

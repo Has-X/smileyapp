@@ -2,7 +2,7 @@
   "name": "smile-ai",
   "type": "module",
   "version": "0.1.0",
-  "description": "Smile AI - A chat-first PWA running local open-weight models",
+  "description": "Smiley - A chat-first PWA running local open-weight models",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",

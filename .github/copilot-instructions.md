@@ -2,7 +2,7 @@
 - [x] Verify that the copilot-instructions.md file in the .github directory is created.
 
 - [x] Clarify Project Requirements
-	Project: Smile AI chat-first PWA using Astro + Preact islands, Tailwind + daisyUI, @vite-pwa/astro
+	Project: Smiley chat-first PWA using Astro + Preact islands, Tailwind + daisyUI, @vite-pwa/astro
 
 - [x] Scaffold the Project
 	Created Astro project with package.json, config files, src structure, pages, API endpoints, and assets

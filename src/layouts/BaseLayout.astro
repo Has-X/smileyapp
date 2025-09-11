@@ -3,7 +3,7 @@ interface Props {
   title?: string;
 }
 
-const { title = 'Smile AI' } = Astro.props;
+const { title = 'Smiley' } = Astro.props;
 
 // Import global styles
 import '../styles/global.css';
@@ -16,7 +16,7 @@ import '../styles/global.css';
       (function(){
         try {
           var mode = localStorage.getItem('smile-theme-mode') || 'light';
-          var accent = localStorage.getItem('smile-accent-color') || 'smile';
+          var accent = localStorage.getItem('smile-accent-color') || 'ocean';
           var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
           var theme = (mode === 'dark' || (mode === 'auto' && prefersDark)) ? (accent + '-dark') : accent;
           document.documentElement.setAttribute('data-theme', theme);
@@ -34,15 +34,91 @@ import '../styles/global.css';
       }
     </style>
     <meta charset="UTF-8" />
-    <meta name="description" content="Smile AI - Chat with local open-weight AI models" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="description" content="Smiley - Your mental wellbeing companion powered by local AI models. Chat, journal, practice mindfulness, and explore emotional wellness with complete privacy and security." />
+    <meta name="keywords" content="mental health, wellbeing, AI companion, local AI, privacy, mindfulness, journaling, emotional wellness, mental health support, therapy assistant, meditation, stress relief" />
+    <meta name="author" content="Smiley" />
+    <meta name="robots" content="index, follow" />
+    <meta name="language" content="English" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://smiley.hasx.dev/" />
+    <meta property="og:title" content="Smiley - Mental Wellbeing Companion" />
+    <meta property="og:description" content="Your personal AI companion for mental wellbeing. Chat, journal, and explore mindfulness with privacy-first AI technology. Supporting mental health through compassionate conversations." />
+    <meta property="og:image" content="https://smiley.hasx.dev/smileyback-min.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Smiley - Mental Wellbeing Companion" />
+    <meta property="og:site_name" content="Smiley" />
+    <meta property="og:locale" content="en_US" />
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://smiley.hasx.dev/" />
+    <meta name="twitter:title" content="Smiley - Mental Wellbeing Companion" />
+    <meta name="twitter:description" content="Your personal AI companion for mental wellbeing. Chat, journal, and explore mindfulness with privacy-first AI technology. Supporting mental health through compassionate conversations." />
+    <meta name="twitter:image" content="https://smiley.hasx.dev/smileyback-min.png" />
+    <meta name="twitter:image:alt" content="Smiley - Mental Wellbeing Companion" />
+    
+    <!-- Additional SEO and Social Meta Tags -->
+    <meta name="theme-color" content="#3b82f6" />
+    <meta name="msapplication-TileColor" content="#3b82f6" />
+    <meta name="msapplication-config" content="/browserconfig.xml" />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://smiley.hasx.dev/" />
+    
+    <!-- Favicon and Icons -->
+    <link rel="icon" type="image/png" href="/ocean-min.png" id="dynamic-favicon" />
+    <link rel="apple-touch-icon" href="/smileyback-min.png" />
+    <link rel="manifest" href="/manifest.json" />
+    
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
-    
-    <!-- PWA meta tags -->
-    <meta name="theme-color" content="#3b82f6" />
     <script is:inline>
+      // Dynamic favicon system based on theme
+      (function(){
+        function updateFavicon() {
+          try {
+            var favicon = document.getElementById('dynamic-favicon');
+            if (!favicon) return;
+            
+            var currentTheme = document.documentElement.getAttribute('data-theme') || 'ocean';
+            
+            // Map themes to favicon files
+            var themeFavicons = {
+              'ocean': '/ocean-min.png',
+              'ocean-dark': '/ocean-min.png',
+              'forest': '/forest-min.png', 
+              'forest-dark': '/forest-min.png',
+              'sunset': '/orange-min.png',
+              'sunset-dark': '/orange-min.png',
+              'orange': '/orange-min.png',
+              'orange-dark': '/orange-min.png',
+              'lavender': '/purple-min.png',
+              'lavender-dark': '/purple-min.png',
+              'purple': '/purple-min.png',
+              'purple-dark': '/purple-min.png',
+            };
+            
+            // Default to ocean if theme not found
+            var faviconPath = themeFavicons[currentTheme] || '/ocean-min.png';
+            favicon.setAttribute('href', faviconPath);
+          } catch(e) {}
+        }
+        
+        // Initial update
+        updateFavicon();
+        
+        // Watch for theme changes
+        var mo = new MutationObserver(updateFavicon);
+        mo.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+        
+        // Also update on load in case theme was set after initial script
+        window.addEventListener('load', updateFavicon);
+      })();
+      
       // Keep the browser UI color in sync with the current accent
       (function(){
         function setThemeColorFromCSS(){
@@ -68,10 +144,22 @@ import '../styles/global.css';
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <meta name="apple-mobile-web-app-title" content="Smile AI" />
+    <meta name="apple-mobile-web-app-title" content="Smiley" />
+    <meta name="application-name" content="Smiley" />
     
-    <!-- Font preload -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <!-- Apple Touch Icon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/smileyback-min.png" />
+    
+    <!-- Microsoft Tiles -->
+    <meta name="msapplication-TileImage" content="/smileyback-min.png" />
+    <meta name="msapplication-TileColor" content="#3b82f6" />
+    <meta name="msapplication-config" content="/browserconfig.xml" />
+    
+    <!-- Additional PWA and Performance -->
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   </head>
