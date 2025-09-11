@@ -5,6 +5,8 @@ class SmileApp {
   private selectedModel: string = '';
   private isOnboardingComplete: boolean = false;
   private debugMode: boolean = false;
+  private hasRevealedChat: boolean = false;
+  private isStreaming: boolean = false;
 
   constructor() {
     this.init();
@@ -130,12 +132,16 @@ class SmileApp {
       messageInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
           e.preventDefault();
-          this.sendMessage();
+          if (!this.isStreaming) {
+            this.sendMessage();
+          }
         }
       });
 
       sendBtn.addEventListener('click', () => {
-        this.sendMessage();
+        if (!this.isStreaming) {
+          this.sendMessage();
+        }
       });
     }
 
@@ -745,6 +751,12 @@ class SmileApp {
     const messageInput = document.getElementById('message-input') as HTMLTextAreaElement;
     if (!messageInput) return;
 
+    // Prevent sending if already streaming
+    if (this.isStreaming) {
+      this.showCustomNotification('Please wait for the current response to finish', 'info');
+      return;
+    }
+
     const message = messageInput.value.trim();
     if (!message) return;
 
@@ -763,13 +775,13 @@ class SmileApp {
     messageInput.value = '';
     messageInput.style.height = 'auto';
 
-    // Hide empty state
-    const emptyState = document.getElementById('empty-state');
-    if (emptyState) {
-      emptyState.style.display = 'none';
-    }
+    // Set streaming state to prevent double sends
+    this.setStreamingState(true);
 
-    // Add user message to UI
+    // Trigger one-time chat reveal animation
+    this.triggerChatRevealAnimation();
+
+    // Add user message to UI (handles empty-state animation)
     this.addMessage('user', message);
 
     // Add assistant placeholder
@@ -818,10 +830,16 @@ class SmileApp {
           }
         }
       }
+      
+      // Reset streaming state on successful completion
+      this.setStreamingState(false);
     } catch (error) {
       console.error('Error sending message:', error);
       this.updateMessage(assistantMessageId, 'Sorry, I encountered an error. Please make sure Ollama is running and try again.');
       this.showCustomNotification('Connection error. Check if Ollama is running.', 'error');
+      
+      // Reset streaming state on error
+      this.setStreamingState(false);
     }
   }
 
@@ -829,17 +847,23 @@ class SmileApp {
     const messageInput = document.getElementById('message-input') as HTMLTextAreaElement;
     if (!messageInput) return;
 
+    // Prevent sending if already streaming
+    if (this.isStreaming) {
+      this.showCustomNotification('Please wait for the current response to finish', 'info');
+      return;
+    }
+
     // Clear input and reset height
     messageInput.value = '';
     messageInput.style.height = 'auto';
 
-    // Hide empty state
-    const emptyState = document.getElementById('empty-state');
-    if (emptyState) {
-      emptyState.style.display = 'none';
-    }
+    // Set streaming state to prevent double sends
+    this.setStreamingState(true);
 
-    // Add user message to UI
+    // Trigger one-time chat reveal animation
+    this.triggerChatRevealAnimation();
+
+    // Add user message to UI (this will handle empty state animation)
     this.addMessage('user', message);
 
     // Add assistant placeholder
@@ -858,13 +882,53 @@ class SmileApp {
         },
         () => {
           console.log('Demo streaming complete');
+          // Reset streaming state on demo completion
+          this.setStreamingState(false);
         }
       );
     } catch (error) {
       console.error('Error in demo streaming:', error);
       this.updateMessage(assistantMessageId, 'Demo streaming error occurred.');
       this.showCustomNotification('Demo streaming error', 'error');
+      
+      // Reset streaming state on error
+      this.setStreamingState(false);
     }
+  }
+
+  private triggerChatRevealAnimation() {
+    if (this.hasRevealedChat) return;
+    const messagesContainer = document.getElementById('messages-container');
+    const emptyState = document.getElementById('empty-state');
+    const chatHeader = document.getElementById('chat-header');
+    if (!messagesContainer) return;
+
+    // Trigger enhanced chat reveal animation
+    messagesContainer.classList.add('animating');
+    messagesContainer.classList.add('chat-active');
+
+    // Hide empty state with enhanced animation
+    if (emptyState) {
+      emptyState.classList.add('chat-starting');
+    }
+
+    // Show chat header with enhanced animation
+    if (chatHeader) {
+      chatHeader.style.display = 'block';
+      setTimeout(() => {
+        chatHeader.classList.add('show');
+      }, 100);
+    }
+
+    // Clean up after animation
+    setTimeout(() => {
+      messagesContainer.classList.remove('animating');
+      if (emptyState) {
+        emptyState.style.display = 'none';
+      }
+    }, 800);
+
+    this.hasRevealedChat = true;
   }
 
   private toggleDebugMode() {
@@ -882,6 +946,42 @@ class SmileApp {
     }
   }
 
+  private setStreamingState(streaming: boolean) {
+    this.isStreaming = streaming;
+    const sendBtn = document.getElementById('send-btn') as HTMLButtonElement;
+    const messageInput = document.getElementById('message-input') as HTMLTextAreaElement;
+    
+    if (sendBtn && messageInput) {
+      if (streaming) {
+        // Store if input was focused before disabling
+        const wasFocused = document.activeElement === messageInput;
+        messageInput.dataset.wasFocused = wasFocused.toString();
+        
+        // Disable controls and show streaming state
+        sendBtn.disabled = true;
+        sendBtn.classList.add('streaming');
+        messageInput.disabled = true;
+        messageInput.classList.add('streaming');
+        messageInput.placeholder = 'AI is responding...';
+      } else {
+        // Re-enable controls and remove streaming state
+        sendBtn.disabled = false;
+        sendBtn.classList.remove('streaming');
+        messageInput.disabled = false;
+        messageInput.classList.remove('streaming');
+        messageInput.placeholder = 'Message Smile AI...';
+        
+        // Auto-refocus if it was focused before
+        if (messageInput.dataset.wasFocused === 'true') {
+          setTimeout(() => {
+            messageInput.focus();
+          }, 100);
+        }
+        messageInput.removeAttribute('data-was-focused');
+      }
+    }
+  }
+
   private initDebugShortcut() {
     document.addEventListener('keydown', (e) => {
       // Toggle debug mode with Ctrl+Shift+D
@@ -896,38 +996,47 @@ class SmileApp {
     const messagesContainer = document.getElementById('messages-container');
     if (!messagesContainer) return '';
 
+    // Handle empty state animation on first message
+    const emptyState = document.getElementById('empty-state');
+    if (emptyState && emptyState.style.display !== 'none') {
+      // Add enhanced chat starting animation
+      emptyState.classList.add('chat-starting');
+      
+      // Temporarily prevent scrollbars during animation
+      messagesContainer.classList.add('animating');
+      messagesContainer.classList.add('chat-active');
+      
+      // Show chat header
+      if ((window as any).showChatHeader) {
+        (window as any).showChatHeader();
+      }
+      
+      // Hide empty state after animation
+      setTimeout(() => {
+        emptyState.style.display = 'none';
+        messagesContainer.classList.remove('animating');
+      }, 800);
+    }
+
     const messageId = `message-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
     const messageDiv = document.createElement('div');
     messageDiv.id = messageId;
-    messageDiv.className = `message ${role === 'user' ? 'message-user' : ''}`;
-
-    const avatar = document.createElement('div');
-    avatar.className = 'message-avatar';
-    avatar.style.backgroundColor = role === 'user' ? 'rgb(var(--md-primary))' : 'rgb(var(--md-surface-variant))';
-    avatar.style.color = role === 'user' ? 'rgb(var(--md-on-primary))' : 'rgb(var(--md-on-surface-variant))';
-    avatar.textContent = role === 'user' ? 'U' : 'A';
-
-    const contentDiv = document.createElement('div');
-    contentDiv.className = 'message-content';
+    messageDiv.className = `message message-${role}`;
 
     const bubble = document.createElement('div');
-    bubble.className = `message-bubble ${role === 'user' ? 'message-bubble-user' : 'message-bubble-assistant'}`;
+    bubble.className = 'message-bubble';
     bubble.textContent = content;
 
-    const time = document.createElement('div');
-    time.className = 'message-time';
-    time.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-    contentDiv.appendChild(bubble);
-    contentDiv.appendChild(time);
-
-    messageDiv.appendChild(avatar);
-    messageDiv.appendChild(contentDiv);
-
+    messageDiv.appendChild(bubble);
     messagesContainer.appendChild(messageDiv);
 
-    // Scroll to bottom
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    // Scroll to bottom smoothly
+    setTimeout(() => {
+      messagesContainer.scrollTo({
+        top: messagesContainer.scrollHeight,
+        behavior: 'smooth'
+      });
+    }, 100);
 
     return messageId;
   }
@@ -937,14 +1046,62 @@ class SmileApp {
     if (messageElement) {
       const bubble = messageElement.querySelector('.message-bubble');
       if (bubble) {
-        bubble.textContent = content;
+        // Get the previous content length to determine new characters
+        const previousContent = bubble.textContent || '';
+        const newCharacters = content.slice(previousContent.length);
+        
+        if (newCharacters.length > 0) {
+          // Apply streaming reveal effect to new characters
+          this.animateStreamingText(bubble as HTMLElement, content, previousContent.length);
+        } else {
+          // Fallback for complete content replacement
+          bubble.textContent = content;
+        }
         
         // Scroll to bottom
         const messagesContainer = document.getElementById('messages-container');
         if (messagesContainer) {
-          messagesContainer.scrollTop = messagesContainer.scrollHeight;
+          messagesContainer.scrollTo({
+            top: messagesContainer.scrollHeight,
+            behavior: 'smooth'
+          });
         }
       }
+    }
+  }
+
+  private animateStreamingText(bubble: HTMLElement, fullContent: string, startIndex: number) {
+    // Clear existing content and rebuild with character spans
+    bubble.innerHTML = '';
+    
+    // Add characters with spans for animation
+    for (let i = 0; i < fullContent.length; i++) {
+      const char = fullContent[i];
+      const span = document.createElement('span');
+      span.textContent = char === ' ' ? '\u00A0' : char; // Use non-breaking space
+      span.className = 'stream-char';
+      
+      if (i < startIndex) {
+        // Characters that were already revealed
+        span.classList.add('revealed');
+      } else {
+        // New characters that need animation
+        span.style.opacity = '0';
+        span.style.transform = 'translateY(10px) scale(0.8)';
+        span.style.filter = 'blur(3px)';
+        span.style.transition = 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+        
+        // Trigger animation with staggered delay
+        const delay = (i - startIndex) * 30; // 30ms delay between characters
+        setTimeout(() => {
+          span.style.opacity = '1';
+          span.style.transform = 'translateY(0) scale(1)';
+          span.style.filter = 'blur(0)';
+          span.classList.add('revealed');
+        }, delay);
+      }
+      
+      bubble.appendChild(span);
     }
   }
 
@@ -955,11 +1112,23 @@ class SmileApp {
       const messages = messagesContainer.querySelectorAll('.message');
       messages.forEach(message => message.remove());
       
-      // Show empty state
+      // Reset and show empty state
       const emptyState = document.getElementById('empty-state');
       if (emptyState) {
+        emptyState.classList.remove('slide-up');
         emptyState.style.display = 'flex';
       }
+      
+      // Hide chat header
+      if ((window as any).hideChatHeader) {
+        (window as any).hideChatHeader();
+      }
+      
+      // Remove animation class if present
+      messagesContainer.classList.remove('animating');
+      
+      // Reset the reveal state
+      this.hasRevealedChat = false;
     }
   }
 

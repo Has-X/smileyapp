@@ -1,15 +1,42 @@
+
+
 <!-- Chat panel -->
 <div id="panel-chat" class="flex-1 flex flex-col chat-panel app-panel cursor-pointer" onclick="focusMessageInput()">
   <!-- Debug Mode Indicator -->
   <div id="debug-indicator" class="fixed top-4 right-4 bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-medium z-50" style="display: none;">
     DEBUG MODE
   </div>
+
+  <!-- Chat Panel Header -->
+  <div class="p-6 max-w-4xl mx-auto w-full" id="chat-header" style="display: none;">
+    <div class="panel-section-header">
+      <div class="header-left-section">
+        <div class="section-title">
+          <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+            <line x1="9" y1="9" x2="9.01" y2="9"/>
+            <line x1="15" y1="9" x2="15.01" y2="9"/>
+          </svg>
+          Conversation
+        </div>
+        <div class="section-count-island" id="chat-back-btn-container">
+          <span class="section-count" id="chat-back-btn" title="Return to home">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Messages area -->
-  <div id="messages-container" class="flex-1 overflow-y-auto px-6 py-8 space-y-4 min-h-[60vh]">
+  <div id="messages-container" class="flex-1 overflow-y-auto py-6 px-4 min-h-[60vh]">
   <!-- Background intentionally left clean (mindfulness cards removed) -->
 
     <!-- Empty state -->
-    <div id="empty-state" class="flex-1 flex flex-col items-center justify-center text-center w-full max-w-4xl mx-auto px-8 py-12">
+    <div id="empty-state" class="flex-1 flex flex-col items-center justify-center text-center w-full max-w-4xl mx-auto px-8 py-12 empty-state-container">
       <!-- Enhanced visual backdrop -->
       <div class="absolute inset-0 overflow-hidden pointer-events-none">
         <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-radial from-primary/5 to-transparent rounded-full blur-3xl animate-pulse-slow"></div>
@@ -17,7 +44,7 @@
       </div>
       
       <!-- Centered breathing circle animation with enhanced presentation -->
-      <div class="breathing-circle-container mb-16 flex flex-col items-center justify-center relative z-10">
+      <div class="breathing-circle-container mb-16 flex flex-col items-center justify-center relative z-10 empty-state-icon">
         <div class="breathing-circle-extra-large relative">
           <div class="breathing-inner-extra-large">
             <div class="chat-icon-background-extra-large">
@@ -33,7 +60,7 @@
       </div>
       
       <!-- Enhanced typography with fancy misty reveal animation -->
-      <div class="mb-16 flex flex-col items-center relative z-10">
+      <div class="mb-16 flex flex-col items-center relative z-10 empty-state-text">
         <div class="text-reveal-container">
           <h2 class="text-5xl font-extralight text-on-surface text-center leading-tight tracking-wide mb-4 misty-text-reveal">
             <span class="word-reveal" data-delay="0">Share</span>
@@ -52,6 +79,7 @@
   <div class="p-6 pb-8">
     <div class="modern-chat-input">
       <div class="chat-input-container">
+        <!-- Streaming status indicator removed -->
         <textarea 
           id="message-input" 
           class="chat-textarea" 
@@ -72,6 +100,159 @@
 <!-- Modal removed - using inline collapsible list instead -->
 
 <style>
+  /* Enhanced chat reveal animations - messages appear from center */
+  .empty-state-container {
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .empty-state-container.chat-starting {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+    pointer-events: none;
+  }
+
+  .empty-state-icon,
+  .empty-state-text {
+    transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .empty-state-container.chat-starting .empty-state-icon {
+    opacity: 0;
+    transform: translateY(40px) scale(0.9);
+  }
+
+  .empty-state-container.chat-starting .empty-state-text {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+
+  /* Enhanced message animations - messages use global.css animation */
+  .message.user {
+    animation-delay: 0.1s;
+    /* Ensure user messages align properly from start */
+    justify-content: flex-end;
+  }
+
+  .message.assistant {
+    animation-delay: 0.3s;
+    /* Ensure assistant messages align properly from start */
+    justify-content: flex-start;
+  }
+
+  /* Enhanced chat header animations */
+  #chat-header {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.98);
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  #chat-header.show {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  /* Enhanced messages container animations */
+  #messages-container {
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  #messages-container.chat-active {
+    transform: translateY(0) scale(1);
+  }
+
+  /* Mobile responsiveness for messages container */
+  @media (max-width: 768px) {
+    #messages-container {
+      padding: 1rem !important;
+      min-height: 50vh !important;
+    }
+  }
+
+  @media (max-width: 480px) {
+    #messages-container {
+      padding: 0.75rem !important;
+      min-height: 45vh !important;
+    }
+  }
+
+  /* Enhanced chat input with improved focus states */
+  .modern-chat-input {
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .chat-input-container {
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .chat-input-container:focus-within {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px -5px rgba(var(--md-primary), 0.25);
+  }
+
+  .chat-textarea:focus {
+    transform: scale(1.01);
+  }
+
+  .chat-send-btn {
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .chat-send-btn:hover:not(:disabled) {
+    transform: scale(1.05) rotate(5deg);
+    background: rgba(var(--md-primary), 0.9);
+  }
+
+  .chat-send-btn:active:not(:disabled) {
+    transform: scale(0.95) rotate(-2deg);
+  }
+
+  /* Mobile responsiveness for chat input */
+  @media (max-width: 768px) {
+    .modern-chat-input {
+      padding: 1rem !important;
+    }
+    .chat-textarea {
+      font-size: 16px; /* Prevents zoom on iOS */
+      padding: 0.875rem 1rem;
+    }
+    .chat-send-btn {
+      padding: 0.875rem;
+      min-width: 2.75rem;
+      min-height: 2.75rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .modern-chat-input {
+      padding: 0.75rem !important;
+    }
+    .chat-input-container {
+      gap: 0.5rem;
+    }
+    .chat-textarea {
+      font-size: 16px; /* Prevents zoom on iOS */
+      padding: 0.75rem 0.875rem;
+    }
+    .chat-send-btn {
+      padding: 0.75rem;
+      min-width: 2.5rem;
+      min-height: 2.5rem;
+    }
+    .chat-send-btn svg {
+      width: 1.125rem;
+      height: 1.125rem;
+    }
+  }
+
+  /* Prevent scrollbar during animations */
+  #messages-container {
+    overflow-x: hidden;
+  }
+
+  #messages-container.animating {
+    overflow-y: hidden;
+  }
+
   /* Misty text reveal - static CSS included in head of component */
   .text-reveal-container {
     position: relative;
@@ -152,6 +333,187 @@
     text-shadow: 0 4px 12px rgba(var(--md-primary), 0.3);
     transition: all 0.3s ease;
   }
+
+  /* Mobile responsiveness for empty state */
+  @media (max-width: 768px) {
+    .empty-state-container {
+      padding: 1rem !important;
+    }
+    .empty-state-container h2 {
+      font-size: 2.5rem !important;
+      line-height: 1.2 !important;
+    }
+    .breathing-circle-container {
+      margin-bottom: 3rem !important;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .empty-state-container {
+      padding: 0.75rem !important;
+    }
+    .empty-state-container h2 {
+      font-size: 2rem !important;
+      line-height: 1.3 !important;
+      margin-bottom: 1rem !important;
+    }
+    .breathing-circle-container {
+      margin-bottom: 2rem !important;
+    }
+    .breathing-circle-extra-large {
+      width: 120px !important;
+      height: 120px !important;
+    }
+    .breathing-inner-extra-large {
+      width: 80px !important;
+      height: 80px !important;
+    }
+    .chat-icon-background-extra-large {
+      width: 60px !important;
+      height: 60px !important;
+    }
+  }
+
+  /* Back button styling - make span clickable and ensure proper icon sizing */
+  #chat-back-btn {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  #chat-back-btn:hover {
+    transform: translateX(-2px) scale(1.05);
+  }
+
+  #chat-back-btn:active {
+    transform: translateX(-1px) scale(0.98);
+  }
+
+  #chat-back-btn svg {
+    width: 16px;
+    height: 16px;
+    transition: all 0.3s ease;
+  }
+
+  #chat-back-btn:hover svg {
+    transform: translateX(-1px);
+  }
+
+  /* Streaming state styles for enhanced UX */
+  .chat-send-btn.streaming {
+    background: rgba(var(--md-primary), 0.6) !important;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  .chat-send-btn.streaming svg {
+    animation: streamingPulse 1.5s ease-in-out infinite;
+  }
+
+  .chat-textarea.streaming {
+    opacity: 0.7;
+    cursor: not-allowed;
+    background: rgba(var(--md-surface-variant), 0.4);
+  }
+
+  .chat-textarea.streaming::placeholder {
+    opacity: 0.5;
+  }
+
+  @keyframes streamingPulse {
+    0%, 100% { 
+      opacity: 0.6; 
+      transform: scale(1);
+    }
+    50% { 
+      opacity: 1; 
+      transform: scale(1.1);
+    }
+  }
+
+  /* Enhanced disabled state for better visual feedback */
+  .chat-send-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+    transform: scale(0.98);
+    transition: all 0.3s ease;
+  }
+
+  .chat-textarea:disabled {
+    cursor: not-allowed;
+    background: rgba(var(--md-surface-variant), 0.3);
+    transform: scale(0.99);
+    transition: all 0.3s ease;
+  }
+
+  /* Chat header fade animations - enhanced */
+  #chat-header {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.98);
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  #chat-header.show {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  /* Mobile responsiveness for chat header */
+  @media (max-width: 768px) {
+    #chat-header {
+      padding: 1rem !important;
+    }
+    .section-title {
+      font-size: 1.25rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    #chat-header {
+      padding: 0.75rem !important;
+    }
+    .section-title {
+      font-size: 1.125rem;
+    }
+    .section-count-island {
+      padding: 0.375rem 0.5rem;
+    }
+  }
+
+  /* Enhanced reverse fade-out animation for returning to frontpage */
+  .chat-fade-out {
+    animation: chatFadeOut 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  }
+
+  .messages-fade-out {
+    animation: messagesFadeOut 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  }
+
+  @keyframes chatFadeOut {
+    0% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-30px) scale(0.98);
+      pointer-events: none;
+    }
+  }
+
+  @keyframes messagesFadeOut {
+    0% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(30px) scale(0.95);
+    }
+  }
 </style>
 
 <script>
@@ -212,7 +574,7 @@
         const delay = parseInt(w.getAttribute('data-delay') || '0', 10) || 0;
         setTimeout(() => {
           w.classList.add('reveal-active');
-        }, 300 + delay);
+        }, 500 + delay); // Increased delay to 500ms to prevent flash
       });
     });
   }
@@ -229,9 +591,113 @@
   (window as any).fillMessage = fillMessage;
   (window as any).focusMessageInput = focusMessageInput;
   (window as any).triggerTextAnimation = triggerTextAnimation;
+  (window as any).showChatHeader = showChatHeader;
+  (window as any).hideChatHeader = hideChatHeader;
+  (window as any).fadeOutToFrontpage = fadeOutToFrontpage;
+
+  // Chat header show/hide functions
+  function showChatHeader() {
+    const header = document.getElementById('chat-header');
+    if (header) {
+      header.style.display = 'block';
+      setTimeout(() => {
+        header.classList.add('show');
+      }, 10);
+    }
+  }
+
+  function hideChatHeader() {
+    const header = document.getElementById('chat-header');
+    if (header) {
+      header.classList.remove('show');
+      setTimeout(() => {
+        header.style.display = 'none';
+      }, 600);
+    }
+  }
+
+  // Fade out animation to return to frontpage
+  function fadeOutToFrontpage() {
+    const messagesContainer = document.getElementById('messages-container');
+    const emptyState = document.getElementById('empty-state');
+    const chatHeader = document.getElementById('chat-header');
+    const textContainer = document.querySelector('.text-reveal-container') as HTMLElement;
+    
+    // Start fade out animations
+    if (chatHeader) chatHeader.classList.add('chat-fade-out');
+    if (messagesContainer) messagesContainer.classList.add('messages-fade-out');
+    
+    // Immediately hide the text to prevent flash
+    if (textContainer) {
+      textContainer.style.opacity = '0';
+      textContainer.classList.remove('reveal-ready');
+      const words = textContainer.querySelectorAll('.word-reveal');
+      words.forEach(w => {
+        w.classList.remove('ready', 'reveal-active');
+      });
+    }
+    
+    // After fade out, restore empty state and clean up
+    setTimeout(() => {
+      // Clear messages
+      if (messagesContainer) {
+        const messages = messagesContainer.querySelectorAll('.message');
+        messages.forEach(msg => msg.remove());
+        messagesContainer.classList.remove('messages-fade-out', 'animating', 'chat-active');
+      }
+      
+      // Restore empty state
+      if (emptyState) {
+        emptyState.style.display = 'flex';
+        emptyState.classList.remove('chat-starting');
+      }
+
+      // Ensure the text reveal container is reset (clear any inline opacity)
+      const textContainerAfter = document.querySelector('.text-reveal-container') as HTMLElement | null;
+      if (textContainerAfter) {
+        // Remove inline opacity set during fade-out so CSS animations can control visibility
+        textContainerAfter.style.opacity = '';
+        // Ensure reveal classes are not present so initMistyTextReveal can re-run cleanly
+        textContainerAfter.classList.remove('reveal-ready');
+        const wordsAfter = textContainerAfter.querySelectorAll('.word-reveal');
+        wordsAfter.forEach(w => w.classList.remove('ready', 'reveal-active'));
+      }
+      
+      // Hide and reset header
+      if (chatHeader) {
+        chatHeader.style.display = 'none';
+        chatHeader.classList.remove('chat-fade-out', 'show');
+      }
+      
+      // Reset app state if available
+      if ((window as any).smileApp) {
+        (window as any).smileApp.hasRevealedChat = false;
+      }
+      
+      // Re-trigger text reveal animation after a short delay to allow DOM to update
+      setTimeout(() => {
+        initMistyTextReveal();
+      }, 150);
+      
+    }, 800);
+  }
+
+  // Back button functionality
+  function setupBackButton() {
+    const backBtn = document.getElementById('chat-back-btn');
+    if (backBtn) {
+      backBtn.addEventListener('click', (e) => {
+        e.stopPropagation(); // Prevent triggering focus on message input
+        fadeOutToFrontpage();
+      });
+    }
+  }
 
   // Initialize animation when page loads
-  document.addEventListener('DOMContentLoaded', initMistyTextReveal);
+  document.addEventListener('DOMContentLoaded', () => {
+    initMistyTextReveal();
+    setupBackButton();
+  });
 
   // Reset reveal state when the chat panel gets hidden to avoid showing old state on next show
   document.addEventListener('DOMContentLoaded', () => {
