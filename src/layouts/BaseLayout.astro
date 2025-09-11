@@ -15,8 +15,8 @@ import '../styles/global.css';
     <script is:inline>
       (function(){
         try {
-          var mode = localStorage.getItem('smile-theme-mode') || 'light';
-          var accent = localStorage.getItem('smile-accent-color') || 'ocean';
+          var mode = localStorage.getItem('smile-theme-mode') || 'auto';
+          var accent = localStorage.getItem('smile-accent-color') || 'smile';
           var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
           var theme = (mode === 'dark' || (mode === 'auto' && prefersDark)) ? (accent + '-dark') : accent;
           document.documentElement.setAttribute('data-theme', theme);
@@ -84,10 +84,12 @@ import '../styles/global.css';
             var favicon = document.getElementById('dynamic-favicon');
             if (!favicon) return;
             
-            var currentTheme = document.documentElement.getAttribute('data-theme') || 'ocean';
+            var currentTheme = document.documentElement.getAttribute('data-theme') || 'smile';
             
             // Map themes to favicon files
             var themeFavicons = {
+              'smile': '/ocean-min.png',
+              'smile-dark': '/ocean-min.png',
               'ocean': '/ocean-min.png',
               'ocean-dark': '/ocean-min.png',
               'forest': '/forest-min.png', 

@@ -25,14 +25,13 @@ export const GET: APIRoute = async () => {
 
     const data = await response.json();
     const models = data.models || [];
-    const modelNames = models.map((model: any) => model.name);
     
     return new Response(
       JSON.stringify({ 
         available: true,
         healthy: true, 
-        models: modelNames,
-        modelCount: modelNames.length
+        models: models,
+        modelCount: models.length
       }),
       { 
         status: 200,

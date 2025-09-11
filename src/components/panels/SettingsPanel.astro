@@ -77,28 +77,21 @@ import OllamaHelper from '../OllamaHelper.astro';
           <p class="setting-description">Choose which AI model to use for conversations</p>
         </div>
 
+        <!-- Ollama Configuration -->
         <div class="setting-group">
-          <h4 class="setting-title">Ollama Configuration</h4>
-          <p class="setting-description">Manage your local AI models and connection</p>
+          <div class="setting-title">
+            AI Engine Setup
+          </div>
+          <div class="setting-description">
+            Configure your local AI engine for enhanced conversations and personalized responses.
+          </div>
           <button class="btn-outlined" onclick="showOllamaHelper()">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
             </svg>
-            Setup & Manage Ollama
+            Setup & Manage AI Engine
           </button>
-        </div>
-
-        <div class="setting-group">
-          <h4 class="setting-title">Voice Responses</h4>
-          <div class="material-switch">
-            <input type="checkbox" id="tts-enabled" />
-            <div class="switch-track">
-              <div class="switch-thumb"></div>
-            </div>
-            <label for="tts-enabled" class="switch-label">Enable text-to-speech responses</label>
-          </div>
-          <p class="setting-description">Hear AI responses spoken aloud</p>
         </div>
       </section>
 
@@ -113,15 +106,50 @@ import OllamaHelper from '../OllamaHelper.astro';
         
         <div class="setting-group">
           <h4 class="setting-title">Display Mode</h4>
-          <div class="custom-select-wrapper">
-            <select id="theme-mode-select" class="custom-select">
-              <option value="auto">Auto (Follow System)</option>
-              <option value="light">Light Mode</option>
-              <option value="dark">Dark Mode</option>
-            </select>
-            <svg class="select-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-            </svg>
+          <div class="material-segmented-button settings-variant" role="radiogroup" aria-label="Theme mode selection">
+            <button class="segment-button selected" data-mode="auto" role="radio" aria-checked="true" aria-label="Auto mode - follows system">
+              <div class="segment-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="4"/>
+                  <path d="M12 2v2"/>
+                  <path d="M12 20v2"/>
+                  <path d="M4.93 4.93l1.41 1.41"/>
+                  <path d="M17.66 17.66l1.41 1.41"/>
+                  <path d="M2 12h2"/>
+                  <path d="M20 12h2"/>
+                  <path d="M6.34 17.66l-1.41 1.41"/>
+                  <path d="M19.07 4.93l-1.41 1.41"/>
+                </svg>
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="auto-overlay">
+                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                </svg>
+              </div>
+              <span class="segment-label">Auto</span>
+            </button>
+            <button class="segment-button" data-mode="light" role="radio" aria-checked="false" aria-label="Light mode">
+              <div class="segment-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="5"/>
+                  <path d="M12 1v2"/>
+                  <path d="M12 21v2"/>
+                  <path d="M4.22 4.22l1.42 1.42"/>
+                  <path d="M18.36 18.36l1.42 1.42"/>
+                  <path d="M1 12h2"/>
+                  <path d="M21 12h2"/>
+                  <path d="M4.22 19.78l1.42-1.42"/>
+                  <path d="M18.36 5.64l1.42-1.42"/>
+                </svg>
+              </div>
+              <span class="segment-label">Light</span>
+            </button>
+            <button class="segment-button" data-mode="dark" role="radio" aria-checked="false" aria-label="Dark mode">
+              <div class="segment-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                </svg>
+              </div>
+              <span class="segment-label">Dark</span>
+            </button>
           </div>
           <p class="setting-description">Choose between light, dark, or automatic theme</p>
         </div>
@@ -186,35 +214,35 @@ import OllamaHelper from '../OllamaHelper.astro';
     </div>
   </div>
 </div>
-
-<!-- Ollama Helper Modal -->
-<div id="ollama-helper-modal" class="global-modal" style="display: none;">
-  <div class="global-modal-backdrop"></div>
-  <div class="global-modal-container">
-    <div class="global-modal-content ollama-modal-content">
-      <div class="ollama-modal-header">
-        <div class="ollama-modal-icon">
-          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-          </svg>
+  
+  <!-- Ollama Helper Modal -->
+  <div id="ollama-helper-modal" class="global-modal" style="display: none;">
+    <div class="global-modal-backdrop"></div>
+    <div class="global-modal-container">
+      <div class="global-modal-content ollama-modal-content">
+        <div class="ollama-modal-header">
+          <div class="ollama-modal-icon">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.07 2.07 0 0 1-2.44-2.44 2.5 2.5 0 0 1 0-4.92 2.5 2.5 0 0 1 0-4.92 2.5 2.5 0 0 1 0-4.92A2.5 2.5 0 0 1 9.5 2Z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.07 2.07 0 0 0 2.44-2.44 2.5 2.5 0 0 0 0-4.92 2.5 2.5 0 0 0 0-4.92 2.5 2.5 0 0 0 0-4.92A2.5 2.5 0 0 0 14.5 2Z"/>
+            </svg>
+          </div>
+          <div class="ollama-modal-text">
+            <h3 class="ollama-modal-title">AI Engine Setup & Management</h3>
+            <p class="ollama-modal-message">Configure your local AI models and connection</p>
+          </div>
+          <button class="ollama-close-btn" onclick="closeOllamaHelper()">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
         </div>
-        <div class="ollama-modal-text">
-          <h3 class="ollama-modal-title">Ollama Setup & Management</h3>
-          <p class="ollama-modal-message">Configure your local AI models and connection</p>
+        <div class="ollama-modal-body">
+          <OllamaHelper />
         </div>
-        <button class="ollama-close-btn" onclick="closeOllamaHelper()">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-          </svg>
-        </button>
-      </div>
-      <div class="ollama-modal-body">
-        <OllamaHelper />
       </div>
     </div>
   </div>
-</div>
 
 <script>
 // Global function to show Ollama helper
@@ -229,11 +257,18 @@ import OllamaHelper from '../OllamaHelper.astro';
     modal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
     
-    // Initialize Ollama connection check
+    // Trigger OllamaHelper initialization and connection check
     setTimeout(() => {
-      if (typeof (window as any).checkOllamaConnection === 'function') {
-        (window as any).checkOllamaConnection();
-      }
+      // Trigger the initialization event for OllamaHelper
+      const initEvent = new CustomEvent('ollamaHelperInit');
+      document.dispatchEvent(initEvent);
+      
+      // Wait a bit more then trigger connection check
+      setTimeout(() => {
+        if (typeof (window as any).checkOllamaConnection === 'function') {
+          (window as any).checkOllamaConnection();
+        }
+      }, 100);
     }, 100);
   }
 };
@@ -261,6 +296,10 @@ const ollamaModalStyles = `
     overflow-y: auto;
     display: flex;
     flex-direction: column;
+    background: rgb(var(--md-surface-container));
+    border-radius: 1.5rem;
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.16);
+    border: 1px solid rgba(var(--md-outline-variant), 0.2);
   }
   
   .ollama-modal-header {
@@ -270,6 +309,8 @@ const ollamaModalStyles = `
     padding: 2rem 2.5rem 1.5rem;
     border-bottom: 1px solid rgba(var(--md-outline-variant), 0.2);
     position: relative;
+    background: rgba(var(--md-surface), 0.8);
+    backdrop-filter: blur(8px);
   }
   
   .ollama-modal-icon {
@@ -282,6 +323,7 @@ const ollamaModalStyles = `
     justify-content: center;
     color: rgb(var(--md-on-primary));
     flex-shrink: 0;
+    box-shadow: 0 4px 16px rgba(var(--md-primary), 0.3);
   }
   
   .ollama-modal-text {
@@ -293,6 +335,7 @@ const ollamaModalStyles = `
     font-weight: 600;
     color: rgb(var(--md-on-surface));
     margin: 0 0 0.5rem 0;
+    letter-spacing: -0.025em;
   }
   
   .ollama-modal-message {
@@ -300,6 +343,7 @@ const ollamaModalStyles = `
     color: rgb(var(--md-on-surface-variant));
     margin: 0;
     opacity: 0.8;
+    line-height: 1.4;
   }
   
   .ollama-close-btn {
@@ -369,6 +413,34 @@ const ollamaModalStyles = `
     .ollama-modal-body {
       padding: 1.5rem 2rem;
     }
+  }
+  
+  /* Dark theme support */
+  [data-theme="dark"] .ollama-modal-content,
+  [data-theme$="-dark"] .ollama-modal-content {
+    background: rgb(var(--md-surface-container));
+    border-color: rgba(var(--md-outline-variant), 0.3);
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.4);
+  }
+  
+  [data-theme="dark"] .ollama-modal-header,
+  [data-theme$="-dark"] .ollama-modal-header {
+    background: rgba(var(--md-surface-container), 0.8);
+    border-bottom-color: rgba(var(--md-outline-variant), 0.3);
+  }
+  
+  [data-theme="dark"] .ollama-close-btn,
+  [data-theme$="-dark"] .ollama-close-btn {
+    background: rgba(var(--md-surface-container-highest), 0.6);
+    border-color: rgba(var(--md-outline-variant), 0.2);
+    color: rgb(var(--md-on-surface-variant));
+  }
+  
+  [data-theme="dark"] .ollama-close-btn:hover,
+  [data-theme$="-dark"] .ollama-close-btn:hover {
+    background: rgba(var(--md-error), 0.15);
+    border-color: rgba(var(--md-error), 0.3);
+    color: rgb(var(--md-error));
   }
 `;
 
@@ -448,14 +520,50 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-// Initialize model loading when settings panel is first shown
+// Initialize settings theme picker
 document.addEventListener('DOMContentLoaded', () => {
+  // Setup Material Design segmented button functionality
+  const settingsSegmentButtons = document.querySelectorAll('.settings-variant .segment-button');
+  
+  settingsSegmentButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      // Update selection state
+      settingsSegmentButtons.forEach(b => {
+        b.classList.remove('selected');
+        b.setAttribute('aria-checked', 'false');
+      });
+      button.classList.add('selected');
+      button.setAttribute('aria-checked', 'true');
+      
+      const selectedMode = button.getAttribute('data-mode') || 'auto';
+      
+      // Apply theme change
+      if (window.smileApp && typeof window.smileApp.setThemeMode === 'function') {
+        window.smileApp.setThemeMode(selectedMode);
+      }
+    });
+  });
+  
+  // Initialize selection based on current theme
+  const currentMode = localStorage.getItem('smile-theme-mode') || 'auto';
+  const currentButton = document.querySelector(`.settings-variant .segment-button[data-mode="${currentMode}"]`);
+  if (currentButton) {
+    settingsSegmentButtons.forEach(b => {
+      b.classList.remove('selected');
+      b.setAttribute('aria-checked', 'false');
+    });
+    currentButton.classList.add('selected');
+    currentButton.setAttribute('aria-checked', 'true');
+  }
+  
   // Check for models when AI tab becomes active
   const aiTab = document.querySelector('[data-tab="ai"]');
   if (aiTab) {
     aiTab.addEventListener('click', () => {
       setTimeout(() => {
-        (window as any).checkSettingsOllamaConnection();
+        if (typeof (window as any).checkSettingsOllamaConnection === 'function') {
+          (window as any).checkSettingsOllamaConnection();
+        }
       }, 100);
     });
   }
@@ -463,8 +571,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // Load models on first load if AI tab is active
   if (aiTab && aiTab.classList.contains('active')) {
     setTimeout(() => {
-      (window as any).checkSettingsOllamaConnection();
+      if (typeof (window as any).checkSettingsOllamaConnection === 'function') {
+        (window as any).checkSettingsOllamaConnection();
+      }
     }, 500);
   }
+ 
 });
 </script>

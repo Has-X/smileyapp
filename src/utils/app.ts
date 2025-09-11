@@ -3,7 +3,7 @@
 import stateManager from './state-manager.js';
 
 class SmileApp {
-  private models: string[] = [];
+  private models: any[] = [];
   private selectedModel: string = '';
   private isOnboardingComplete: boolean = false;
   private debugMode: boolean = false;
@@ -910,15 +910,18 @@ class SmileApp {
     
     modelSelects.forEach(select => {
       if (this.models.length > 0) {
-        select.innerHTML = this.models.map(model => 
-          `<option value="${model}">${model}</option>`
-        ).join('');
+        select.innerHTML = this.models.map(model => {
+          const modelName = typeof model === 'string' ? model : model.name;
+          return `<option value="${modelName}">${modelName}</option>`;
+        }).join('');
         
-        if (this.selectedModel && this.models.includes(this.selectedModel)) {
+        const modelNames = this.models.map(model => typeof model === 'string' ? model : model.name);
+        if (this.selectedModel && modelNames.includes(this.selectedModel)) {
           select.value = this.selectedModel;
         } else if (this.models.length > 0) {
-          select.value = this.models[0];
-          this.selectedModel = this.models[0];
+          const firstModelName = typeof this.models[0] === 'string' ? this.models[0] : this.models[0].name;
+          select.value = firstModelName;
+          this.selectedModel = firstModelName;
           localStorage.setItem('smile-selected-model', this.selectedModel);
         }
       } else {

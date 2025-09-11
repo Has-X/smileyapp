@@ -110,9 +110,28 @@ import OllamaHelper from './OllamaHelper.astro';
 
           <div class="theme-mode-selection">
             <h3 class="mode-selection-title">Display Mode</h3>
-            <div class="mode-chips">
-              <button class="mode-chip selected" data-mode="auto" aria-label="Auto mode - follows system">
-                <div class="mode-icon">
+            <div class="material-segmented-button" role="radiogroup" aria-label="Theme mode selection">
+              <button class="segment-button selected" data-mode="auto" role="radio" aria-checked="true" aria-label="Auto mode - follows system">
+                <div class="segment-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="4"/>
+                    <path d="M12 2v2"/>
+                    <path d="M12 20v2"/>
+                    <path d="M4.93 4.93l1.41 1.41"/>
+                    <path d="M17.66 17.66l1.41 1.41"/>
+                    <path d="M2 12h2"/>
+                    <path d="M20 12h2"/>
+                    <path d="M6.34 17.66l-1.41 1.41"/>
+                    <path d="M19.07 4.93l-1.41 1.41"/>
+                  </svg>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="auto-overlay">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                  </svg>
+                </div>
+                <span class="segment-label">Auto</span>
+              </button>
+              <button class="segment-button" data-mode="light" role="radio" aria-checked="false" aria-label="Light mode">
+                <div class="segment-icon">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <circle cx="12" cy="12" r="5"/>
                     <path d="M12 1v2"/>
@@ -125,34 +144,15 @@ import OllamaHelper from './OllamaHelper.astro';
                     <path d="M18.36 5.64l1.42-1.42"/>
                   </svg>
                 </div>
-                <span class="mode-name">Auto</span>
-                <span class="mode-desc">Follow system</span>
+                <span class="segment-label">Light</span>
               </button>
-              <button class="mode-chip" data-mode="light" aria-label="Light mode">
-                <div class="mode-icon">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="5"/>
-                    <path d="M12 1v2"/>
-                    <path d="M12 21v2"/>
-                    <path d="M4.22 4.22l1.42 1.42"/>
-                    <path d="M18.36 18.36l1.42 1.42"/>
-                    <path d="M1 12h2"/>
-                    <path d="M21 12h2"/>
-                    <path d="M4.22 19.78l1.42-1.42"/>
-                    <path d="M18.36 5.64l1.42-1.42"/>
-                  </svg>
-                </div>
-                <span class="mode-name">Light</span>
-                <span class="mode-desc">Always light</span>
-              </button>
-              <button class="mode-chip" data-mode="dark" aria-label="Dark mode">
-                <div class="mode-icon">
+              <button class="segment-button" data-mode="dark" role="radio" aria-checked="false" aria-label="Dark mode">
+                <div class="segment-icon">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
                   </svg>
                 </div>
-                <span class="mode-name">Dark</span>
-                <span class="mode-desc">Always dark</span>
+                <span class="segment-label">Dark</span>
               </button>
             </div>
           </div>
@@ -3858,7 +3858,7 @@ class OnboardingFlow {
   
   constructor() {
     // Load current theme settings
-    this.selectedAccent = localStorage.getItem('smile-accent-color') || 'ocean';
+    this.selectedAccent = localStorage.getItem('smile-accent-color') || 'smile';
     this.selectedMode = localStorage.getItem('smile-theme-mode') || 'auto';
     this.init();
     this.detectSystem();
@@ -3891,13 +3891,20 @@ class OnboardingFlow {
     if (nextBtn) nextBtn.addEventListener('click', () => this.nextStep());
     if (finishBtn) finishBtn.addEventListener('click', () => this.finish());
 
-    // Mode selection
-    const modeChips = document.querySelectorAll('.mode-chip');
-    modeChips.forEach(chip => {
-      chip.addEventListener('click', () => {
-        modeChips.forEach(c => c.classList.remove('selected'));
-        chip.classList.add('selected');
-        this.selectedMode = chip.getAttribute('data-mode') || 'auto';
+    // Mode selection - Material Design segmented button
+    const segmentButtons = document.querySelectorAll('.segment-button');
+    
+    segmentButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        // Update selection state
+        segmentButtons.forEach(b => {
+          b.classList.remove('selected');
+          b.setAttribute('aria-checked', 'false');
+        });
+        button.classList.add('selected');
+        button.setAttribute('aria-checked', 'true');
+        
+        this.selectedMode = button.getAttribute('data-mode') || 'auto';
         this.applyTheme();
       });
     });
