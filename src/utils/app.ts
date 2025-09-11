@@ -467,8 +467,7 @@ class SmileApp {
 
   private setView(panel: HTMLElement, view: string, buttons: NodeListOf<Element>) {
     try {
-      console.log('=== VIEW TOGGLE DEBUG ===');
-      console.log('Setting view:', view, 'on panel:', panel.id);
+      // Setting view layout
 
       // Find all possible content containers that support view switching
       const contentSelectors = [
@@ -487,7 +486,7 @@ class SmileApp {
         const container = panel.querySelector(selector) as HTMLElement;
         if (container) {
           targetContainer = container;
-          console.log('Found target container:', selector);
+          // Found target container
           break;
         }
       }
@@ -496,7 +495,7 @@ class SmileApp {
       if (!targetContainer) {
         targetContainer = panel.querySelector('[data-view-container]') as HTMLElement;
         if (targetContainer) {
-          console.log('Found fallback container with data-view-container');
+          // Found fallback container
         }
       }
 
@@ -520,7 +519,7 @@ class SmileApp {
         localStorage.setItem(`view-${panelId}`, view);
       }
 
-      console.log('=== VIEW TOGGLE COMPLETE ===');
+      // View toggle complete
     } catch (error) {
       console.error('Error setting view:', error);
       if (error instanceof Error) {
@@ -543,7 +542,7 @@ class SmileApp {
       container.style.gap = '1rem';
       container.style.flexDirection = '';
     }
-    console.log('Applied', view, 'layout to container:', container.className);
+    // Applied layout to container
   }
 
   private animateViewTransition(container: HTMLElement | null, layoutChange: () => void) {
@@ -576,7 +575,7 @@ class SmileApp {
   }
 
   private switchPanel(panelId: string) {
-  console.log('[switchPanel] switching to', panelId);
+  // Switching to panel
     // Hide all panels
     const panels = document.querySelectorAll('[id^="panel-"]');
     
@@ -589,7 +588,7 @@ class SmileApp {
     
     if (targetPanel) {
       targetPanel.classList.remove('hidden');
-      console.log('[switchPanel] showed', targetPanel.id);
+      // Panel shown successfully
       
       // Trigger text animation for chat panel
       if (panelId === 'chat') {
@@ -719,7 +718,7 @@ class SmileApp {
         }
       }
     } catch (error) {
-      console.log('Ollama not available:', error);
+      // Ollama not available, using demo mode
       this.models = [];
       this.updateModelSelects();
     }
@@ -881,7 +880,7 @@ class SmileApp {
           this.updateMessage(assistantMessageId, chunk);
         },
         () => {
-          console.log('Demo streaming complete');
+          // Demo streaming complete
           // Reset streaming state on demo completion
           this.setStreamingState(false);
         }
@@ -935,7 +934,7 @@ class SmileApp {
     this.debugMode = !this.debugMode;
     const status = this.debugMode ? 'ENABLED' : 'DISABLED';
     this.showCustomNotification(`Debug Mode ${status}`, this.debugMode ? 'success' : 'info');
-    console.log(`Debug Mode ${status}`);
+    // Debug mode toggled
     this.updateDebugIndicator();
   }
 
@@ -998,11 +997,14 @@ class SmileApp {
 
     // Handle empty state animation on first message
     const emptyState = document.getElementById('empty-state');
-    if (emptyState && emptyState.style.display !== 'none') {
-      // Add enhanced chat starting animation
+    const isFirstMessage = emptyState && emptyState.style.display !== 'none';
+    
+    if (isFirstMessage) {
+      // Immediately hide empty state to prevent messages appearing in middle
+      emptyState.style.display = 'none';
       emptyState.classList.add('chat-starting');
       
-      // Temporarily prevent scrollbars during animation
+      // Prepare messages container for chat mode
       messagesContainer.classList.add('animating');
       messagesContainer.classList.add('chat-active');
       
@@ -1011,11 +1013,10 @@ class SmileApp {
         (window as any).showChatHeader();
       }
       
-      // Hide empty state after animation
+      // Clean up animation classes after transition
       setTimeout(() => {
-        emptyState.style.display = 'none';
         messagesContainer.classList.remove('animating');
-      }, 800);
+      }, 600);
     }
 
     const messageId = `message-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
@@ -1030,13 +1031,15 @@ class SmileApp {
     messageDiv.appendChild(bubble);
     messagesContainer.appendChild(messageDiv);
 
-    // Scroll to bottom smoothly
-    setTimeout(() => {
-      messagesContainer.scrollTo({
-        top: messagesContainer.scrollHeight,
-        behavior: 'smooth'
-      });
-    }, 100);
+    // Scroll to bottom smoothly with improved timing
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        messagesContainer.scrollTo({
+          top: messagesContainer.scrollHeight,
+          behavior: 'smooth'
+        });
+      }, isFirstMessage ? 200 : 50);
+    });
 
     return messageId;
   }
@@ -1556,7 +1559,7 @@ class SmileApp {
     // 3. Create special moments from meaningful interactions
     // 4. Dynamically render memory cards with actual data
     
-    console.log('Memories data loaded with counts:', counters);
+    // Memories data loaded
   }
 
   private generateInsights() {
@@ -1837,7 +1840,7 @@ class SmileApp {
     // 3. Display conversation items with dates and message counts
     // 4. Update the history count
     
-    console.log('Conversation history loaded');
+    // Conversation history loaded
   }
 
   private resumeConversation(conversationId?: string) {
@@ -2262,7 +2265,7 @@ class SmileApp {
       }
     });
 
-    console.log('Profile data loaded');
+    // Profile data loaded
   }
 
   private setupProfileActions() {
@@ -2321,7 +2324,7 @@ class SmileApp {
     // Update any UI elements that might use profile data
     this.updateProfileDependentUI();
 
-    console.log('Profile data saved:', profileData);
+    // Profile data saved
   }
 
   private updateProfileDependentUI() {

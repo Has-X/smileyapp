@@ -1,5 +1,6 @@
 ---
 import SecuritySettings from '../SecuritySettings.astro';
+import OllamaHelper from '../OllamaHelper.astro';
 ---
 
 <div id="panel-settings" class="flex-1 flex flex-col hidden app-panel">
@@ -22,29 +23,29 @@ import SecuritySettings from '../SecuritySettings.astro';
       <p class="text-on-surface-variant text-sm">Customize your AI experience, appearance, and privacy preferences</p>
     </div>
     
-    <!-- Settings Tabs -->
-    <div class="settings-tabs mb-8">
-      <div class="tabs-nav">
-        <button class="tab-button active" data-tab="ai">
-          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <!-- Settings Navigation -->
+    <div class="settings-navigation mb-8">
+      <div class="nav-pills">
+        <button class="nav-pill active" data-anchor="ai">
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
           </svg>
           AI & Chat
         </button>
-        <button class="tab-button" data-tab="appearance">
-          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <button class="nav-pill" data-anchor="appearance">
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v12a4 4 0 004 4h4a2 2 0 002-2V5z"/>
           </svg>
           Appearance
         </button>
-        <button class="tab-button" data-tab="privacy">
-          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <button class="nav-pill" data-anchor="privacy">
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
           </svg>
           Privacy
         </button>
-        <button class="tab-button" data-tab="security">
-          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <button class="nav-pill" data-anchor="security">
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
           </svg>
           Security
@@ -52,9 +53,17 @@ import SecuritySettings from '../SecuritySettings.astro';
       </div>
     </div>
 
-    <!-- AI & Conversation Tab -->
-    <div class="tab-content active" data-tab-content="ai">
-      <div class="space-y-6">
+    <!-- Settings Content - Single Scrollable List -->
+    <div class="settings-content">
+      <!-- AI & Chat Section -->
+      <section id="ai" class="settings-section">
+        <h3 class="section-header">
+          <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+          </svg>
+          AI & Chat
+        </h3>
+        
         <div class="setting-group">
           <h4 class="setting-title">AI Model</h4>
           <div class="custom-select-wrapper">
@@ -91,12 +100,17 @@ import SecuritySettings from '../SecuritySettings.astro';
           </div>
           <p class="setting-description">Hear AI responses spoken aloud</p>
         </div>
-      </div>
-    </div>
+      </section>
 
-    <!-- Appearance Tab -->
-    <div class="tab-content" data-tab-content="appearance">
-      <div class="space-y-8">
+      <!-- Appearance Section -->
+      <section id="appearance" class="settings-section">
+        <h3 class="section-header">
+          <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v12a4 4 0 004 4h4a2 2 0 002-2V5z"/>
+          </svg>
+          Appearance
+        </h3>
+        
         <div class="setting-group">
           <h4 class="setting-title">Display Mode</h4>
           <div class="custom-select-wrapper">
@@ -134,12 +148,17 @@ import SecuritySettings from '../SecuritySettings.astro';
           </div>
           <p class="setting-description">Choose your preferred accent color</p>
         </div>
-      </div>
-    </div>
+      </section>
 
-    <!-- Privacy Tab -->
-    <div class="tab-content" data-tab-content="privacy">
-      <div class="space-y-6">
+      <!-- Privacy Section -->
+      <section id="privacy" class="settings-section">
+        <h3 class="section-header">
+          <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+          </svg>
+          Privacy
+        </h3>
+        
         <div class="setting-group">
           <h4 class="setting-title">Clear All Data</h4>
           <button id="clear-data-btn" class="btn-outlined">
@@ -150,35 +169,48 @@ import SecuritySettings from '../SecuritySettings.astro';
           </button>
           <p class="setting-description">Remove all chat history and preferences from local storage</p>
         </div>
-      </div>
-    </div>
+      </section>
 
-    <!-- Security Settings -->
-    <div class="tab-content" data-tab-content="security">
-      <div class="space-y-6">
+      <!-- Security Section -->
+      <section id="security" class="settings-section">
+        <h3 class="section-header">
+          <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+          </svg>
+          Security
+        </h3>
+        
         <!-- Import Security Settings Component -->
         <SecuritySettings />
-      </div>
+      </section>
     </div>
   </div>
 </div>
 
 <!-- Ollama Helper Modal -->
-<div id="ollama-helper-modal" class="modal-overlay" style="display: none;">
-  <div class="modal-container">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>Ollama Setup & Management</h3>
-        <button class="modal-close" onclick="closeOllamaHelper()">
+<div id="ollama-helper-modal" class="global-modal" style="display: none;">
+  <div class="global-modal-backdrop"></div>
+  <div class="global-modal-container">
+    <div class="global-modal-content ollama-modal-content">
+      <div class="ollama-modal-header">
+        <div class="ollama-modal-icon">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+        </div>
+        <div class="ollama-modal-text">
+          <h3 class="ollama-modal-title">Ollama Setup & Management</h3>
+          <p class="ollama-modal-message">Configure your local AI models and connection</p>
+        </div>
+        <button class="ollama-close-btn" onclick="closeOllamaHelper()">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
           </svg>
         </button>
       </div>
-      <div class="modal-body">
-        <div id="ollama-helper-settings-container">
-          <!-- Ollama helper will be loaded here -->
-        </div>
+      <div class="ollama-modal-body">
+        <OllamaHelper />
       </div>
     </div>
   </div>
@@ -188,17 +220,21 @@ import SecuritySettings from '../SecuritySettings.astro';
 // Global function to show Ollama helper
 (window as any).showOllamaHelper = function() {
   const modal = document.getElementById('ollama-helper-modal');
-  const container = document.getElementById('ollama-helper-settings-container');
-  
-  if (modal && container) {
-    // Load Ollama helper content
-    loadOllamaHelperIntoSettings(container);
+  if (modal) {
     modal.style.display = 'flex';
+    modal.classList.remove('hidden');
+    // Force reflow
+    modal.offsetHeight;
+    modal.classList.add('show');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
     
-    // Add show class for animation
+    // Initialize Ollama connection check
     setTimeout(() => {
-      modal.classList.add('show');
-    }, 10);
+      if (typeof (window as any).checkOllamaConnection === 'function') {
+        (window as any).checkOllamaConnection();
+      }
+    }, 100);
   }
 };
 
@@ -207,224 +243,209 @@ import SecuritySettings from '../SecuritySettings.astro';
   const modal = document.getElementById('ollama-helper-modal');
   if (modal) {
     modal.classList.remove('show');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
     setTimeout(() => {
       modal.style.display = 'none';
+      modal.classList.add('hidden');
     }, 300);
   }
 };
 
-async function loadOllamaHelperIntoSettings(container: HTMLElement) {
-  // Create the Ollama helper content
-  container.innerHTML = `
-    <div class="ollama-helper">
-      <div class="ollama-status" id="settings-ollama-status">
-        <div class="status-icon" id="settings-status-icon">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-          </svg>
-        </div>
-        <div class="status-content">
-          <h3 class="status-title" id="settings-status-title">Checking Ollama Connection...</h3>
-          <p class="status-message" id="settings-status-message">Please wait while we check your Ollama installation.</p>
-        </div>
-      </div>
-
-      <!-- Connection Success State -->
-      <div class="ollama-connected hidden" id="settings-ollama-connected">
-        <div class="connection-success">
-          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-          </svg>
-          <h3>Ollama Connected Successfully!</h3>
-          <p>Found <span id="settings-model-count">0</span> models available</p>
-        </div>
-        
-        <div class="model-list" id="settings-model-list">
-          <!-- Models will be populated here -->
-        </div>
-        
-        <div class="ollama-actions">
-          <button class="btn-outlined" onclick="refreshSettingsModels()">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-            </svg>
-            Refresh Models
-          </button>
-          
-          <button class="btn-primary" onclick="downloadRecommendedModelFromSettings()">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
-            </svg>
-            Download Recommended Model
-          </button>
-        </div>
-      </div>
-
-      <!-- Setup Instructions -->
-      <div class="ollama-setup" id="settings-ollama-setup">
-        <div class="setup-quick-guide">
-          <h4>Quick Setup Guide</h4>
-          <ol style="margin-left: 1rem; color: rgb(var(--md-on-surface-variant)); line-height: 1.6;">
-            <li>Download Ollama from <a href="https://ollama.ai" target="_blank" style="color: rgb(var(--md-primary));">ollama.ai</a></li>
-            <li>Install and start the application</li>
-            <li>Run <code style="background: rgba(var(--md-surface-container-highest), 0.8); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: monospace;">ollama pull llama3.2</code> in your terminal</li>
-            <li>Click "Check Connection" below</li>
-          </ol>
-        </div>
-        
-        <div class="setup-actions" style="margin-top: 1.5rem;">
-          <button class="btn-primary" onclick="checkSettingsOllamaConnection()">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-            </svg>
-            Check Connection
-          </button>
-          
-          <a href="https://ollama.ai/docs" target="_blank" class="btn-outlined">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-            </svg>
-            View Documentation
-          </a>
-        </div>
-      </div>
-    </div>
-  `;
-  
-  // Check Ollama connection immediately
-  (window as any).checkSettingsOllamaConnection();
-}
-
-// Global functions for settings Ollama helper
-(window as any).checkSettingsOllamaConnection = async function() {
-  const statusTitle = document.getElementById('settings-status-title');
-  const statusMessage = document.getElementById('settings-status-message');
-  const connectedDiv = document.getElementById('settings-ollama-connected');
-  const setupDiv = document.getElementById('settings-ollama-setup');
-  const modelCount = document.getElementById('settings-model-count');
-  const modelList = document.getElementById('settings-model-list');
-
-  if (statusTitle) statusTitle.textContent = 'Checking Ollama Connection...';
-  if (statusMessage) statusMessage.textContent = 'Attempting to connect to Ollama...';
-  
-  try {
-    const response = await fetch('http://localhost:11434/api/tags');
-    
-    if (response.ok) {
-      const data = await response.json();
-      const models = data.models || [];
-      
-      if (statusTitle) statusTitle.textContent = 'Ollama Connected!';
-      if (statusMessage) statusMessage.textContent = `Found ${models.length} models available`;
-      if (connectedDiv) connectedDiv.classList.remove('hidden');
-      if (setupDiv) setupDiv.classList.add('hidden');
-      if (modelCount) modelCount.textContent = models.length.toString();
-      
-      // Populate model list
-      if (modelList) {
-        if (models.length === 0) {
-          modelList.innerHTML = '<p style="text-align: center; color: rgb(var(--md-on-surface-variant)); font-size: 0.875rem;">No models downloaded yet. Download a model to get started.</p>';
-        } else {
-          modelList.innerHTML = models.map((model: any) => `
-            <div class="model-item">
-              <div class="model-info">
-                <h4>${model.name}</h4>
-                <p>Size: ${formatSize(model.size)} • Modified: ${formatDate(model.modified_at)}</p>
-              </div>
-              <button class="btn-outlined btn-sm" onclick="selectModelFromSettings('${model.name}')">
-                Select
-              </button>
-            </div>
-          `).join('');
-        }
-      }
-      
-      // Update the main model select
-      updateMainModelSelect(models);
-      
-    } else {
-      throw new Error('Connection failed');
-    }
-  } catch (error) {
-    if (statusTitle) statusTitle.textContent = 'Ollama Not Found';
-    if (statusMessage) statusMessage.textContent = 'Please install and start Ollama to continue';
-    if (connectedDiv) connectedDiv.classList.add('hidden');
-    if (setupDiv) setupDiv.classList.remove('hidden');
+// Add CSS styling for the Ollama modal
+const ollamaModalStyles = `
+  .ollama-modal-content {
+    max-width: 700px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
   }
-};
-
-(window as any).refreshSettingsModels = function() {
-  (window as any).checkSettingsOllamaConnection();
-};
-
-(window as any).selectModelFromSettings = function(modelName: string) {
-  const modelSelect = document.getElementById('model-select') as HTMLSelectElement;
-  if (modelSelect) {
-    modelSelect.value = modelName;
+  
+  .ollama-modal-header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 2rem 2.5rem 1.5rem;
+    border-bottom: 1px solid rgba(var(--md-outline-variant), 0.2);
+    position: relative;
+  }
+  
+  .ollama-modal-icon {
+    width: 4rem;
+    height: 4rem;
+    background: linear-gradient(135deg, rgb(var(--md-primary)), rgb(var(--md-secondary)));
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgb(var(--md-on-primary));
+    flex-shrink: 0;
+  }
+  
+  .ollama-modal-text {
+    flex: 1;
+  }
+  
+  .ollama-modal-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: rgb(var(--md-on-surface));
+    margin: 0 0 0.5rem 0;
+  }
+  
+  .ollama-modal-message {
+    font-size: 1rem;
+    color: rgb(var(--md-on-surface-variant));
+    margin: 0;
+    opacity: 0.8;
+  }
+  
+  .ollama-close-btn {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    width: 3rem;
+    height: 3rem;
+    background: rgba(var(--md-surface-container-highest), 0.8);
+    border: 1px solid rgba(var(--md-outline-variant), 0.3);
+    border-radius: 50%;
+    color: rgb(var(--md-on-surface-variant));
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(8px);
+  }
+  
+  .ollama-close-btn:hover {
+    background: rgba(var(--md-error), 0.1);
+    border-color: rgba(var(--md-error), 0.3);
+    color: rgb(var(--md-error));
+    transform: scale(1.05);
+  }
+  
+  .ollama-modal-body {
+    padding: 2rem 2.5rem;
+    flex: 1;
+    overflow-y: auto;
+  }
+  
+  @media (max-width: 768px) {
+    .ollama-modal-content {
+      max-width: 95vw;
+      width: 95vw;
+      max-height: 95vh;
+      margin: 1rem;
+    }
     
-    // Save selection
-    localStorage.setItem('smile_selected_model', modelName);
+    .ollama-modal-header {
+      padding: 1.5rem 2rem 1rem;
+      gap: 1rem;
+    }
     
-    // Show success notification
-    if ((window as any).smileApp) {
-      (window as any).smileApp.showCustomNotification(`Selected model: ${modelName}`, 'success');
+    .ollama-modal-icon {
+      width: 3rem;
+      height: 3rem;
+    }
+    
+    .ollama-modal-title {
+      font-size: 1.25rem;
+    }
+    
+    .ollama-modal-message {
+      font-size: 0.875rem;
+    }
+    
+    .ollama-close-btn {
+      top: 1rem;
+      right: 1rem;
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+    
+    .ollama-modal-body {
+      padding: 1.5rem 2rem;
     }
   }
-};
+`;
 
-(window as any).downloadRecommendedModelFromSettings = function() {
-  const code = 'ollama pull llama3.2';
-  navigator.clipboard.writeText(code).then(() => {
-    if ((window as any).smileApp) {
-      (window as any).smileApp.showCustomNotification('Command copied to clipboard! Run it in your terminal.', 'info');
-    }
-  });
-};
-
-function updateMainModelSelect(models: any[]) {
-  const modelSelect = document.getElementById('model-select') as HTMLSelectElement;
-  if (!modelSelect) return;
-  
-  modelSelect.innerHTML = '';
-  
-  if (models.length === 0) {
-    modelSelect.innerHTML = '<option>No models found - Setup Ollama first</option>';
-  } else {
-    models.forEach(model => {
-      const option = document.createElement('option');
-      option.value = model.name;
-      option.textContent = model.name;
-      modelSelect.appendChild(option);
-    });
-    
-    // Restore previous selection or use saved model
-    const savedModel = localStorage.getItem('smile_selected_model');
-    if (savedModel && models.find(m => m.name === savedModel)) {
-      modelSelect.value = savedModel;
-    } else if (models.length > 0) {
-      modelSelect.value = models[0].name;
-    }
-  }
+// Inject styles
+if (!document.getElementById('ollama-modal-styles')) {
+  const styleSheet = document.createElement('style');
+  styleSheet.id = 'ollama-modal-styles';
+  styleSheet.textContent = ollamaModalStyles;
+  document.head.appendChild(styleSheet);
 }
 
-function formatSize(bytes: number): string {
-  const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
-  if (bytes === 0) return '0 B';
-  const i = Math.floor(Math.log(bytes) / Math.log(1024));
-  return Math.round(bytes / Math.pow(1024, i) * 100) / 100 + ' ' + sizes[i];
-}
-
-function formatDate(dateString: string): string {
-  const date = new Date(dateString);
-  return date.toLocaleDateString();
-}
-
-// Close modal when clicking outside
+// Close modal when clicking backdrop
 document.addEventListener('click', (e) => {
   const modal = document.getElementById('ollama-helper-modal');
-  if (modal && e.target === modal) {
+  if (modal && e.target === modal.querySelector('.global-modal-backdrop')) {
     (window as any).closeOllamaHelper();
   }
+});
+
+// Close modal with Escape key
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    const modal = document.getElementById('ollama-helper-modal');
+    if (modal && !modal.classList.contains('hidden')) {
+      (window as any).closeOllamaHelper();
+    }
+  }
+});
+
+// Settings navigation functionality
+document.addEventListener('DOMContentLoaded', () => {
+  const navPills = document.querySelectorAll('.nav-pill');
+  const sections = document.querySelectorAll('.settings-section');
+  
+  // Handle navigation pill clicks
+  navPills.forEach(pill => {
+    pill.addEventListener('click', (e) => {
+      e.preventDefault();
+      const anchor = pill.getAttribute('data-anchor');
+      if (anchor) {
+        // Update active pill
+        navPills.forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        
+        // Scroll to section
+        const targetSection = document.getElementById(anchor);
+        if (targetSection) {
+          targetSection.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start' 
+          });
+        }
+      }
+    });
+  });
+  
+  // Update active pill based on scroll position
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const sectionId = entry.target.id;
+        navPills.forEach(pill => {
+          pill.classList.remove('active');
+          if (pill.getAttribute('data-anchor') === sectionId) {
+            pill.classList.add('active');
+          }
+        });
+      }
+    });
+  }, {
+    threshold: 0.3,
+    rootMargin: '-20% 0px -70% 0px'
+  });
+  
+  sections.forEach(section => {
+    observer.observe(section);
+  });
 });
 
 // Initialize model loading when settings panel is first shown

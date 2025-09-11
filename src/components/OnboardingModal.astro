@@ -263,7 +263,7 @@ import OllamaHelper from './OllamaHelper.astro';
           </div>
         </div>
 
-        <!-- Step 5: AI Engine Setup - Redesigned -->
+        <!-- Step 5: AI Engine Setup - Using OllamaHelper Component -->
         <div class="step-content" data-step="5">
           <div class="step-header">
             <div class="step-icon">
@@ -276,290 +276,9 @@ import OllamaHelper from './OllamaHelper.astro';
             <p>Connect with Ollama to enhance your AI capabilities. This powerful local AI engine provides private, secure conversations.</p>
           </div>
 
-          <div class="ai-setup-redesigned">
-            <!-- AI Engine Status - Enhanced -->
-            <div class="ai-status-row" id="connection-status-card">
-              <div class="status-icon-container">
-                <div class="status-icon-bg">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.07 2.07 0 0 1-2.44-2.44 2.5 2.5 0 0 1 0-4.92 2.5 2.5 0 0 1 0-4.92 2.5 2.5 0 0 1 0-4.92A2.5 2.5 0 0 1 9.5 2Z"/>
-                    <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.07 2.07 0 0 0 2.44-2.44 2.5 2.5 0 0 0 0-4.92 2.5 2.5 0 0 0 0-4.92 2.5 2.5 0 0 0 0-4.92A2.5 2.5 0 0 0 14.5 2Z"/>
-                  </svg>
-                </div>
-                <div class="status-indicator" id="status-icon">
-                  <div class="status-dot" id="status-dot"></div>
-                </div>
-              </div>
-              
-              <div class="status-info">
-                <div class="status-header">
-                  <span class="status-label">AI Engine</span>
-                  <span class="status-badge" id="connection-message">Checking...</span>
-                </div>
-                <span class="status-description">Local intelligence powered by Ollama</span>
-              </div>
-
-              <button class="check-btn" id="check-connection-btn" onclick="checkOllamaConnection()">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-                </svg>
-              </button>
-            </div>
-
-            <!-- Success State -->
-            <div class="ai-success-state hidden" id="ai-success-state">
-              <div class="success-header">
-                <div class="success-icon">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                  </svg>
-                </div>
-                <div class="success-content">
-                  <h3>🎉 Ollama Connected Successfully!</h3>
-                  <p>Found <span id="model-count-display">0</span> AI models ready to use</p>
-                </div>
-              </div>
-              
-              <div class="models-preview" id="models-preview">
-                <!-- Models will be populated here -->
-              </div>
-              
-              <div class="success-actions">
-                <button class="action-btn secondary" onclick="refreshOllamaModels()">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-                  </svg>
-                  Refresh Models
-                </button>
-                <button class="action-btn primary hidden" id="download-model-btn" onclick="downloadRecommendedModel()">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
-                  </svg>
-                  Download Recommended Model
-                </button>
-              </div>
-            </div>
-
-            <!-- Setup Instructions -->
-            <div class="ai-setup-instructions" id="ai-setup-instructions">
-              <div class="setup-header">
-                <h3>Install Ollama to Get Started</h3>
-                <p>Choose your operating system and follow the simple installation steps</p>
-              </div>
-
-              <!-- OS Selection Tabs -->
-              <div class="os-tabs">
-                <button class="os-tab active" data-os="windows" onclick="switchOSTab('windows')">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-13.051-1.35"/>
-                  </svg>
-                  Windows
-                </button>
-                <button class="os-tab" data-os="mac" onclick="switchOSTab('mac')">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.89 3.29.89.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.71.85-1.85 1.51-2.97 1.42-.15-1.15.41-2.35 1.07-3.11z"/>
-                  </svg>
-                  macOS
-                </button>
-                <button class="os-tab" data-os="linux" onclick="switchOSTab('linux')">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12.504 0c-.155 0-.315.008-.48.021-4.226.333-3.105 4.807-3.17 6.298-.076 1.092-.3 1.953-1.05 3.02-.885 1.051-2.127 2.75-2.716 4.521-.278.832-.41 1.684-.287 2.489a.424.424 0 00-.11.135c-.26.268-.45.6-.663.839-.199.199-.485.267-.797.4-.313.136-.658.269-.864.68-.09.189-.136.394-.132.602 0 .199.027.4.055.536.058.399.116.728.04.97-.249.68-.28 1.145-.106 1.484.174.334.535.47.94.601.81.2 1.91.135 2.774.6.926.466 1.866.67 2.616.47.526-.116.97-.464 1.208-.946.587-.003 1.23-.269 2.26-.334.699-.058 1.574.267 2.577.2.025.134.063.198.114.333l.003.003c.391.778 1.113 1.132 1.884 1.071.771-.06 1.592-.536 2.257-1.306.631-.765 1.683-1.084 2.378-1.503.348-.199.629-.469.649-.853.023-.4-.2-.811-.714-1.376v-.097l-.003-.003c-.17-.2-.25-.535-.338-.926-.085-.401-.182-.786-.492-1.046h-.003c-.059-.054-.123-.067-.188-.135a.357.357 0 00-.19-.064c.431-1.278.264-2.55-.173-3.694-.533-1.41-1.465-2.638-2.175-3.483-.796-1.005-1.576-1.957-1.56-3.368.026-2.152.236-6.133-3.544-6.139z"/>
-                  </svg>
-                  Linux
-                </button>
-              </div>
-
-              <!-- OS-Specific Instructions -->
-              <div class="os-instructions">
-                <div class="os-content active" data-os="windows">
-                  <div class="install-steps">
-                    <div class="install-step">
-                      <div class="step-number">1</div>
-                      <div class="step-details">
-                        <h4>Download Ollama for Windows</h4>
-                        <p>Get the official Ollama installer for Windows</p>
-                        <a href="https://ollama.ai/download/windows" target="_blank" class="download-link">
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
-                          </svg>
-                          Download for Windows
-                        </a>
-                      </div>
-                    </div>
-                    
-                    <div class="install-step">
-                      <div class="step-number">2</div>
-                      <div class="step-details">
-                        <h4>Install & Launch</h4>
-                        <p>Run the installer and launch Ollama. It will start automatically in the background.</p>
-                      </div>
-                    </div>
-                    
-                    <div class="install-step">
-                      <div class="step-number">3</div>
-                      <div class="step-details">
-                        <h4>Download Your First Model</h4>
-                        <p>Open Command Prompt or PowerShell and run:</p>
-                        <div class="command-block">
-                          <code>ollama pull llama3.2</code>
-                          <button class="copy-command" onclick="copyToClipboard('ollama pull llama3.2')">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-                              <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
-                            </svg>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="os-content" data-os="mac">
-                  <div class="install-steps">
-                    <div class="install-step">
-                      <div class="step-number">1</div>
-                      <div class="step-details">
-                        <h4>Download Ollama for macOS</h4>
-                        <p>Get the official Ollama installer for Mac</p>
-                        <a href="https://ollama.ai/download/mac" target="_blank" class="download-link">
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
-                          </svg>
-                          Download for macOS
-                        </a>
-                      </div>
-                    </div>
-                    
-                    <div class="install-step">
-                      <div class="step-number">2</div>
-                      <div class="step-details">
-                        <h4>Install & Launch</h4>
-                        <p>Open the .dmg file, drag Ollama to Applications, and launch it from your Applications folder.</p>
-                      </div>
-                    </div>
-                    
-                    <div class="install-step">
-                      <div class="step-number">3</div>
-                      <div class="step-details">
-                        <h4>Download Your First Model</h4>
-                        <p>Open Terminal and run:</p>
-                        <div class="command-block">
-                          <code>ollama pull llama3.2</code>
-                          <button class="copy-command" onclick="copyToClipboard('ollama pull llama3.2')">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-                              <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
-                            </svg>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="os-content" data-os="linux">
-                  <div class="install-steps">
-                    <div class="install-step">
-                      <div class="step-number">1</div>
-                      <div class="step-details">
-                        <h4>Install Ollama</h4>
-                        <p>Run the installation script in your terminal:</p>
-                        <div class="command-block">
-                          <code>curl -fsSL https://ollama.ai/install.sh | sh</code>
-                          <button class="copy-command" onclick="copyToClipboard('curl -fsSL https://ollama.ai/install.sh | sh')">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-                              <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
-                            </svg>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div class="install-step">
-                      <div class="step-number">2</div>
-                      <div class="step-details">
-                        <h4>Start the Service</h4>
-                        <p>Start Ollama as a background service:</p>
-                        <div class="command-block">
-                          <code>systemctl --user start ollama</code>
-                          <button class="copy-command" onclick="copyToClipboard('systemctl --user start ollama')">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-                              <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
-                            </svg>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div class="install-step">
-                      <div class="step-number">3</div>
-                      <div class="step-details">
-                        <h4>Download Your First Model</h4>
-                        <p>Download a recommended AI model:</p>
-                        <div class="command-block">
-                          <code>ollama pull llama3.2</code>
-                          <button class="copy-command" onclick="copyToClipboard('ollama pull llama3.2')">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-                              <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
-                            </svg>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="setup-help">
-                <div class="help-links">
-                  <a href="https://ollama.ai/docs" target="_blank" class="help-link">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
-                      <polyline points="14,2 14,8 20,8"/>
-                      <line x1="16" y1="13" x2="8" y2="13"/>
-                      <line x1="16" y1="17" x2="8" y2="17"/>
-                      <polyline points="10,9 9,9 8,9"/>
-                    </svg>
-                    Documentation
-                  </a>
-                  <button class="help-link" onclick="toggleTroubleshooting()">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <circle cx="12" cy="12" r="10"/>
-                      <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/>
-                      <line x1="12" y1="17" x2="12.01" y2="17"/>
-                    </svg>
-                    Troubleshooting
-                  </button>
-                </div>
-              </div>
-
-              <!-- Troubleshooting Section -->
-              <div class="troubleshooting-section hidden" id="troubleshooting-section">
-                <h4>Common Issues & Solutions</h4>
-                <div class="trouble-items">
-                  <div class="trouble-item">
-                    <h5>🔧 Service Not Running</h5>
-                    <p>Make sure Ollama is running. Try restarting the application or running <code>ollama serve</code> in your terminal.</p>
-                  </div>
-                  <div class="trouble-item">
-                    <h5>🌐 Connection Refused</h5>
-                    <p>Verify Ollama is running on port 11434. Visit <a href="http://localhost:11434" target="_blank">localhost:11434</a> to check.</p>
-                  </div>
-                  <div class="trouble-item">
-                    <h5>📦 No Models Found</h5>
-                    <p>Download at least one model using <code>ollama pull llama3.2</code> in your terminal.</p>
-                  </div>
-                  <div class="trouble-item">
-                    <h5>⚡ Slow Performance</h5>
-                    <p>Try a smaller model like <code>llama3.2:1b</code> if you have limited RAM or processing power.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
+          <div class="ai-setup-container">
+            <OllamaHelper />
+            
             <!-- Skip Option -->
             <div class="skip-option">
               <div class="skip-content">
@@ -730,16 +449,16 @@ import OllamaHelper from './OllamaHelper.astro';
 <style>
 /* Clean Material Design 3 Onboarding */
 .onboarding-content {
-  max-width: 600px;
-  width: 90vw;
-  max-height: 85vh;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  border-radius: 1.5rem;
-  background: rgb(var(--md-surface-container));
-  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.16);
-}
+    max-width: 700px;
+    width: 90vw;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: 1.5rem;
+    background: rgb(var(--md-surface-container));
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.16);
+  }
 
 /* Progress Indicator */
 .progress-container {

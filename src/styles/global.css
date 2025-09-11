@@ -353,20 +353,24 @@
     border-color: rgba(255, 255, 255, 0.18);
   }
 
-  [data-theme="dark"] .material-select {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.2);
+  [data-theme="dark"] .material-select,
+  [data-theme$="-dark"] .material-select {
+    background: rgba(var(--md-surface-container), 0.8);
+    border-color: rgba(var(--md-outline), 0.3);
     color: rgb(var(--md-on-surface));
   }
 
-  [data-theme="dark"] .material-select:hover {
-    background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(255, 255, 255, 0.25);
+  [data-theme="dark"] .material-select:hover,
+  [data-theme$="-dark"] .material-select:hover {
+    background: rgba(var(--md-surface-container-high), 0.9);
+    border-color: rgba(var(--md-outline), 0.4);
   }
 
-  [data-theme="dark"] .material-select:focus {
-    background: rgba(255, 255, 255, 0.12);
+  [data-theme="dark"] .material-select:focus,
+  [data-theme$="-dark"] .material-select:focus {
+    background: rgba(var(--md-surface-container-highest), 0.9);
     border-color: rgba(var(--md-primary), 0.6);
+    box-shadow: 0 0 0 2px rgba(var(--md-primary), 0.2);
   }
 
   [data-theme="dark"] .nav-button,
@@ -766,17 +770,18 @@
       radial-gradient(400px 300px at 10% 10%, rgba(251, 191, 36, 0.06) 0%, transparent 50%);
   }
 
-  /* Light mode background - enhanced visibility
+  /* Light mode background - enhanced visibility to match dark theme vibrancy
      Use theme variables so accent color affects the ambient canvas.
-     This mirrors the dark-theme structure but with slightly higher
-     transparency to keep readability on light surfaces. */
+     This mirrors the dark-theme structure with comparable opacity values. */
   :not([data-theme$="-dark"]):not([data-theme="dark"]) #app-shell::before {
     background:
-      radial-gradient(900px 700px at 20% 30%, rgba(var(--md-primary), 0.24) 0%, rgba(var(--md-primary), 0.12) 40%, transparent 60%),
-      radial-gradient(700px 500px at 80% 70%, rgba(var(--md-secondary), 0.18) 0%, rgba(var(--md-secondary), 0.10) 40%, transparent 60%),
-      radial-gradient(1100px 900px at 50% 50%, rgba(var(--md-info), 0.16) 0%, rgba(var(--md-info), 0.08) 40%, transparent 70%),
-      radial-gradient(600px 400px at 70% 20%, rgba(var(--md-warning), 0.14) 0%, transparent 50%),
-      radial-gradient(500px 300px at 30% 80%, rgba(var(--md-success), 0.14) 0%, transparent 50%);
+      radial-gradient(900px 700px at 20% 30%, rgba(var(--md-primary), 0.16) 0%, rgba(var(--md-primary), 0.08) 40%, transparent 60%),
+      radial-gradient(700px 500px at 80% 70%, rgba(var(--md-secondary), 0.13) 0%, rgba(var(--md-secondary), 0.06) 40%, transparent 60%),
+      radial-gradient(1100px 900px at 50% 50%, rgba(var(--md-tertiary), 0.11) 0%, rgba(var(--md-tertiary), 0.05) 40%, transparent 70%),
+      radial-gradient(800px 600px at 70% 20%, rgba(var(--md-info), 0.09) 0%, rgba(var(--md-info), 0.03) 40%, transparent 60%),
+      radial-gradient(600px 400px at 30% 80%, rgba(var(--md-success), 0.08) 0%, rgba(var(--md-success), 0.02) 40%, transparent 60%),
+      radial-gradient(500px 350px at 90% 90%, rgba(var(--md-warning), 0.06) 0%, transparent 50%),
+      radial-gradient(400px 300px at 10% 10%, rgba(245, 158, 11, 0.05) 0%, transparent 50%);
   }
 
   /* Modern panel styling - unified bright backgrounds */
@@ -796,12 +801,12 @@
     margin-bottom: 2.5rem;
   }
 
-  /* Settings Tabs */
-  .settings-tabs {
+  /* Settings Navigation */
+  .settings-navigation {
     margin-bottom: 2rem;
   }
 
-  .tabs-nav {
+  .nav-pills {
     display: flex;
     gap: 0.5rem;
     background: rgba(255, 255, 255, 0.04);
@@ -812,28 +817,86 @@
     overflow-x: auto;
   }
 
-  /* Dark theme tabs with reduced white */
-  [data-theme="dark"] .tabs-nav,
-  [data-theme$="-dark"] .tabs-nav {
+  .nav-pill {
+    display: flex;
+    align-items: center;
+    padding: 0.625rem 1.25rem;
+    border-radius: 0.75rem;
+    background: transparent;
+    border: none;
+    color: rgb(var(--md-on-surface-variant));
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    min-width: fit-content;
+  }
+
+  .nav-pill:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: rgb(var(--md-on-surface));
+  }
+
+  .nav-pill.active {
+    background: rgba(var(--md-primary), 0.15);
+    color: rgb(var(--md-primary));
+    box-shadow: 0 2px 8px rgba(var(--md-primary), 0.2);
+  }
+
+  /* Settings Content */
+  .settings-content {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+  }
+
+  .settings-section {
+    scroll-margin-top: 2rem;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: rgb(var(--md-on-surface));
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(var(--md-outline-variant), 0.2);
+  }
+
+  .section-header svg {
+    color: rgb(var(--md-primary));
+  }
+
+  /* Dark theme navigation with reduced white */
+  [data-theme="dark"] .nav-pills,
+  [data-theme$="-dark"] .nav-pills {
     background: rgba(255, 255, 255, 0.02);
     border-color: rgba(255, 255, 255, 0.05);
   }
 
-  [data-theme="dark"] .tab-button,
-  [data-theme$="-dark"] .tab-button {
+  [data-theme="dark"] .nav-pill,
+  [data-theme$="-dark"] .nav-pill {
     color: rgb(var(--md-on-surface-variant));
   }
 
-  [data-theme="dark"] .tab-button:hover,
-  [data-theme$="-dark"] .tab-button:hover {
+  [data-theme="dark"] .nav-pill:hover,
+  [data-theme$="-dark"] .nav-pill:hover {
     background: rgba(255, 255, 255, 0.04);
     color: rgb(var(--md-on-surface));
   }
 
-  [data-theme="dark"] .tab-button.active,
-  [data-theme$="-dark"] .tab-button.active {
+  [data-theme="dark"] .nav-pill.active,
+  [data-theme$="-dark"] .nav-pill.active {
     background: rgba(var(--md-primary), 0.2);
     color: rgb(var(--md-primary));
+  }
+
+  [data-theme="dark"] .section-header,
+  [data-theme$="-dark"] .section-header {
+    border-bottom-color: rgba(var(--md-outline-variant), 0.1);
   }
 
   .tab-button {
@@ -925,8 +988,13 @@
   .color-preview {
     width: 48px;
     height: 48px;
+    min-width: 48px;
+    min-height: 48px;
+    max-width: 48px;
+    max-height: 48px;
     border-radius: 50%;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    flex-shrink: 0;
   }
 
   .color-theme-card span {
@@ -2913,39 +2981,58 @@
     scrollbar-color: rgba(var(--md-outline-variant), 0.3) transparent;
     overflow-x: hidden; /* Prevent horizontal scrollbar */
     overscroll-behavior: contain; /* avoid rubber-band scroll during animation */
-    /* Telegram-inspired dynamic padding: adapts to window width for optimal reading */
+    /* Improved responsive padding for better mobile experience */
     padding-inline: clamp(
-      16px,                    /* minimum: mobile comfort */
-      calc(50vw - 400px),      /* dynamic: centers ~800px content area */
-      min(25vw, 240px)         /* maximum: prevents over-wide spacing */
+      12px,                    /* minimum: mobile comfort */
+      calc(50vw - 380px),      /* dynamic: centers ~760px content area */
+      min(20vw, 200px)         /* maximum: prevents over-wide spacing */
     );
+    /* Ensure messages start from top when empty state is hidden */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
   }
 
-  /* Responsive refinements for different screen categories */
+  /* Enhanced mobile responsiveness */
+  @media (max-width: 480px) {
+    #messages-container {
+      /* Mobile: minimal padding, maximum content width */
+      padding-inline: 8px;
+      padding-block: 12px;
+    }
+  }
+
   @media (max-width: 768px) {
     #messages-container {
-      /* Mobile: tighter padding, more content width */
-      padding-inline: clamp(12px, 4vw, 24px);
+      /* Tablet: comfortable padding */
+      padding-inline: clamp(8px, 3vw, 16px);
+      padding-block: 16px;
     }
   }
 
   @media (min-width: 1400px) {
     #messages-container {
       /* Large screens: use fixed comfortable distance */
-      padding-inline: clamp(180px, calc(50vw - 420px), 280px);
+      padding-inline: clamp(160px, calc(50vw - 400px), 240px);
     }
   }
 
   @media (min-width: 1920px) {
     #messages-container {
       /* Ultra-wide: prevent messages from getting lost in space */
-      padding-inline: clamp(240px, calc(50vw - 480px), 360px);
+      padding-inline: clamp(200px, calc(50vw - 450px), 300px);
     }
   }
 
-  /* Prevent scrollbars during animations */
+  /* Prevent scrollbars during animations and ensure proper positioning */
   #messages-container.animating {
     overflow: hidden;
+  }
+
+  /* When chat is active, ensure messages container takes full space */
+  #messages-container.chat-active {
+    min-height: auto;
+    justify-content: flex-start;
   }
 
   #messages-container::-webkit-scrollbar {
@@ -3474,24 +3561,41 @@
   .message-user .message-bubble { margin-left: auto; margin-right: 0; text-align: right; }
   .message-assistant .message-bubble { margin-right: auto; margin-left: 0; text-align: left; }
 
-  /* Enhanced mobile responsiveness */
+  /* Enhanced mobile responsiveness with better spacing */
   @media (max-width: 768px) {
     .message-bubble { 
-      max-width: min(28rem, 90%); 
+      max-width: min(26rem, 92%); 
       padding: 0.875rem 1rem;
       font-size: 0.9rem;
     }
     .message {
-      margin: 0.25rem 0;
+      margin: 0.375rem 0;
     }
   }
 
   @media (max-width: 480px) {
     .message-bubble { 
-      max-width: 95%; 
+      max-width: 96%; 
       padding: 0.75rem 0.875rem;
       font-size: 0.875rem;
       border-radius: 1.25rem;
+      line-height: 1.5;
+    }
+    .message {
+      margin: 0.25rem 0;
+    }
+    /* Improve touch targets on mobile */
+    .message-bubble:hover {
+      transform: none; /* Disable hover effects on mobile */
+    }
+  }
+
+  /* Extra small screens */
+  @media (max-width: 360px) {
+    .message-bubble {
+      max-width: 98%;
+      padding: 0.625rem 0.75rem;
+      font-size: 0.8rem;
     }
     .message {
       margin: 0.1875rem 0;
@@ -4693,8 +4797,9 @@
 [data-theme$="-dark"] .journal-form-input,
 [data-theme$="-dark"] .journal-form-textarea,
 [data-theme$="-dark"] .journal-form-select {
-  background: rgba(var(--surface-container), 0.8);
-  border-color: rgba(var(--outline), 0.3);
+  background: rgba(var(--md-surface-container), 0.8);
+  border-color: rgba(var(--md-outline), 0.3);
+  color: rgb(var(--md-on-surface));
 }
 
 [data-theme="dark"] .journal-form-input:focus,
@@ -6772,8 +6877,8 @@ body {
   width: 100vw;
   height: 100vh;
   background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
   z-index: 9997;
 }
 
@@ -6949,7 +7054,8 @@ body {
 
 [data-theme="dark"] .confirm-modal-backdrop,
 [data-theme$="-dark"] .confirm-modal-backdrop {
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(12px) saturate(180%);
 }
 
 /* Responsive design */
@@ -7705,11 +7811,12 @@ body {
 }
 
 .confirm-modal-backdrop {
-  position: absolute;
+  position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(4px);
   transition: all 0.3s ease;
+  z-index: 19998;
 }
 
 /* Light Theme Backdrop */
@@ -7718,15 +7825,15 @@ body {
 [data-theme="forest"] .confirm-modal-backdrop,
 [data-theme="sunset"] .confirm-modal-backdrop,
 [data-theme="lavender"] .confirm-modal-backdrop {
-  background: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(8px);
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(12px) saturate(180%);
 }
 
 /* Dark Theme Backdrop */
 [data-theme="dark"] .confirm-modal-backdrop,
 [data-theme$="-dark"] .confirm-modal-backdrop {
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(6px);
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(12px) saturate(180%);
 }
 
 .confirm-modal-container {
@@ -7736,6 +7843,7 @@ body {
   max-height: 90vh;
   transform: scale(0.9) translateY(20px);
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 19999;
 }
 
 .confirm-modal.show .confirm-modal-container {
@@ -7753,6 +7861,7 @@ body {
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   overflow: hidden;
+  z-index: 20000;
 }
 
 /* Light Theme Modal Content */
@@ -7772,8 +7881,8 @@ body {
 /* Dark Theme Modal Content */
 [data-theme="dark"] .confirm-modal-content,
 [data-theme$="-dark"] .confirm-modal-content {
-  background: rgba(33, 37, 41, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(var(--md-surface), 0.95);
+  border: 1px solid rgba(var(--md-outline-variant), 0.2);
   box-shadow: 
     0 8px 32px rgba(0, 0, 0, 0.24),
     0 4px 16px rgba(0, 0, 0, 0.16),
@@ -8372,15 +8481,15 @@ body {
   inset: 0 !important;
   width: 100vw !important;
   height: 100vh !important;
-  z-index: 19990 !important;
+  z-index: 19998 !important;
 }
 .journal-modal-portal .confirm-modal-container {
-  z-index: 12010 !important;
+  z-index: 20001 !important;
   max-width: 600px !important; /* Smaller modal width */
   width: 90% !important;
 }
 .journal-modal-portal .confirm-modal-content {
-  z-index: 12010 !important;
+  z-index: 20002 !important;
   max-width: 600px !important; /* Override the 65rem inline style */
   width: 100% !important;
 }

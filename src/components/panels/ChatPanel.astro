@@ -32,11 +32,11 @@
   </div>
 
   <!-- Messages area -->
-  <div id="messages-container" class="flex-1 overflow-y-auto py-6 px-4 min-h-[60vh]">
+  <div id="messages-container" class="flex-1 overflow-y-auto py-4 px-2 min-h-[50vh] sm:py-6 sm:px-4 sm:min-h-[60vh]">
   <!-- Background intentionally left clean (mindfulness cards removed) -->
 
     <!-- Empty state -->
-    <div id="empty-state" class="flex-1 flex flex-col items-center justify-center text-center w-full max-w-4xl mx-auto px-8 py-12 empty-state-container">
+    <div id="empty-state" class="flex-1 flex flex-col items-center justify-center text-center w-full max-w-4xl mx-auto px-4 py-8 sm:px-8 sm:py-12 empty-state-container">
       <!-- Enhanced visual backdrop -->
       <div class="absolute inset-0 overflow-hidden pointer-events-none">
         <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-radial from-primary/5 to-transparent rounded-full blur-3xl animate-pulse-slow"></div>
@@ -76,7 +76,7 @@
   </div>
 
   <!-- Modern floating message composer -->
-  <div class="p-6 pb-8">
+  <div class="p-4 pb-6 sm:p-6 sm:pb-8">
     <div class="modern-chat-input">
       <div class="chat-input-container">
         <!-- Streaming status indicator removed -->
@@ -525,6 +525,13 @@
     }
   }
 
+  // Auto-check Ollama when chat panel becomes visible
+  function checkOllamaOnPanelShow() {
+    if ((window as any).ollamaHelper) {
+      (window as any).ollamaHelper.checkConnection();
+    }
+  }
+
   // Function to fill message input from suggestion cards
   function fillMessage(message: string) {
     const messageInput = document.getElementById('message-input') as HTMLTextAreaElement;
@@ -697,6 +704,21 @@
   document.addEventListener('DOMContentLoaded', () => {
     initMistyTextReveal();
     setupBackButton();
+    
+    // Set up observer for chat panel visibility
+    const chatPanel = document.getElementById('panel-chat');
+    if (chatPanel) {
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+            if (!chatPanel.classList.contains('hidden')) {
+              checkOllamaOnPanelShow();
+            }
+          }
+        });
+      });
+      observer.observe(chatPanel, { attributes: true });
+    }
   });
 
   // Reset reveal state when the chat panel gets hidden to avoid showing old state on next show

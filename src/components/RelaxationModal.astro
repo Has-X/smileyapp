@@ -3,9 +3,9 @@
 ---
 
 <!-- Fullscreen Relaxation Modal -->
-<div id="relaxation-modal" class="relaxation-modal hidden">
+<div id="relaxation-modal" class="global-modal relaxation-modal" style="display: none;">
   <!-- Background with animated gradient -->
-  <div class="relaxation-backdrop">
+  <div class="global-modal-backdrop relaxation-backdrop">
     <div class="relaxation-bg-gradient"></div>
     <div class="relaxation-particles">
       <div class="particle"></div>
@@ -18,18 +18,19 @@
   </div>
 
   <!-- Main Content Container -->
-  <div class="relaxation-container">
-    <!-- Header with close button -->
-    <div class="relaxation-header">
-      <button id="close-relaxation" class="relaxation-close-btn">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-        </svg>
-      </button>
-    </div>
+  <div class="global-modal-container relaxation-container">
+    <div class="global-modal-content">
+      <!-- Header with close button -->
+      <div class="relaxation-header">
+        <button id="close-relaxation" class="relaxation-close-btn">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
 
-    <!-- Central Breathing Animation -->
-    <div class="relaxation-content">
+      <!-- Central Breathing Animation -->
+      <div class="relaxation-content">
       <!-- Top Section: Session Info -->
       <div class="top-section">
         <div class="session-info">
@@ -122,6 +123,7 @@
         </button>
       </div>
     </div>
+    </div>
   </div>
 </div>
 
@@ -130,33 +132,33 @@
    RELAXATION MODAL - IMMERSIVE MEDITATION EXPERIENCE
    ================================================================ */
 
+/* Relaxation Modal Customizations - Material Design 3 */
 .relaxation-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  --modal-max-width: 100vw;
+  --modal-max-height: 100vh;
 }
 
-.relaxation-modal.show {
-  opacity: 1;
-  visibility: visible;
+.relaxation-modal .global-modal-container {
+  max-width: 100vw;
+  max-height: 100vh;
+  width: 100%;
+  height: 100%;
+}
+
+.relaxation-modal .global-modal-content {
+  border-radius: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(var(--md-surface), 0.05);
+  backdrop-filter: blur(0px);
+  border: none;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Animated Background */
 .relaxation-backdrop {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
   overflow: hidden;
 }
 
@@ -280,21 +282,13 @@
   }
 }
 
-/* Main Container */
+/* Main Container - inherits from global-modal-content */
 .relaxation-container {
   position: relative;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  background: rgba(var(--surface), 0.05);
-  backdrop-filter: blur(0px);
-  border: 1px solid rgba(var(--outline-variant), 0.1);
   z-index: 10;
-  transition: backdrop-filter 0.8s ease-out;
 }
 
-.relaxation-modal.show .relaxation-container {
+.relaxation-modal.show .global-modal-content {
   backdrop-filter: blur(20px);
 }
 
@@ -318,9 +312,9 @@
   width: 3rem;
   height: 3rem;
   border-radius: 50%;
-  background: rgba(var(--surface-container), 0.8);
+  background: rgba(var(--md-surface-container), 0.8);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(var(--outline-variant), 0.2);
+  border: 1px solid rgba(var(--md-outline-variant), 0.2);
   color: rgb(var(--md-on-surface));
   display: flex;
   align-items: center;
@@ -330,7 +324,7 @@
 }
 
 .relaxation-close-btn:hover {
-  background: rgba(var(--error), 0.15);
+  background: rgba(var(--md-error), 0.15);
   color: rgb(var(--md-error));
   transform: scale(1.1);
 }
@@ -1118,13 +1112,13 @@
 }
 
 .control-btn.secondary {
-  background: rgba(var(--surface-container), 0.8);
+  background: rgba(var(--md-surface-container), 0.8);
   color: rgb(var(--md-on-surface));
   border: 1px solid rgb(var(--md-outline-variant));
 }
 
 .control-btn.secondary:hover {
-  background: rgba(var(--surface-container-high), 0.9);
+  background: rgba(var(--md-surface-container-high), 0.9);
   transform: translateY(-1px);
 }
 
@@ -1417,7 +1411,7 @@ class RelaxationController {
   }
   
   openModal(exerciseType) {
-    console.log('Opening modal for exercise:', exerciseType);
+    // Opening modal for exercise
     this.currentExercise = this.exercises[exerciseType];
     
     if (!this.currentExercise) {
@@ -1425,7 +1419,7 @@ class RelaxationController {
       return;
     }
     
-    console.log('Exercise found:', this.currentExercise);
+    // Exercise found
     this.totalDuration = this.currentExercise.duration;
     this.resetSession();
     this.updateModalContent();
@@ -1779,6 +1773,6 @@ window.openRelaxationModal = function(exerciseType) {
 
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('Relaxation Modal initialized');
+  // Relaxation Modal initialized
 });
 </script>
