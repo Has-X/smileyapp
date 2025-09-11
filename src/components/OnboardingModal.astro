@@ -105,7 +105,56 @@ import OllamaHelper from './OllamaHelper.astro';
               </svg>
             </div>
             <h2>Choose Your Theme</h2>
-            <p>Select a visual accent. Preview updates instantly; you can change it later.</p>
+            <p>Select your preferred appearance mode and accent color. Preview updates instantly.</p>
+          </div>
+
+          <div class="theme-mode-selection">
+            <h3 class="mode-selection-title">Display Mode</h3>
+            <div class="mode-chips">
+              <button class="mode-chip selected" data-mode="auto" aria-label="Auto mode - follows system">
+                <div class="mode-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="5"/>
+                    <path d="M12 1v2"/>
+                    <path d="M12 21v2"/>
+                    <path d="M4.22 4.22l1.42 1.42"/>
+                    <path d="M18.36 18.36l1.42 1.42"/>
+                    <path d="M1 12h2"/>
+                    <path d="M21 12h2"/>
+                    <path d="M4.22 19.78l1.42-1.42"/>
+                    <path d="M18.36 5.64l1.42-1.42"/>
+                  </svg>
+                </div>
+                <span class="mode-name">Auto</span>
+                <span class="mode-desc">Follow system</span>
+              </button>
+              <button class="mode-chip" data-mode="light" aria-label="Light mode">
+                <div class="mode-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="5"/>
+                    <path d="M12 1v2"/>
+                    <path d="M12 21v2"/>
+                    <path d="M4.22 4.22l1.42 1.42"/>
+                    <path d="M18.36 18.36l1.42 1.42"/>
+                    <path d="M1 12h2"/>
+                    <path d="M21 12h2"/>
+                    <path d="M4.22 19.78l1.42-1.42"/>
+                    <path d="M18.36 5.64l1.42-1.42"/>
+                  </svg>
+                </div>
+                <span class="mode-name">Light</span>
+                <span class="mode-desc">Always light</span>
+              </button>
+              <button class="mode-chip" data-mode="dark" aria-label="Dark mode">
+                <div class="mode-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                  </svg>
+                </div>
+                <span class="mode-name">Dark</span>
+                <span class="mode-desc">Always dark</span>
+              </button>
+            </div>
           </div>
 
           <div class="theme-live-preview" id="theme-live-preview">
@@ -116,7 +165,9 @@ import OllamaHelper from './OllamaHelper.astro';
             </div>
           </div>
 
-          <div class="themes-grid compact">
+          <div class="accent-color-selection">
+            <h3 class="accent-selection-title">Accent Color</h3>
+            <div class="themes-grid compact">
             <button class="theme-chip" data-theme="smile" aria-label="Select Smile Blue theme">
               <span class="chip-bg smile-theme"></span>
               <span class="chip-outline"></span>
@@ -137,6 +188,7 @@ import OllamaHelper from './OllamaHelper.astro';
               <span class="chip-outline"></span>
               <span class="chip-name">Lavender Purple</span>
             </button>
+            </div>
           </div>
         </div>
 
@@ -458,6 +510,13 @@ import OllamaHelper from './OllamaHelper.astro';
     border-radius: 1.5rem;
     background: rgb(var(--md-surface-container));
     box-shadow: 0 24px 48px rgba(0, 0, 0, 0.16);
+    position: relative;
+  }
+
+  .onboarding-body {
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: 6rem; /* Space for fixed navigation */
   }
 
 /* Progress Indicator */
@@ -631,6 +690,136 @@ import OllamaHelper from './OllamaHelper.astro';
 @media (max-width: 640px){
   .themes-grid.compact { grid-template-columns: repeat(2,1fr); }
   .theme-live-preview { padding:1rem; }
+}
+
+/* Theme Mode Selection Styles */
+.theme-mode-selection {
+  margin-bottom: 2rem;
+}
+
+.mode-selection-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgb(var(--md-on-surface));
+  margin: 0 0 1rem 0;
+  text-align: left;
+}
+
+.mode-chips {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+
+.mode-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 0.75rem;
+  background: rgba(var(--md-surface-container-low), 0.6);
+  border: 2px solid rgba(var(--md-outline-variant), 0.3);
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.mode-chip:hover {
+  background: rgba(var(--md-surface-container), 0.8);
+  border-color: rgba(var(--md-primary), 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.mode-chip.selected {
+  background: rgba(var(--md-primary-container), 0.2);
+  border-color: rgb(var(--md-primary));
+  box-shadow: 0 0 0 2px rgba(var(--md-primary), 0.2), 0 4px 16px rgba(0, 0, 0, 0.12);
+  transform: translateY(-1px);
+}
+
+.mode-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  background: rgba(var(--md-primary), 0.1);
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(var(--md-primary));
+  transition: all 0.3s ease;
+}
+
+.mode-chip.selected .mode-icon {
+  background: rgba(var(--md-primary), 0.15);
+  color: rgb(var(--md-primary));
+  transform: scale(1.05);
+}
+
+.mode-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: rgb(var(--md-on-surface));
+  line-height: 1.2;
+}
+
+.mode-chip.selected .mode-name {
+  color: rgb(var(--md-primary));
+}
+
+.mode-desc {
+  font-size: 0.75rem;
+  color: rgb(var(--md-on-surface-variant));
+  opacity: 0.8;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.mode-chip.selected .mode-desc {
+  color: rgb(var(--md-primary));
+  opacity: 0.9;
+}
+
+/* Accent Color Selection Styles */
+.accent-color-selection {
+  margin-top: 1.5rem;
+}
+
+.accent-selection-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgb(var(--md-on-surface));
+  margin: 0 0 1rem 0;
+  text-align: left;
+}
+
+@media (max-width: 640px) {
+  .mode-chips {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+  
+  .mode-chip {
+    flex-direction: row;
+    justify-content: flex-start;
+    padding: 0.875rem 1rem;
+    gap: 0.75rem;
+  }
+  
+  .mode-icon {
+    width: 2rem;
+    height: 2rem;
+  }
+  
+  .mode-name {
+    font-size: 0.9375rem;
+  }
+  
+  .mode-desc {
+    font-size: 0.8125rem;
+  }
 }
 
 /* Body */
@@ -1909,8 +2098,15 @@ import OllamaHelper from './OllamaHelper.astro';
   gap: 1rem;
   padding: 1.5rem 2rem;
   border-top: 1px solid rgba(var(--md-outline-variant), 0.2);
-  background: rgba(var(--md-surface), 0.8);
-  backdrop-filter: blur(8px);
+  background: rgba(var(--md-surface), 0.95);
+  backdrop-filter: blur(16px);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  border-bottom-left-radius: 1.5rem;
+  border-bottom-right-radius: 1.5rem;
 }
 
 .nav-spacer {
@@ -2071,6 +2267,14 @@ import OllamaHelper from './OllamaHelper.astro';
   
   .onboarding-nav {
     padding: 1rem 1.5rem;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+  
+  .onboarding-body {
+    padding-bottom: 5rem;
   }
   
   .step-header h2 {
@@ -2163,10 +2367,15 @@ import OllamaHelper from './OllamaHelper.astro';
 }
 
 [data-theme="dark"] .progress-container,
-[data-theme$="-dark"] .progress-container,
+[data-theme$="-dark"] .progress-container {
+  background: rgba(var(--md-surface-container), 0.8);
+}
+
 [data-theme="dark"] .onboarding-nav,
 [data-theme$="-dark"] .onboarding-nav {
-  background: rgba(var(--md-surface-container), 0.8);
+  background: rgba(var(--md-surface-container), 0.95);
+  backdrop-filter: blur(16px);
+  border-top-color: rgba(var(--md-outline-variant), 0.3);
 }
 
 [data-theme="dark"] .form-input,
@@ -3388,14 +3597,28 @@ import OllamaHelper from './OllamaHelper.astro';
  * Lightweight typing hints so Astro's TS analyzer doesn't complain.
  * These are ignored at runtime but silence editor diagnostics.
  */
-/** @typedef {{bg:string,primary:string,surface:string,surfaceVariant:string}} AccentCfg */
-/** @typedef {{[k:string]:AccentCfg}} AccentMap */
-/** @type {any} */
-window.__smileOnboardingInstance;
+interface AccentCfg {
+  bg: string;
+  primary: string;
+  surface: string;
+  surfaceVariant: string;
+}
+
+interface AccentMap {
+  [k: string]: AccentCfg;
+}
+
+declare global {
+  interface Window {
+    __smileOnboardingInstance: any;
+  }
+}
+
 class OnboardingFlow {
   currentStep = 1;
   totalSteps = 6;
   selectedAccent = 'smile';
+  selectedMode = 'auto';
   encryptionEnabled = false;
   profileData = {};
   
@@ -3431,6 +3654,17 @@ class OnboardingFlow {
     if (nextBtn) nextBtn.addEventListener('click', () => this.nextStep());
     if (finishBtn) finishBtn.addEventListener('click', () => this.finish());
 
+    // Mode selection
+    const modeChips = document.querySelectorAll('.mode-chip');
+    modeChips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        modeChips.forEach(c => c.classList.remove('selected'));
+        chip.classList.add('selected');
+        this.selectedMode = chip.getAttribute('data-mode') || 'auto';
+        this.applyTheme();
+      });
+    });
+
     // Theme selection
     const themeChips = document.querySelectorAll('.theme-chip');
     themeChips.forEach(chip => {
@@ -3438,7 +3672,7 @@ class OnboardingFlow {
         themeChips.forEach(c => c.classList.remove('selected'));
         chip.classList.add('selected');
         this.selectedAccent = chip.getAttribute('data-theme') || 'smile';
-        this.applyAccent();
+        this.applyTheme();
       });
     });
 
@@ -3543,19 +3777,16 @@ class OnboardingFlow {
     this.updateThemePreview('smile');
   }
 
-  /** @param {string} accent */
-  updateThemePreview(accent) {
+  updateThemePreview(accent: string) {
     const preview = document.getElementById('theme-live-preview');
     if (!preview) return;
-  /** @type {AccentMap} */
-  const themeConfig = {
+    const themeConfig: AccentMap = {
       smile: { bg: 'linear-gradient(135deg,#3b82f6,#1e40af)', primary: 'rgba(30,64,175,.55)', surface: 'rgba(255,255,255,.55)', surfaceVariant: 'rgba(255,255,255,.38)' },
       forest: { bg: 'linear-gradient(135deg,#10b981,#047857)', primary: 'rgba(4,120,87,.55)', surface: 'rgba(255,255,255,.55)', surfaceVariant: 'rgba(255,255,255,.38)' },
       sunset: { bg: 'linear-gradient(135deg,#f97316,#ea580c)', primary: 'rgba(234,88,12,.55)', surface: 'rgba(255,255,255,.55)', surfaceVariant: 'rgba(255,255,255,.38)' },
       lavender: { bg: 'linear-gradient(135deg,#a855f7,#7c3aed)', primary: 'rgba(124,58,237,.55)', surface: 'rgba(255,255,255,.55)', surfaceVariant: 'rgba(255,255,255,.38)' },
     };
-  /** @type {AccentCfg|undefined} */
-  const cfg = themeConfig[accent];
+    const cfg: AccentCfg | undefined = themeConfig[accent];
     if (!cfg) return;
     preview.style.setProperty('--tlp-bg', cfg.bg);
     preview.style.setProperty('--tlp-primary', cfg.primary);
@@ -3563,12 +3794,12 @@ class OnboardingFlow {
     preview.style.setProperty('--tlp-surface-variant', cfg.surfaceVariant);
   }
 
-  applyAccent(){
+  applyTheme(){
     this.updateThemePreview(this.selectedAccent);
     localStorage.setItem('smile-accent-color', this.selectedAccent);
-    const mode = localStorage.getItem('smile-theme-mode') || 'light';
+    localStorage.setItem('smile-theme-mode', this.selectedMode);
     const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const themeName = mode === 'dark' ? `${this.selectedAccent}-dark` : (mode === 'auto' ? (prefersDark ? `${this.selectedAccent}-dark` : this.selectedAccent) : this.selectedAccent);
+    const themeName = this.selectedMode === 'dark' ? `${this.selectedAccent}-dark` : (this.selectedMode === 'auto' ? (prefersDark ? `${this.selectedAccent}-dark` : this.selectedAccent) : this.selectedAccent);
     if (window.smileApp && typeof window.smileApp.setTheme === 'function') {
       window.smileApp.setTheme(themeName);
     } else {
@@ -3599,7 +3830,7 @@ class OnboardingFlow {
     
     // Apply theme when reaching the final step to ensure it displays correctly
     if (this.currentStep === this.totalSteps) {
-      this.applyAccent();
+      this.applyTheme();
     }
     
     this.updateProgress();
@@ -3638,7 +3869,7 @@ class OnboardingFlow {
       if (!response.ok) throw new Error('Ollama not running');
       const data = await response.json();
       const models = data.models || [];
-  const hasRecommendedModel = models.some((/** @type {any} */m) => (m.name||'').includes('llama') || (m.name||'').includes('gpt') || (m.name||'').includes('mistral'));
+      const hasRecommendedModel = models.some((m: any) => (m.name||'').includes('llama') || (m.name||'').includes('gpt') || (m.name||'').includes('mistral'));
       if (hasRecommendedModel) {
   resultEl.innerHTML = `<div style="display:flex;align-items:flex-start;gap:.75rem;color:rgb(var(--md-success));"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><polyline points="20,6 9,17 4,12"/></svg><div style="line-height:1.25;">AI engine ready! Found ${models.length} model(s).</div></div>`;
       } else if (models.length > 0) {
@@ -3662,18 +3893,19 @@ class OnboardingFlow {
     // Collect all onboarding data
     const onboardingData = {
       theme: this.selectedAccent,
+      mode: this.selectedMode,
       encryption: this.encryptionEnabled,
       profile: this.profileData,
       completedAt: new Date().toISOString()
     };
 
     // Persist onboarding state and data
-    const mode = localStorage.getItem('smile-theme-mode') || 'light';
     const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const themeName = mode === 'dark' ? `${this.selectedAccent}-dark` : (mode === 'auto' ? (prefersDark ? `${this.selectedAccent}-dark` : this.selectedAccent) : this.selectedAccent);
+    const themeName = this.selectedMode === 'dark' ? `${this.selectedAccent}-dark` : (this.selectedMode === 'auto' ? (prefersDark ? `${this.selectedAccent}-dark` : this.selectedAccent) : this.selectedAccent);
     
     // Save all settings
     localStorage.setItem('smile-accent-color', this.selectedAccent);
+    localStorage.setItem('smile-theme-mode', this.selectedMode);
     localStorage.setItem('smile-theme', themeName);
     localStorage.setItem('smile-onboarding', 'complete');
     localStorage.setItem('smile-onboarding-data', JSON.stringify(onboardingData));

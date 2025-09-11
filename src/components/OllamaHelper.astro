@@ -886,10 +886,11 @@ class OllamaHelper {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
     } catch (error) {
-      if (error.name === 'AbortError') {
+      if (error instanceof Error && error.name === 'AbortError') {
         this.updateStatus('error', 'Connection Timeout', 'Ollama is not responding. Make sure it\'s running on port 11434.');
       } else {
-        this.updateStatus('error', 'Connection Failed', `Unable to connect to Ollama: ${error.message}`);
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+        this.updateStatus('error', 'Connection Failed', `Unable to connect to Ollama: ${errorMessage}`);
       }
       setTimeout(() => this.showSetupInstructions(), 1000);
     }

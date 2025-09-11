@@ -41,7 +41,7 @@ class StateManager {
     return {
       currentPanel: 'chat',
       currentView: 'default',
-      currentAction: null,
+      currentAction: undefined,
       chatMessages: [],
       journalEntries: [],
       memories: [],
@@ -55,7 +55,7 @@ class StateManager {
   }
 
   private generateSessionId(): string {
-    return `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `session_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
   }
 
   private initializeFromURL() {

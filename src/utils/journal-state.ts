@@ -160,7 +160,7 @@ class JournalStateManager {
   public saveEntry(entry: Omit<JournalEntry, 'id' | 'timestamp'>): JournalEntry {
     const newEntry: JournalEntry = {
       ...entry,
-      id: `entry_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: `entry_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
       timestamp: Date.now()
     };
 

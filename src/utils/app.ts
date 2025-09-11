@@ -9,7 +9,7 @@ class SmileApp {
   private debugMode: boolean = false;
   private hasRevealedChat: boolean = false;
   private isStreaming: boolean = false;
-  private stateUnsubscribe: (() => void) | null = null;
+
 
   constructor() {
     this.init();
@@ -58,8 +58,8 @@ class SmileApp {
 
   private initTheme() {
     // Initialize theme system with separated mode and accent color
-    // Default to light on first run to avoid surprising dark takeover during onboarding
-    const savedMode = localStorage.getItem('smile-theme-mode') || 'light';
+    // Default to auto mode to respect user's system preference
+    const savedMode = localStorage.getItem('smile-theme-mode') || 'auto';
     const savedAccent = localStorage.getItem('smile-accent-color') || 'smile';
 
     // Apply initial theme name
@@ -94,7 +94,7 @@ class SmileApp {
     try {
       // Initialize secure storage - this will automatically check and show unlock modal if needed
       const { default: SecureStorage } = await import('./secure-storage.ts');
-      const storage = SecureStorage.getInstance();
+      SecureStorage.getInstance();
       
       // The constructor will automatically call checkAndShowUnlockModal
       // No additional action needed here
@@ -129,7 +129,7 @@ class SmileApp {
 
   private setupStateManagement() {
     // Subscribe to state changes
-    this.stateUnsubscribe = stateManager.subscribe((state) => {
+    stateManager.subscribe((state) => {
       // Update UI based on state changes
       this.handleStateChange(state);
     });
@@ -553,9 +553,26 @@ class SmileApp {
       // Clear messages
       this.clearMessages();
       
-      // Reset to onboarding
+      // Clear secure storage
+      if ((window as any).secureStorage) {
+        (window as any).secureStorage.clearAll();
+      }
+      
+      // Reset state without page reload
       this.isOnboardingComplete = false;
-      this.showOnboarding();
+      this.selectedModel = '';
+      this.models = [];
+      
+      // Reset UI state
+      this.switchPanel('chat');
+      
+      // Show success notification
+      this.showCustomNotification('All data has been cleared successfully', 'success');
+      
+      // Reset to onboarding after a brief delay
+      setTimeout(() => {
+        this.showOnboarding();
+      }, 500);
     };
 
   // Prefer app confirm modal, fallback to native via helper

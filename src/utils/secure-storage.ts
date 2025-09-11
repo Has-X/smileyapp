@@ -36,7 +36,7 @@ class SecureStorage {
   private autoLockTimer: number | null = null;
   private activityTimer: number | null = null;
   private lastActivity: number = Date.now();
-  private rememberForSession: boolean = false;
+
   private sessionData: UnlockSession | null = null;
   private readonly ALGORITHM = 'AES-GCM';
   private readonly KEY_DERIVATION = 'PBKDF2';
@@ -203,7 +203,7 @@ class SecureStorage {
       // Successfully unlocked
       this.cryptoKey = key;
       this.isUnlocked = true;
-      this.rememberForSession = rememberSession;
+      // Session remembering handled by sessionData
       
       if (rememberSession) {
         this.createSession(password);
@@ -227,7 +227,7 @@ class SecureStorage {
   lock(): void {
     this.cryptoKey = null;
     this.isUnlocked = false;
-    this.rememberForSession = false;
+    // Session state cleared
     this.sessionData = null;
     
     // Clear session storage
