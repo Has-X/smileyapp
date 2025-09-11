@@ -808,6 +808,216 @@
   margin-top: 0.25rem;
   padding-top: 0;
 }
+
+/* Dark Theme Support for Ollama Helper */
+[data-theme="dark"] .ollama-status,
+[data-theme$="-dark"] .ollama-status {
+  background: rgba(var(--md-surface-container), 0.8);
+  border-color: rgba(var(--md-outline-variant), 0.5);
+}
+
+[data-theme="dark"] .status-icon,
+[data-theme$="-dark"] .status-icon {
+  background: rgba(var(--md-primary), 0.15);
+  color: rgb(var(--md-primary));
+}
+
+[data-theme="dark"] .connection-success,
+[data-theme$="-dark"] .connection-success {
+  background: linear-gradient(135deg, rgba(var(--md-success), 0.12), rgba(var(--md-primary), 0.06));
+  border-color: rgba(var(--md-success), 0.3);
+  box-shadow: 0 4px 16px rgba(var(--md-success), 0.15);
+}
+
+[data-theme="dark"] .connection-success svg,
+[data-theme$="-dark"] .connection-success svg {
+  background: rgba(var(--md-success), 0.15);
+  color: rgb(var(--md-success));
+}
+
+[data-theme="dark"] .model-list,
+[data-theme$="-dark"] .model-list {
+  background: rgba(var(--md-surface-container), 0.8);
+  border-color: rgba(var(--md-outline-variant), 0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] .model-item,
+[data-theme$="-dark"] .model-item {
+  background: rgba(var(--md-surface-container-highest), 0.8);
+  border-color: rgba(var(--md-outline-variant), 0.25);
+}
+
+[data-theme="dark"] .model-item:hover,
+[data-theme$="-dark"] .model-item:hover {
+  background: rgba(var(--md-surface-container-highest), 1);
+  border-color: rgba(var(--md-primary), 0.4);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .model-item.recommended-model,
+[data-theme$="-dark"] .model-item.recommended-model {
+  background: linear-gradient(135deg, rgba(var(--md-primary), 0.12), rgba(var(--md-secondary), 0.06));
+  border-color: rgba(var(--md-primary), 0.4);
+  box-shadow: 0 4px 16px rgba(var(--md-primary), 0.2);
+}
+
+[data-theme="dark"] .model-item.medium-match-model,
+[data-theme$="-dark"] .model-item.medium-match-model {
+  background: linear-gradient(135deg, rgba(var(--md-tertiary), 0.08), rgba(var(--md-secondary), 0.04));
+  border-color: rgba(var(--md-tertiary), 0.3);
+}
+
+[data-theme="dark"] .model-icon,
+[data-theme$="-dark"] .model-icon {
+  background: linear-gradient(135deg, rgba(var(--md-primary), 0.2), rgba(var(--md-secondary), 0.15));
+  color: rgb(var(--md-primary));
+}
+
+[data-theme="dark"] .recommended-model .model-icon,
+[data-theme$="-dark"] .recommended-model .model-icon {
+  background: linear-gradient(135deg, rgb(var(--md-primary)), rgb(var(--md-secondary)));
+  color: rgb(var(--md-on-primary));
+  box-shadow: 0 4px 12px rgba(var(--md-primary), 0.4);
+}
+
+[data-theme="dark"] .medium-match-model .model-icon,
+[data-theme$="-dark"] .medium-match-model .model-icon {
+  background: linear-gradient(135deg, rgba(var(--md-tertiary), 0.25), rgba(var(--md-secondary), 0.2));
+  color: rgb(var(--md-tertiary));
+}
+
+[data-theme="dark"] .model-badge.recommended,
+[data-theme$="-dark"] .model-badge.recommended {
+  background: linear-gradient(135deg, rgba(var(--md-primary), 0.2), rgba(var(--md-secondary), 0.15));
+  color: rgb(var(--md-primary));
+  border-color: rgba(var(--md-primary), 0.3);
+}
+
+[data-theme="dark"] .model-badge.official,
+[data-theme$="-dark"] .model-badge.official {
+  background: rgba(var(--md-success), 0.15);
+  color: rgb(var(--md-success));
+  border-color: rgba(var(--md-success), 0.3);
+}
+
+[data-theme="dark"] .instruction-step,
+[data-theme$="-dark"] .instruction-step {
+  background: rgba(var(--md-surface-container), 0.6);
+  border-color: rgba(var(--md-outline-variant), 0.2);
+}
+
+[data-theme="dark"] .instruction-step:hover,
+[data-theme$="-dark"] .instruction-step:hover {
+  background: rgba(var(--md-surface-container-high), 0.8);
+  border-color: rgba(var(--md-primary), 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="dark"] .step-number,
+[data-theme$="-dark"] .step-number {
+  background: linear-gradient(135deg, rgb(var(--md-primary)), rgb(var(--md-secondary)));
+  color: rgb(var(--md-on-primary));
+  box-shadow: 0 2px 8px rgba(var(--md-primary), 0.3);
+}
+
+[data-theme="dark"] .code-block,
+[data-theme$="-dark"] .code-block {
+  background: rgba(var(--md-surface-container-highest), 0.8);
+  border-color: rgba(var(--md-outline-variant), 0.3);
+}
+
+[data-theme="dark"] .code-block:hover,
+[data-theme$="-dark"] .code-block:hover {
+  background: rgba(var(--md-surface-container-highest), 1);
+  border-color: rgba(var(--md-primary), 0.3);
+}
+
+[data-theme="dark"] .copy-btn,
+[data-theme$="-dark"] .copy-btn {
+  background: rgba(var(--md-primary), 0.15);
+  color: rgb(var(--md-primary));
+  border-color: rgba(var(--md-primary), 0.2);
+}
+
+[data-theme="dark"] .copy-btn:hover,
+[data-theme$="-dark"] .copy-btn:hover {
+  background: rgba(var(--md-primary), 0.25);
+  border-color: rgba(var(--md-primary), 0.4);
+  box-shadow: 0 2px 8px rgba(var(--md-primary), 0.2);
+}
+
+[data-theme="dark"] .btn-primary,
+[data-theme$="-dark"] .btn-primary {
+  background: linear-gradient(135deg, rgb(var(--md-primary)), rgb(var(--md-secondary)));
+  color: rgb(var(--md-on-primary));
+  box-shadow: 0 2px 8px rgba(var(--md-primary), 0.3);
+}
+
+[data-theme="dark"] .btn-primary:hover,
+[data-theme$="-dark"] .btn-primary:hover {
+  background: linear-gradient(135deg, rgb(var(--md-primary)), rgb(var(--md-secondary)));
+  box-shadow: 0 4px 16px rgba(var(--md-primary), 0.4);
+  transform: translateY(-1px);
+}
+
+[data-theme="dark"] .btn-outlined,
+[data-theme$="-dark"] .btn-outlined {
+  background: rgba(var(--md-surface-container), 0.8);
+  color: rgb(var(--md-primary));
+  border-color: rgba(var(--md-primary), 0.3);
+}
+
+[data-theme="dark"] .btn-outlined:hover,
+[data-theme$="-dark"] .btn-outlined:hover {
+  background: rgba(var(--md-primary), 0.1);
+  border-color: rgba(var(--md-primary), 0.5);
+}
+
+[data-theme="dark"] .check-connection-btn,
+[data-theme$="-dark"] .check-connection-btn {
+  background: rgba(var(--md-primary), 0.15);
+  color: rgb(var(--md-primary));
+  border-color: rgba(var(--md-primary), 0.2);
+}
+
+[data-theme="dark"] .check-connection-btn:hover,
+[data-theme$="-dark"] .check-connection-btn:hover {
+  background: rgba(var(--md-primary), 0.25);
+  border-color: rgba(var(--md-primary), 0.4);
+}
+
+[data-theme="dark"] .status-badge,
+[data-theme$="-dark"] .status-badge {
+  background: rgba(var(--md-success), 0.15);
+  color: rgb(var(--md-success));
+}
+
+[data-theme="dark"] .tab-btn,
+[data-theme$="-dark"] .tab-btn {
+  background: rgba(var(--md-surface-container), 0.6);
+  color: rgb(var(--md-on-surface-variant));
+  border-color: rgba(var(--md-outline-variant), 0.2);
+}
+
+[data-theme="dark"] .tab-btn:hover,
+[data-theme$="-dark"] .tab-btn:hover {
+  background: rgba(var(--md-surface-container-high), 0.8);
+  color: rgb(var(--md-on-surface));
+}
+
+[data-theme="dark"] .tab-btn.active,
+[data-theme$="-dark"] .tab-btn.active {
+  background: rgba(var(--md-primary), 0.15);
+  color: rgb(var(--md-primary));
+  border-color: rgba(var(--md-primary), 0.3);
+}
+
+[data-theme="dark"] .troubleshooting,
+[data-theme$="-dark"] .troubleshooting {
+  background: rgba(var(--md-surface-container), 0.6);
+  border-color: rgba(var(--md-outline-variant), 0.3);
+}
 </style>
 
 <script>

@@ -172,7 +172,7 @@
   [data-theme="dark"] {
     --md-primary: 139 148 255;
     --md-on-primary: 0 0 0;
-    --md-primary-container: 54 47 189;
+    --md-primary-container: 70 85 200; /* Less purple, more neutral blue */
     --md-on-primary-container: 234 238 255;
     
     --md-secondary: 206 209 216;
@@ -218,7 +218,7 @@
   [data-theme$="-dark"] {
     --md-primary: 129 140 248;
     --md-on-primary: 0 0 0;
-    --md-primary-container: 67 56 202;
+    --md-primary-container: 85 95 220; /* Less purple, more neutral blue */
     --md-on-primary-container: 224 231 255;
 
     --md-secondary: 196 199 206;
@@ -261,20 +261,29 @@
   }
 
   /* Override accent primary for each -dark theme */
+  [data-theme="ocean-dark"] {
+    --md-primary: 59 130 246; /* #3b82f6 - Ocean Blue */
+    --md-primary-container: 30 64 175; /* Darker blue container */
+    --md-surface-tint: 59 130 246;
+  }
   [data-theme="smile-dark"] {
     --md-primary: 59 130 246; /* #3b82f6 */
+    --md-primary-container: 30 64 175; /* Darker blue container */
     --md-surface-tint: 59 130 246;
   }
   [data-theme="forest-dark"] {
     --md-primary: 16 185 129; /* #10b981 */
+    --md-primary-container: 5 150 100; /* Darker green container */
     --md-surface-tint: 16 185 129;
   }
   [data-theme="sunset-dark"] {
     --md-primary: 245 158 11; /* #f59e0b */
+    --md-primary-container: 194 120 5; /* Darker orange container */
     --md-surface-tint: 245 158 11;
   }
   [data-theme="lavender-dark"] {
     --md-primary: 139 92 246; /* #8b5cf6 */
+    --md-primary-container: 109 70 196; /* Darker purple container */
     --md-surface-tint: 139 92 246;
   }
 
