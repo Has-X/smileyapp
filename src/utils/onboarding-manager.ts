@@ -4,6 +4,7 @@ declare global {
   interface Window {
     smileApp?: {
       setTheme: (theme: string) => void;
+      setThemeMode: (mode: string) => void;
       showCustomNotification?: (msg: string, type?: 'success' | 'warning' | 'error' | 'info') => void;
     };
     modalManager?: {

@@ -2,30 +2,29 @@
 
 <!-- Chat panel -->
 <div id="panel-chat" class="flex-1 flex flex-col chat-panel app-panel cursor-pointer" onclick="focusMessageInput()">
-  <!-- Debug Mode Indicator -->
-  <div id="debug-indicator" class="fixed top-4 right-4 bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-medium z-50" style="display: none;">
-    DEBUG MODE
-  </div>
+  <!-- Debug mode removed for production -->
 
-  <!-- Chat Panel Header -->
-  <div class="p-6 max-w-4xl mx-auto w-full" id="chat-header" style="display: none;">
-    <div class="panel-section-header">
-      <div class="header-left-section">
-        <div class="section-title">
-          <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="10"/>
-            <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
-            <line x1="9" y1="9" x2="9.01" y2="9"/>
-            <line x1="15" y1="9" x2="15.01" y2="9"/>
-          </svg>
-          Conversation
-        </div>
-        <div class="section-count-island" id="chat-back-btn-container">
-          <span class="section-count" id="chat-back-btn" title="Return to home">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+  <!-- Chat Panel Header - Sticky when active -->
+  <div class="chat-header-sticky" id="chat-header" style="display: none;">
+    <div class="p-6 max-w-4xl mx-auto w-full">
+      <div class="panel-section-header">
+        <div class="header-left-section">
+          <div class="section-title">
+            <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+              <line x1="9" y1="9" x2="9.01" y2="9"/>
+              <line x1="15" y1="9" x2="15.01" y2="9"/>
             </svg>
-          </span>
+            Conversation
+          </div>
+          <div class="section-count-island" id="chat-back-btn-container">
+            <span class="section-count" id="chat-back-btn" title="Return to home">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+              </svg>
+            </span>
+          </div>
         </div>
       </div>
     </div>
@@ -34,6 +33,12 @@
   <!-- Messages area -->
   <div id="messages-container" class="flex-1 overflow-y-auto py-4 px-2 min-h-[50vh] sm:py-6 sm:px-4 sm:min-h-[60vh]">
   <!-- Background intentionally left clean (mindfulness cards removed) -->
+  
+    <!-- Exercise and SOS Embeds -->
+    <div id="chat-embeds-container">
+      <!-- Exercise Embed will be inserted here -->
+      <!-- SOS Embed will be inserted here -->
+    </div>
 
     <!-- Empty state -->
     <div id="empty-state" class="flex-1 flex flex-col items-center justify-center text-center w-full max-w-4xl mx-auto px-4 py-8 sm:px-8 sm:py-12 empty-state-container">
@@ -449,6 +454,25 @@
     transition: all 0.3s ease;
   }
 
+  /* Sticky chat header - stays at top when scrolling within chat panel */
+  .chat-header-sticky {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    width: 100%;
+  }
+
+  /* Ensure chat panel has proper scroll context */
+  #panel-chat {
+    overflow-y: auto;
+    height: 100vh;
+  }
+
+  /* Remove extra padding since sticky header doesn't need it */
+  .chat-revealed #messages-container {
+    padding-top: 0;
+  }
+
   /* Chat header fade animations - enhanced */
   #chat-header {
     opacity: 0;
@@ -457,8 +481,22 @@
   }
 
   #chat-header.show {
-    opacity: 1;
-    transform: translateY(0) scale(1);
+    opacity: 1 !important;
+    transform: translateY(0) scale(1) !important;
+    display: block !important;
+  }
+
+  /* Only show header when chat panel is active and has messages */
+  #panel-chat:not(.hidden) .chat-revealed #chat-header {
+    opacity: 1 !important;
+    transform: translateY(0) scale(1) !important;
+    display: block !important;
+  }
+
+  /* Hide header when chat panel is hidden */
+  #panel-chat.hidden #chat-header {
+    display: none !important;
+    opacity: 0 !important;
   }
 
   /* Mobile responsiveness for chat header */
@@ -628,6 +666,7 @@
     const messagesContainer = document.getElementById('messages-container');
     const emptyState = document.getElementById('empty-state');
     const chatHeader = document.getElementById('chat-header');
+    const chatPanel = document.getElementById('panel-chat');
     const textContainer = document.querySelector('.text-reveal-container') as HTMLElement;
     
     // Start fade out animations
@@ -670,10 +709,15 @@
         wordsAfter.forEach(w => w.classList.remove('ready', 'reveal-active'));
       }
       
-      // Hide and reset header
+      // Hide and reset header completely
       if (chatHeader) {
         chatHeader.style.display = 'none';
         chatHeader.classList.remove('chat-fade-out', 'show');
+      }
+      
+      // Remove chat-revealed class from panel to ensure header stays hidden
+      if (chatPanel) {
+        chatPanel.classList.remove('chat-revealed');
       }
       
       // Reset app state if available

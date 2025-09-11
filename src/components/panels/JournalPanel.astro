@@ -1,5 +1,6 @@
 ---
 import ViewToggle from '../ViewToggle.astro';
+import EmptyState from '../EmptyState.astro';
 ---
 
 <div id="panel-journal" class="flex-1 flex flex-col hidden app-panel">
@@ -14,7 +15,7 @@ import ViewToggle from '../ViewToggle.astro';
           Personal Journal
         </div>
         <div class="section-count-island">
-          <span class="section-count">3</span>
+          <span id="journal-count" class="section-count">0</span>
         </div>
       </div>
       <div class="header-actions">
@@ -29,109 +30,17 @@ import ViewToggle from '../ViewToggle.astro';
     </div>
 
     <!-- Journal Entries -->
-    <div class="journal-entries-container" id="journal-entries" data-view-container>
-      <!-- Sample entries -->
-      <div class="journal-entry-card-enhanced" data-date="2025-08-23">
-        <div class="journal-entry-actions">
-          <button class="journal-edit-btn" data-journal-id="journal-1" title="Edit entry">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-            </svg>
-          </button>
-          <button class="journal-delete-btn" data-journal-id="journal-1" title="Delete journal entry">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H8a1 1 0 00-1 1v3M4 7h16"/>
-            </svg>
-          </button>
-        </div>
-        <div class="journal-entry-header">
-          <div class="journal-entry-date-bg">
-            <div class="journal-date-day">23</div>
-            <div class="journal-date-month">Aug</div>
-          </div>
-          <div class="journal-entry-meta">
-            <h4 class="journal-entry-title">Morning Reflections</h4>
-            <div class="journal-entry-info">
-              <span class="journal-entry-time">8:30 AM</span>
-              <span class="journal-entry-mood">😊</span>
-              <span class="journal-entry-privacy private">
-                Private
-              </span>
-            </div>
-          </div>
-        </div>
-        <div class="journal-entry-content">
-          Started the day with gratitude practice. Feeling more centered and ready to tackle the challenges ahead. The morning walk really helped clear my mind and set positive intentions for the day. Looking forward to what today brings.
-        </div>
+    <div class="journal-entries-container" id="journal-container" data-view-container>
+      <div id="journal-empty-state">
+        <EmptyState 
+          icon='<svg class="w-16 h-16 text-on-surface-variant" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>'
+          title="No Journal Entries Yet"
+          description="Start documenting your thoughts, feelings, and daily experiences. Your personal journal is a safe space for reflection and growth."
+          actionText="Write First Entry"
+          actionTarget="#new-journal-btn"
+        />
       </div>
-
-      <div class="journal-entry-card-enhanced" data-date="2025-08-22">
-        <div class="journal-entry-actions">
-          <button class="journal-edit-btn" data-journal-id="journal-2" title="Edit entry">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-            </svg>
-          </button>
-          <button class="journal-delete-btn" data-journal-id="journal-2" title="Delete journal entry">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H8a1 1 0 00-1 1v3M4 7h16"/>
-            </svg>
-          </button>
-        </div>
-        <div class="journal-entry-header">
-          <div class="journal-entry-date-bg">
-            <div class="journal-date-day">22</div>
-            <div class="journal-date-month">Aug</div>
-          </div>
-          <div class="journal-entry-meta">
-            <h4 class="journal-entry-title">Evening Wind Down</h4>
-            <div class="journal-entry-info">
-              <span class="journal-entry-time">9:15 PM</span>
-              <span class="journal-entry-mood">😐</span>
-              <span class="journal-entry-privacy shared">
-                Shared
-              </span>
-            </div>
-          </div>
-        </div>
-        <div class="journal-entry-content">
-          Had a mixed day today. Work was stressful but the team meeting went well. Looking forward to a better tomorrow. Need to remember to take breaks more often and not let the pressure build up so much.
-        </div>
-      </div>
-
-  <div class="journal-entry-card-enhanced" data-date="2025-08-21">
-        <div class="journal-entry-actions">
-          <button class="journal-edit-btn" data-journal-id="journal-3" title="Edit entry">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-            </svg>
-          </button>
-          <button class="journal-delete-btn" data-journal-id="journal-3" title="Delete journal entry">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H8a1 1 0 00-1 1v3M4 7h16"/>
-            </svg>
-          </button>
-        </div>
-        <div class="journal-entry-header">
-          <div class="journal-entry-date-bg">
-            <div class="journal-date-day">21</div>
-            <div class="journal-date-month">Aug</div>
-          </div>
-          <div class="journal-entry-meta">
-            <h4 class="journal-entry-title">Breakthrough Moment</h4>
-            <div class="journal-entry-info">
-              <span class="journal-entry-time">7:45 PM</span>
-              <span class="journal-entry-mood">😊</span>
-              <span class="journal-entry-privacy private">
-                Private
-              </span>
-            </div>
-          </div>
-        </div>
-        <div class="journal-entry-content">
-          Finally understood what my therapist meant about mindful breathing. The afternoon anxiety episode was much more manageable using the techniques we discussed. This feels like real progress in managing my stress responses.
-        </div>
-      </div>
+      <div id="journal-entries" style="display: none;"></div>
     </div>
   </div>
 </div>

@@ -510,7 +510,7 @@ class EnhancedSecurityUnlockModal {
             })
           );
         } catch (e) {
-          console.log('IndexedDB cleanup completed');
+          // IndexedDB cleanup completed
         }
       }
       
@@ -677,7 +677,7 @@ class EnhancedSecurityUnlockModal {
     if (app && typeof app.showCustomNotification === 'function') {
       app.showCustomNotification(message, type);
     } else {
-      console.log(`${type.toUpperCase()}: ${message}`);
+      // Notification: ${type} - ${message}
     }
   }
 }

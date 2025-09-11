@@ -1,179 +1,121 @@
-# Smiley
+# 🌟 Smiley — Wellbeing
 
-A privacy-first chat application that runs powerful open-weight AI models locally using Ollama. Built with Astro, Preact, Tailwind CSS, and daisyUI as a Progressive Web App.
+![Smiley Banner](public/smileyback-min.png)
 
-## ✨ Features
+**Smiley** is a privacy-first AI companion designed to support your emotional wellbeing. Running fully offline with open-source AI models, Smiley gives you a safe space to reflect, chat, and practice mindfulness — without exposing your private thoughts to servers or third parties.
 
-- **Chat-first PWA**: The homepage IS the chat interface - no marketing pages
-- **100% Local**: All AI processing happens on your machine via Ollama
-- **Privacy by Design**: No cloud APIs, no data collection, no analytics
-- **Open Models Only**: Supports GPT-OSS and other open-weight models
-- **Offline Capable**: Works offline after initial install (except AI calls)
-- **Accessible**: Keyboard navigation, screen reader support, focus management
-- **Lightweight**: Minimal JavaScript bundle, CSS animations over JS
-
-## 🤖 Supported Models
-
-### GPT-OSS 20B (Recommended)
-- **Parameters**: ~21 billion
-- **VRAM**: ~16GB recommended
-- **Context**: 131,072 tokens
-- **Features**: Strong reasoning, tool calling, excellent for daily tasks
-
-### GPT-OSS 120B (Advanced)
-- **Parameters**: ~117-120 billion  
-- **VRAM**: 80GB+ (single GPU like NVIDIA H100)
-- **Context**: 131,072 tokens
-- **Features**: Superior reasoning, research-grade performance
-
-## 🚀 Quick Start
-
-### Prerequisites
-- Node.js ≥ 20.0.0
-- pnpm (recommended) or npm
-
-### Installation
-
-1. **Clone and install dependencies**:
-   ```bash
-   git clone <repository-url> smile-ai
-   cd smile-ai
-   pnpm install
-   ```
-
-2. **Install and setup Ollama**:
-   ```bash
-   # Install Ollama from https://ollama.com
-   # Then pull the GPT-OSS model:
-   ollama pull gpt-oss:20b
-   
-   # Start Ollama service (usually auto-starts)
-   ollama serve
-   ```
-
-3. **Start development server**:
-   ```bash
-   pnpm dev
-   ```
-
-4. **Open in browser**: http://localhost:3000
-
-### Production Build
-
-```bash
-pnpm build
-pnpm preview
-```
-
-## 🏗️ Architecture
-
-### Tech Stack
-- **Framework**: Astro 5.0+ with SSR
-- **UI**: Preact islands for interactivity
-- **Styling**: Tailwind CSS + daisyUI (Material-ish theme)
-- **PWA**: @vite-pwa/astro with Workbox
-- **Storage**: localStorage + IndexedDB (via idb)
-- **Validation**: Zod schemas
-- **Utilities**: class-variance-authority for component variants
-
-### Project Structure
-```
-src/
-├── components/          # Reusable UI components
-├── layouts/            # Page layouts
-├── pages/              # Routes and API endpoints
-│   ├── api/           # Ollama proxy endpoints
-│   ├── index.astro    # Main chat interface
-│   ├── privacy.astro  # Privacy policy
-│   └── setup.astro    # Ollama setup guide
-├── types/             # TypeScript definitions
-└── utils/             # Helper functions and stores
-```
-
-### Key Components
-- **AppShell**: Main layout with dock navigation
-- **Chat**: Message rendering and streaming
-- **SmileAvatar**: Animated empty state
-- **OnboardingModal**: First-run setup
-- **UI Kit**: IconButton, Modal, form controls
-
-## 🔌 API Endpoints
-
-### `/api/ollama` (POST)
-Streams chat responses from local Ollama instance.
-
-**Request**:
-```json
-{
-  "model": "gpt-oss:20b",
-  "messages": [
-    {"role": "user", "content": "Hello!"}
-  ]
-}
-```
-
-**Response**: NDJSON stream of Ollama chat chunks
-
-### `/api/ollama-health` (GET)
-Health check and model discovery.
-
-**Response**:
-```json
-{
-  "healthy": true,
-  "models": [...],
-  "modelCount": 2
-}
-```
-
-## 🎨 Theming
-
-Smiley includes three built-in themes:
-- **Smile**: Custom Material-inspired theme (default)
-- **Light**: Clean light theme
-- **Dark**: Dark mode
-
-Theme switching is instant and persists across sessions.
-
-## 🔐 Privacy & Security
-
-- **No telemetry**: Zero analytics or tracking
-- **Local storage**: All data stays on your device
-- **No cloud APIs**: Direct connection to local Ollama only
-- **Open source**: Fully auditable codebase
-- **Offline capable**: Core functionality works without internet
-
-## ⚡ Performance
-
-- **Lighthouse Score**: 90+ on desktop for first load
-- **Bundle Size**: <100KB initial JavaScript
-- **PWA**: Offline caching for static assets
-- **Streaming**: Real-time AI response rendering
-- **Accessibility**: WCAG 2.1 AA compliant
-
-## 🛠️ Development
-
-### Commands
-```bash
-pnpm dev          # Start dev server
-pnpm build        # Production build
-pnpm preview      # Preview production build  
-pnpm check        # TypeScript check
-```
-
-### Environment
-- **Node**: ≥20.0.0 required
-- **Ollama**: Must be running on localhost:11434
-- **Models**: Pull gpt-oss:20b or other compatible models
-
-## 🙏 Credits
-
-Powered by open models. Thanks to:
-- **NVIDIA** for providing GPUs for AI research
-- **OpenAI** for releasing GPT-OSS open-weight models  
-- **Ollama** for making local AI accessible
-- **Astro**, **Preact**, and the open source community
+Try it instantly at: [**https://smiley.hasx.dev**](https://smiley.hasx.dev) ✨
 
 ---
 
-*Smiley runs local-only. Your conversations never leave your device.*
+## 🌱 Why Smiley?
+
+Smiley was created to make wellbeing more accessible for everyone.
+
+For many people, professional support like a coach or psychologist is out of reach — whether due to cost, availability, or the difficulty of sharing sensitive details with someone else. Smiley bridges that gap by offering a private, offline-first space for reflection and support.
+
+With Smiley, you can explore your thoughts, practice mindfulness, and build habits for resilience — all while knowing your data stays with you, on your device.
+
+---
+
+## 🎯 Fine-Tuned Model: GPT-Smiley
+
+Smiley is powered by **GPT-Smiley**, our custom fine-tuned version of GPT-OSS. This fine-tune is optimized specifically for:
+
+* **Emotional Support Conversations** — refined to respond with warmth, empathy, and clarity.
+* **Mindfulness Guidance** — trained to deliver step-by-step calming and breathing exercises.
+* **Privacy-First Context** — shaped to avoid unnecessary data requests and respect boundaries.
+
+This fine-tuned model is what makes Smiley different: it is not just any general-purpose AI, but one carefully adapted to act as a wellbeing companion that runs fully offline.
+
+---
+
+## 🚀 Quick Start (Online)
+
+The easiest way to begin is by opening [**https://smiley.hasx.dev**](https://smiley.hasx.dev) in your browser.
+
+Smiley will walk you through a gentle onboarding: setting your theme, enabling encryption, choosing your model, and creating a personal profile. From the start, your experience feels tailored, safe, and fully yours.
+
+---
+
+## 💻 Self-Hosting (Offline Setup)
+
+Prefer full independence? Run Smiley locally on your own machine.
+
+### Prerequisites
+
+* **Ollama** running locally (`ollama serve`)
+* **Node.js (20+)** and **pnpm** installed
+
+### Step 1: Pull the model
+
+```bash
+ollama pull hasx/gpt-smiley:20b
+```
+
+### Step 2: Clone the repo
+
+```bash
+git clone https://github.com/Has-X/smileyapp.git
+cd smileyapp
+pnpm install
+```
+
+### Step 3: Build and serve
+
+```bash
+pnpm build
+pnpm serve
+```
+
+Open the app locally at `http://localhost:3000`.
+
+---
+
+## ✨ Features
+
+### 🚪 Onboarding
+
+Smiley guides you through setup in a clear and supportive way — helping you pick your theme, enable encryption, adjust model settings, and personalize your profile.
+
+### 💬 Private Chat
+
+Conversations with Smiley feel natural and supportive. Everything runs locally, with no external servers or tracking.
+
+### 🧘 Mindfulness Studio
+
+Smiley includes guided exercises for calm and focus — from quick breathing sessions to longer mindfulness routines — always ready, even offline.
+
+### 📖 Journal
+
+Your thoughts matter. Smiley offers a private, safe place to capture reflections, tag entries, and revisit them whenever you need. A digital sanctuary that belongs only to you.
+
+### 👤 Profile
+
+Customize what Smiley knows about you: your name, goals, tone, or what brings you comfort. This makes every interaction more meaningful and personal.
+
+### 🔐 Security
+
+Protect your data with password-based encryption. Your chat history, journal entries, and profile are fully encrypted and stored only on your device.
+
+---
+
+## 🛠️ How It Works
+
+* **Astro + Preact** power the responsive, lightweight interface.
+* **Tailwind + DaisyUI** provide an accessible, polished design.
+* **Ollama** handles offline AI interactions with GPT-Smiley.
+* **IndexedDB + localStorage** securely store your data on your device.
+* **PWA support** makes Smiley installable and available offline.
+
+---
+
+## 🌍 Real-World Impact
+
+Smiley empowers individuals to take care of their mental wellbeing without needing internet access or giving up privacy. It’s especially valuable in low-connectivity areas or for those who prefer to keep sensitive reflections completely private.
+
+---
+
+✨ **Smiley** is more than an app. It’s a trusted companion, built with care to protect your privacy while supporting your everyday wellbeing.
+
+License: AGPL

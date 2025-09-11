@@ -14,7 +14,7 @@ import ViewToggle from '../ViewToggle.astro';
           Chat History
         </div>
         <div class="section-count-island">
-          <span class="section-count">3</span>
+          <span class="section-count" id="history-count">0</span>
         </div>
       </div>
       <ViewToggle panelId="panel-history" />
@@ -43,66 +43,15 @@ import ViewToggle from '../ViewToggle.astro';
 
     <!-- History Content - Compact conversation cards -->
     <div class="memory-grid" id="history-container" data-view-container>
-      <!-- Conversation history cards -->
-      
-      <div class="memory-card" data-date="2025-08-23">
-        <div class="memory-card-actions">
-          <button class="memory-delete-btn history-delete-btn" data-conversation-id="conv-1" title="Delete conversation">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H8a1 1 0 00-1 1v3M4 7h16"/>
-            </svg>
-          </button>
+      <div id="history-empty" style="display: none;">
+        <div class="text-center py-12">
+          <svg class="w-16 h-16 text-on-surface-variant mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          <h3 class="text-lg font-semibold text-on-surface mb-2">No Chat History Yet</h3>
+          <p class="text-on-surface-variant mb-4">Your conversation history will appear here once you start chatting.</p>
+          <button class="btn-primary" onclick="(window as any).smileApp?.switchPanel('chat')">Start First Conversation</button>
         </div>
-        <div class="conversation-header">
-          <span class="memory-date">2 hours ago</span>
-          <div class="conversation-stats">
-            <span class="conversation-stat">18 messages</span>
-            <span class="conversation-stat">22 min</span>
-          </div>
-        </div>
-        <p class="memory-excerpt">
-          We discussed your morning anxiety patterns and explored breathing techniques. You mentioned feeling overwhelmed when waking up, and we worked through a 4-7-8 breathing exercise that seemed to help calm your nervous system.
-        </p>
-      </div>
-
-      <div class="memory-card" data-date="2025-08-22">
-        <div class="memory-card-actions">
-          <button class="memory-delete-btn history-delete-btn" data-conversation-id="conv-2" title="Delete conversation">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H8a1 1 0 00-1 1v3M4 7h16"/>
-            </svg>
-          </button>
-        </div>
-        <div class="conversation-header">
-          <span class="memory-date">Yesterday</span>
-          <div class="conversation-stats">
-            <span class="conversation-stat">31 messages</span>
-            <span class="conversation-stat">38 min</span>
-          </div>
-        </div>
-        <p class="memory-excerpt">
-          Long conversation about setting realistic goals and improving productivity. We created a personalized evening routine to help with sleep quality and discussed strategies for maintaining motivation during challenging periods.
-        </p>
-      </div>
-
-      <div class="memory-card" data-date="2025-08-20">
-        <div class="memory-card-actions">
-          <button class="memory-delete-btn history-delete-btn" data-conversation-id="conv-3" title="Delete conversation">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H8a1 1 0 00-1 1v3M4 7h16"/>
-            </svg>
-          </button>
-        </div>
-        <div class="conversation-header">
-          <span class="memory-date">3 days ago</span>
-          <div class="conversation-stats">
-            <span class="conversation-stat">24 messages</span>
-            <span class="conversation-stat">29 min</span>
-          </div>
-        </div>
-        <p class="memory-excerpt">
-          Discussion about work stress and setting healthy boundaries. We explored mindfulness techniques for managing overwhelming workdays and practiced a brief body scan meditation together.
-        </p>
       </div>
     </div>
   </div>

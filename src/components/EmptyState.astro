@@ -1,0 +1,46 @@
+---
+export interface Props {
+  icon: string;
+  title: string;
+  description: string;
+  actionText?: string;
+  actionTarget?: string;
+}
+
+const { icon, title, description, actionText, actionTarget } = Astro.props;
+---
+
+<div class="empty-state-container flex flex-col items-center justify-center py-16 px-8 text-center">
+  <div class="empty-state-icon mb-6 opacity-60">
+    <Fragment set:html={icon} />
+  </div>
+  <h3 class="empty-state-title text-xl font-semibold text-on-surface mb-3">
+    {title}
+  </h3>
+  <p class="empty-state-description text-on-surface-variant mb-6 max-w-md leading-relaxed">
+    {description}
+  </p>
+  {actionText && actionTarget && (
+    <button 
+      class="empty-state-action bg-primary text-on-primary font-medium px-6 py-3 rounded-lg transition-all duration-200 hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50"
+      onclick={`document.querySelector('${actionTarget}')?.click()`}
+    >
+      {actionText}
+    </button>
+  )}
+</div>
+
+<style>
+  .empty-state-container {
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .empty-state-icon {
+    transform: scale(1);
+    transition: transform 0.3s ease;
+  }
+  
+  .empty-state-icon:hover {
+    transform: scale(1.1);
+  }
+</style>

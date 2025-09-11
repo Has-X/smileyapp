@@ -6,13 +6,15 @@ class SmileApp {
   private models: any[] = [];
   private selectedModel: string = '';
   private isOnboardingComplete: boolean = false;
-  private debugMode: boolean = false;
+  // Debug mode removed for production
   private hasRevealedChat: boolean = false;
   private isStreaming: boolean = false;
 
 
   constructor() {
     this.init();
+    // Make app instance globally available
+    (window as any).smileApp = this;
   }
 
   private async init() {
@@ -37,8 +39,7 @@ class SmileApp {
     // Initialize ambient background interactions
     this.initAmbientBackground();
     
-    // Initialize debug mode keyboard shortcut
-    this.initDebugShortcut();
+    // Debug mode removed for production
     
     // Load models
     await this.loadModels();
@@ -408,12 +409,10 @@ class SmileApp {
       });
     }
 
-    // Test Unlock button
+    // Remove test unlock button - it's confusing and not needed
     const testUnlockBtn = document.getElementById('test-unlock-btn') as HTMLButtonElement;
     if (testUnlockBtn) {
-      testUnlockBtn.addEventListener('click', () => {
-        this.testUnlock();
-      });
+      testUnlockBtn.style.display = 'none';
     }
 
     // Initialize security UI from current storage state (try enhanced first)
@@ -438,12 +437,24 @@ class SmileApp {
     const setPasswordBtn = document.getElementById('set-password-btn') as HTMLButtonElement;
     const changePasswordBtn = document.getElementById('change-password-btn') as HTMLButtonElement;
     const testUnlockBtn = document.getElementById('test-unlock-btn') as HTMLButtonElement;
+    const encryptionStatus = document.getElementById('encryption-status');
 
     if (encryptionToggle) encryptionToggle.checked = !!settings.encryptionEnabled;
     if (autoLockSelect) autoLockSelect.value = String(settings.autoLockInterval ?? 30);
     if (setPasswordBtn) setPasswordBtn.style.display = settings.encryptionEnabled ? 'none' : '';
     if (changePasswordBtn) changePasswordBtn.style.display = settings.encryptionEnabled ? '' : 'none';
-    if (testUnlockBtn) testUnlockBtn.style.display = settings.encryptionEnabled ? '' : 'none';
+    if (testUnlockBtn) testUnlockBtn.style.display = 'none'; // Always hide test unlock
+    
+    // Update encryption status text
+    if (encryptionStatus) {
+      if (settings.encryptionEnabled) {
+        encryptionStatus.textContent = 'Your data is encrypted and secure';
+        encryptionStatus.className = 'text-sm text-green-600 dark:text-green-400';
+      } else {
+        encryptionStatus.textContent = 'Your data is stored without encryption';
+        encryptionStatus.className = 'text-sm text-gray-600 dark:text-gray-400';
+      }
+    }
   }
 
   private setupOnboardingListeners() {
@@ -700,15 +711,17 @@ class SmileApp {
   private applyViewLayout(container: HTMLElement, view: string) {
     if (view === 'tiles') {
       // Tiles view: vertical stack layout
-      container.style.display = 'flex';
-      container.style.flexDirection = 'column';
-      container.style.gap = '1.25rem';
+      container.classList.remove('view-grid');
+      container.style.display = '';
+      container.style.flexDirection = '';
+      container.style.gap = '';
       container.style.gridTemplateColumns = '';
     } else {
-      // Grid view: responsive grid layout  
-      container.style.display = 'grid';
-      container.style.gridTemplateColumns = 'repeat(auto-fill, minmax(280px, 1fr))';
-      container.style.gap = '1rem';
+      // Grid view: responsive grid layout
+      container.classList.add('view-grid');
+      container.style.display = '';
+      container.style.gridTemplateColumns = '';
+      container.style.gap = '';
       container.style.flexDirection = '';
     }
     // Applied layout to container
@@ -854,7 +867,7 @@ class SmileApp {
     }
   }
 
-  private setThemeMode(mode: string) {
+  public setThemeMode(mode: string) {
     localStorage.setItem('smile-theme-mode', mode);
     
     const accentColor = localStorage.getItem('smile-accent-color') || 'smile';
@@ -943,12 +956,6 @@ class SmileApp {
     const message = messageInput.value.trim();
     if (!message) return;
 
-    // Check if debug mode is enabled
-    if (this.debugMode) {
-      await this.sendDemoMessage(message);
-      return;
-    }
-
     if (!this.selectedModel) {
       this.showCustomNotification('Please select a model first', 'error');
       return;
@@ -965,57 +972,43 @@ class SmileApp {
     this.triggerChatRevealAnimation();
 
     // Add user message to UI (handles empty-state animation)
-    this.addMessage('user', message);
+    const userMessageId = this.addMessage('user', message);
 
-    // Add assistant placeholder
+    // Add assistant placeholder with empty content for streaming
     const assistantMessageId = this.addMessage('assistant', '');
 
     try {
-      const response = await fetch('/api/ollama', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          message,
-          model: this.selectedModel,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const reader = response.body?.getReader();
-      const decoder = new TextDecoder();
-      let assistantMessage = '';
-
-      if (reader) {
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-
-          const chunk = decoder.decode(value);
-          const lines = chunk.split('\n');
-
-          for (const line of lines) {
-            if (line.startsWith('data: ')) {
-              try {
-                const data = JSON.parse(line.slice(6));
-                if (data.content) {
-                  assistantMessage += data.content;
-                  this.updateMessage(assistantMessageId, assistantMessage);
-                }
-              } catch (e) {
-                // Ignore JSON parse errors
-              }
-            }
-          }
+      // Use AI Conversation Manager for enhanced functionality
+      const { default: AIConversationManager } = await import('./ai-conversation-manager.ts');
+      const aiManager = AIConversationManager.getInstance();
+      
+      // Set up streaming message listener before sending
+      const streamingListener = (event: CustomEvent) => {
+        const { messageId, content } = event.detail;
+        this.updateMessage(messageId, content);
+      };
+      
+      window.addEventListener('ai-message-update', streamingListener);
+      
+      try {
+        const result = await aiManager.sendMessage(message, this.selectedModel);
+        
+        // Final update with clean response (removes tool calls)
+        this.updateMessage(result.messageId, result.response);
+      
+      // Handle tool calls by showing appropriate embeds
+        for (const toolCall of result.toolCalls) {
+          this.handleToolCallUI(toolCall);
         }
+        
+        // Reset streaming state on successful completion
+        this.setStreamingState(false);
+        
+      } finally {
+        // Clean up streaming listener
+        window.removeEventListener('ai-message-update', streamingListener);
       }
       
-      // Reset streaming state on successful completion
-      this.setStreamingState(false);
     } catch (error) {
       console.error('Error sending message:', error);
       this.updateMessage(assistantMessageId, 'Sorry, I encountered an error. Please make sure Ollama is running and try again.');
@@ -1026,58 +1019,52 @@ class SmileApp {
     }
   }
 
-  private async sendDemoMessage(message: string) {
-    const messageInput = document.getElementById('message-input') as HTMLTextAreaElement;
-    if (!messageInput) return;
-
-    // Prevent sending if already streaming
-    if (this.isStreaming) {
-      this.showCustomNotification('Please wait for the current response to finish', 'info');
-      return;
-    }
-
-    // Clear input and reset height
-    messageInput.value = '';
-    messageInput.style.height = 'auto';
-
-    // Set streaming state to prevent double sends
-    this.setStreamingState(true);
-
-    // Trigger one-time chat reveal animation
-    this.triggerChatRevealAnimation();
-
-    // Add user message to UI (this will handle empty state animation)
-    this.addMessage('user', message);
-
-    // Add assistant placeholder
-    const assistantMessageId = this.addMessage('assistant', '');
-
-    try {
-      // Import demo streamer dynamically
-      const { default: DemoStreamer } = await import('./demo-streamer.ts');
-      const streamer = DemoStreamer.getInstance();
-
-      // Stream the demo response
-      await streamer.streamResponse(
-        message,
-        (chunk: string) => {
-          this.updateMessage(assistantMessageId, chunk);
-        },
-        () => {
-          // Demo streaming complete
-          // Reset streaming state on demo completion
-          this.setStreamingState(false);
+  private handleToolCallUI(toolCall: any) {
+    switch (toolCall.type) {
+      case 'exercise':
+        // Exercise embed will be shown via event listener
+        break;
+      case 'sos':
+        // SOS embed will be shown via event listener
+        break;
+      case 'memory':
+        if (toolCall.action === 'save') {
+          this.showCustomNotification('💾 Memory saved', 'success');
+          this.refreshMemoriesPanel();
+        } else if (toolCall.action === 'delete') {
+          this.showCustomNotification('🗑️ Memory deleted', 'info');
+          this.refreshMemoriesPanel();
         }
-      );
-    } catch (error) {
-      console.error('Error in demo streaming:', error);
-      this.updateMessage(assistantMessageId, 'Demo streaming error occurred.');
-      this.showCustomNotification('Demo streaming error', 'error');
-      
-      // Reset streaming state on error
-      this.setStreamingState(false);
+        break;
+      case 'journal':
+        // Journal context will be handled in the AI response
+        break;
     }
   }
+
+  private async refreshMemoriesPanel() {
+    try {
+      const { default: AIConversationManager } = await import('./ai-conversation-manager.ts');
+      const aiManager = AIConversationManager.getInstance();
+      const memories = await aiManager.getMemoryList();
+      
+      // Update memories count
+      const memoriesCount = document.getElementById('memories-count');
+      if (memoriesCount) {
+        memoriesCount.textContent = memories.length.toString();
+      }
+      
+      // Refresh memories content if panel is visible
+      const memoriesPanel = document.getElementById('panel-memories');
+      if (memoriesPanel && !memoriesPanel.classList.contains('hidden')) {
+        this.loadMemoriesData();
+      }
+    } catch (error) {
+      console.error('Failed to refresh memories panel:', error);
+    }
+  }
+
+
 
   private triggerChatRevealAnimation() {
     if (this.hasRevealedChat) return;
@@ -1114,20 +1101,7 @@ class SmileApp {
     this.hasRevealedChat = true;
   }
 
-  private toggleDebugMode() {
-    this.debugMode = !this.debugMode;
-    const status = this.debugMode ? 'ENABLED' : 'DISABLED';
-    this.showCustomNotification(`Debug Mode ${status}`, this.debugMode ? 'success' : 'info');
-    // Debug mode toggled
-    this.updateDebugIndicator();
-  }
-
-  private updateDebugIndicator() {
-    const indicator = document.getElementById('debug-indicator');
-    if (indicator) {
-      indicator.style.display = this.debugMode ? 'block' : 'none';
-    }
-  }
+  // Debug mode functionality removed
 
   private setStreamingState(streaming: boolean) {
     this.isStreaming = streaming;
@@ -1165,15 +1139,7 @@ class SmileApp {
     }
   }
 
-  private initDebugShortcut() {
-    document.addEventListener('keydown', (e) => {
-      // Toggle debug mode with Ctrl+Shift+D
-      if (e.ctrlKey && e.shiftKey && e.key === 'D') {
-        e.preventDefault();
-        this.toggleDebugMode();
-      }
-    });
-  }
+  // Debug shortcuts removed
 
   private addMessage(role: 'user' | 'assistant', content: string): string {
     const messagesContainer = document.getElementById('messages-container');
@@ -1233,19 +1199,10 @@ class SmileApp {
     if (messageElement) {
       const bubble = messageElement.querySelector('.message-bubble');
       if (bubble) {
-        // Get the previous content length to determine new characters
-        const previousContent = bubble.textContent || '';
-        const newCharacters = content.slice(previousContent.length);
+        // For streaming updates, directly update content for speed
+        bubble.textContent = content;
         
-        if (newCharacters.length > 0) {
-          // Apply streaming reveal effect to new characters
-          this.animateStreamingText(bubble as HTMLElement, content, previousContent.length);
-        } else {
-          // Fallback for complete content replacement
-          bubble.textContent = content;
-        }
-        
-        // Scroll to bottom
+        // Scroll to bottom smoothly
         const messagesContainer = document.getElementById('messages-container');
         if (messagesContainer) {
           messagesContainer.scrollTo({
@@ -1715,35 +1672,236 @@ class SmileApp {
     });
   }
 
-  private loadMemoriesData() {
-    // Update memory counts in filter buttons
-    const counters = {
-      all: 42,
-      chats: 28,
-      insights: 8,
-      moments: 6
-    };
+  private async loadMemoriesData() {
+    try {
+      const { default: AIConversationManager } = await import('./ai-conversation-manager.ts');
+      const aiManager = AIConversationManager.getInstance();
+      
+      // Load real memories and conversations
+      const memories = await aiManager.getMemoryList();
+      const conversations = await aiManager.getConversationList();
+      
+      // Count different types
+      const counters = {
+        all: memories.length + conversations.length,
+        chats: conversations.length,
+        insights: memories.filter(m => m.type === 'insight').length,
+        moments: memories.filter(m => m.type === 'moment').length
+      };
 
-    Object.entries(counters).forEach(([filter, count]) => {
-      const filterBtn = document.querySelector(`[data-filter="${filter}"] .filter-count`);
-      if (filterBtn) {
-        filterBtn.textContent = count.toString();
+      // Update filter button counts
+      Object.entries(counters).forEach(([filter, count]) => {
+        const filterBtn = document.querySelector(`[data-filter="${filter}"] .filter-count`);
+        if (filterBtn) {
+          filterBtn.textContent = count.toString();
+        }
+      });
+
+      // Update total count in header
+      const totalCount = document.getElementById('memories-count');
+      if (totalCount) {
+        totalCount.textContent = counters.all.toString();
       }
-    });
-
-    // Update total count in header
-    const totalCount = document.getElementById('memories-count');
-    if (totalCount) {
-      totalCount.textContent = counters.all.toString();
+      
+      // Render memory cards
+      await this.renderMemoryCards(memories, conversations);
+      
+      // Show/hide empty state
+      const emptyState = document.getElementById('memories-empty');
+      
+      if (counters.all === 0) {
+        if (emptyState) emptyState.style.display = 'block';
+      } else {
+        if (emptyState) emptyState.style.display = 'none';
+      }
+      
+    } catch (error) {
+      console.error('Failed to load memories data:', error);
+      // Fallback to empty state
+      const emptyState = document.getElementById('memories-empty-state');
+      const content = document.getElementById('memories-content');
+      if (emptyState) emptyState.style.display = 'flex';
+      if (content) content.style.display = 'none';
     }
-
-    // In a real implementation, this would:
-    // 1. Load conversation history from localStorage
-    // 2. Generate AI insights based on conversation patterns
-    // 3. Create special moments from meaningful interactions
-    // 4. Dynamically render memory cards with actual data
+  }
+  
+  private async renderMemoryCards(memories: any[], conversations: any[]) {
+    const container = document.getElementById('memories-container');
+    if (!container) return;
     
-    // Memories data loaded
+    // Clear existing memory items but keep empty state
+    const existingItems = container.querySelectorAll('.memory-card');
+    existingItems.forEach(item => item.remove());
+    
+    // Add memory cards directly to container
+    memories.forEach(memory => {
+      const card = this.createMemoryCard(memory);
+      container.appendChild(card);
+    });
+  }
+  
+  private createMemoryCard(memory: any): HTMLElement {
+    const card = document.createElement('div');
+    card.className = 'memory-card cursor-pointer';
+    card.dataset.memoryId = memory.id;
+    card.dataset.date = new Date(memory.timestamp).toISOString();
+    
+    const timeAgo = this.formatTimeAgo(memory.timestamp);
+    
+    card.innerHTML = `
+      <div class="memory-card-actions">
+        <button class="memory-delete-btn" data-memory-id="${memory.id}" title="Delete memory">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H8a1 1 0 00-1 1v3M4 7h16"/>
+          </svg>
+        </button>
+      </div>
+      <div class="memory-date">${timeAgo}</div>
+      <p class="memory-excerpt">${memory.content}</p>
+    `;
+    
+    // Add delete button functionality
+    const deleteBtn = card.querySelector('.memory-delete-btn');
+    if (deleteBtn) {
+      deleteBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.deleteMemory(memory.id);
+      });
+    }
+    
+    return card;
+  }
+  
+  private async deleteMemory(memoryId: string) {
+    try {
+      const { default: AIConversationManager } = await import('./ai-conversation-manager.ts');
+      const aiManager = AIConversationManager.getInstance();
+      
+      // Delete the memory
+      await aiManager.deleteMemory(memoryId);
+      
+      // Refresh the memories panel
+      await this.loadMemoriesData();
+      
+      this.showCustomNotification('Memory deleted', 'success');
+      
+    } catch (error) {
+      console.error('Failed to delete memory:', error);
+      this.showCustomNotification('Failed to delete memory', 'error');
+    }
+  }
+  
+  private createMemorySection(title: string, type: string): HTMLElement {
+    const section = document.createElement('div');
+    section.className = 'memory-section mb-8';
+    section.innerHTML = `
+      <h3 class="text-lg font-semibold text-on-surface mb-4 flex items-center gap-2">
+        ${this.getMemoryTypeIcon(type)}
+        ${title}
+      </h3>
+      <div class="memory-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      </div>
+    `;
+    return section.querySelector('.memory-grid')!.parentElement!;
+  }
+  
+  private getMemoryTypeIcon(type: string): string {
+    switch (type) {
+      case 'conversation':
+        return '<svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>';
+      case 'insight':
+        return '<svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>';
+      case 'moment':
+        return '<svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>';
+      default:
+        return '<svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>';
+    }
+  }
+  
+  private createConversationMemoryCard(conversation: any): HTMLElement {
+    const card = document.createElement('div');
+    card.className = 'memory-card conversation-memory interactive-card p-4 cursor-pointer';
+    card.dataset.conversationId = conversation.id;
+    
+    const lastMessage = conversation.messages[conversation.messages.length - 1];
+    const preview = lastMessage?.content.slice(0, 100) + (lastMessage?.content.length > 100 ? '...' : '') || 'No messages';
+    const timeAgo = this.formatTimeAgo(conversation.updatedAt);
+    
+    card.innerHTML = `
+      <div class="memory-header flex items-start justify-between mb-3">
+        <div class="memory-title font-semibold text-on-surface">${conversation.title}</div>
+        <div class="memory-time text-xs text-on-surface-variant">${timeAgo}</div>
+      </div>
+      <div class="memory-excerpt text-sm text-on-surface-variant leading-relaxed">${preview}</div>
+      <div class="memory-tags flex gap-2 mt-3">
+        <span class="memory-tag px-2 py-1 text-xs rounded-full bg-primary/10 text-primary">
+          ${conversation.messages.length} messages
+        </span>
+      </div>
+    `;
+    
+    card.addEventListener('click', () => {
+      this.resumeConversation(conversation.id);
+    });
+    
+    return card;
+  }
+  
+  private createInsightMemoryCard(insight: any): HTMLElement {
+    const card = document.createElement('div');
+    card.className = 'memory-card insight-memory interactive-card p-4';
+    
+    const timeAgo = this.formatTimeAgo(insight.timestamp);
+    
+    card.innerHTML = `
+      <div class="memory-header flex items-start justify-between mb-3">
+        <div class="memory-title font-semibold text-on-surface">AI Insight</div>
+        <div class="memory-time text-xs text-on-surface-variant">${timeAgo}</div>
+      </div>
+      <div class="memory-excerpt text-sm text-on-surface-variant leading-relaxed">${insight.content}</div>
+      <div class="memory-tags flex gap-2 mt-3">
+        <span class="memory-tag px-2 py-1 text-xs rounded-full bg-secondary/10 text-secondary">
+          Importance: ${insight.importance}/10
+        </span>
+      </div>
+    `;
+    
+    return card;
+  }
+  
+  private createMomentMemoryCard(moment: any): HTMLElement {
+    const card = document.createElement('div');
+    card.className = 'memory-card moment-memory interactive-card p-4';
+    
+    const timeAgo = this.formatTimeAgo(moment.timestamp);
+    
+    card.innerHTML = `
+      <div class="memory-header flex items-start justify-between mb-3">
+        <div class="memory-title font-semibold text-on-surface">Special Moment</div>
+        <div class="memory-time text-xs text-on-surface-variant">${timeAgo}</div>
+      </div>
+      <div class="memory-excerpt text-sm text-on-surface-variant leading-relaxed">${moment.content}</div>
+      <div class="memory-tags flex gap-2 mt-3">
+        ${moment.tags ? moment.tags.map(tag => 
+          `<span class="memory-tag px-2 py-1 text-xs rounded-full bg-tertiary/10 text-tertiary">${tag}</span>`
+        ).join('') : ''}
+      </div>
+    `;
+    
+    return card;
+  }
+  
+  private formatTimeAgo(timestamp: number): string {
+    const now = Date.now();
+    const diff = now - timestamp;
+    const minutes = Math.floor(diff / 60000);
+    const hours = Math.floor(diff / 3600000);
+    const days = Math.floor(diff / 86400000);
+    
+    if (days > 0) return `${days}d ago`;
+    if (hours > 0) return `${hours}h ago`;
+    if (minutes > 0) return `${minutes}m ago`;
+    return 'Just now';
   }
 
   private generateInsights() {
@@ -2011,55 +2169,276 @@ class SmileApp {
            date1.getFullYear() === date2.getFullYear();
   }
 
-  private loadConversationHistory() {
-    // Update history count in header
-    const historyCount = document.getElementById('history-count');
-    if (historyCount) {
-      historyCount.textContent = '0'; // Start with 0, will be updated as conversations are saved
+  private async loadConversationHistory() {
+    try {
+      const { default: AIConversationManager } = await import('./ai-conversation-manager.ts');
+      const aiManager = AIConversationManager.getInstance();
+      const conversations = await aiManager.getConversationList();
+      
+      // Validate conversations array
+      const validConversations = Array.isArray(conversations) ? conversations : [];
+      
+      // Update history count in header
+      const historyCount = document.getElementById('history-count');
+      if (historyCount) {
+        historyCount.textContent = validConversations.length.toString();
+      }
+      
+      // Render conversation items
+      await this.renderConversationHistory(validConversations);
+      
+      // Show/hide empty state
+      const emptyState = document.getElementById('history-empty');
+      
+      if (validConversations.length === 0) {
+        if (emptyState) emptyState.style.display = 'block';
+      } else {
+        if (emptyState) emptyState.style.display = 'none';
+      }
+      
+    } catch (error) {
+      console.error('Failed to load conversation history:', error);
+      
+      // Clear any corrupted data and show empty state
+      const container = document.getElementById('history-container');
+      if (container) {
+        const existingItems = container.querySelectorAll('.memory-card:not(#history-empty)');
+        existingItems.forEach(item => item.remove());
+      }
+      
+      const emptyState = document.getElementById('history-empty');
+      if (emptyState) emptyState.style.display = 'block';
+      
+      const historyCount = document.getElementById('history-count');
+      if (historyCount) historyCount.textContent = '0';
+      
+      this.showCustomNotification('Failed to load conversation history', 'error');
     }
-
-    // In a real implementation, this would:
-    // 1. Load conversation history from localStorage
-    // 2. Generate conversation preview text
-    // 3. Display conversation items with dates and message counts
-    // 4. Update the history count
+  }
+  
+  private async renderConversationHistory(conversations: any[]) {
+    const container = document.getElementById('history-container');
+    if (!container) return;
     
-    // Conversation history loaded
+    // Clear existing conversation items but keep empty state
+    const existingItems = container.querySelectorAll('.memory-card:not(#history-empty)');
+    existingItems.forEach(item => item.remove());
+    
+    // Filter out invalid conversations and render valid ones
+    const validConversations = conversations.filter(conv => 
+      conv && conv.id && conv.messages && Array.isArray(conv.messages) && conv.updatedAt
+    );
+    
+    validConversations.forEach(conversation => {
+      try {
+        const item = this.createConversationHistoryItem(conversation);
+        container.appendChild(item);
+      } catch (error) {
+        console.error('Error creating conversation item:', error, conversation);
+      }
+    });
+  }
+  
+  private createConversationHistoryItem(conversation: any): HTMLElement {
+    // Validate conversation data
+    if (!conversation || !conversation.id || !conversation.messages || !Array.isArray(conversation.messages)) {
+      throw new Error('Invalid conversation data');
+    }
+    
+    const item = document.createElement('div');
+    item.className = 'memory-card cursor-pointer';
+    item.dataset.conversationId = conversation.id;
+    
+    // Safe date handling
+    const updatedAt = conversation.updatedAt || Date.now();
+    item.dataset.date = new Date(updatedAt).toISOString();
+    
+    // Safe title handling
+    const title = conversation.title || 'Untitled Conversation';
+    item.dataset.keywords = title.toLowerCase();
+    
+    // Safe message handling
+    const lastMessage = conversation.messages && conversation.messages.length > 0 
+      ? conversation.messages[conversation.messages.length - 1] 
+      : null;
+    
+    let preview = 'No messages';
+    if (lastMessage && lastMessage.content && typeof lastMessage.content === 'string') {
+      const content = lastMessage.content.trim();
+      preview = content.length > 120 ? content.slice(0, 120) + '...' : content;
+    }
+    
+    const timeAgo = this.formatTimeAgo(updatedAt);
+    const duration = this.calculateConversationDuration(conversation);
+    const messageCount = conversation.messages ? conversation.messages.length : 0;
+    
+    // Escape HTML to prevent XSS
+    const safePreview = preview.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const safeTitle = title.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    
+    item.innerHTML = `
+      <div class="memory-card-actions">
+        <button class="memory-delete-btn history-delete-btn" data-conversation-id="${conversation.id}" title="Delete conversation">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H8a1 1 0 00-1 1v3M4 7h16"/>
+          </svg>
+        </button>
+      </div>
+      <div class="conversation-header">
+        <span class="memory-date">${timeAgo}</span>
+        <div class="conversation-stats">
+          <span class="conversation-stat">${messageCount} messages</span>
+          <span class="conversation-stat">${duration}</span>
+        </div>
+      </div>
+      <p class="memory-excerpt">${safePreview}</p>
+    `;
+    
+    // Make entire card clickable to resume conversation
+    item.addEventListener('click', (e) => {
+      // Don't trigger if clicking delete button
+      if ((e.target as HTMLElement).closest('.memory-delete-btn')) {
+        return;
+      }
+      this.resumeConversation(conversation.id);
+    });
+    
+    // Add delete button functionality
+    const deleteBtn = item.querySelector('.memory-delete-btn');
+    if (deleteBtn) {
+      deleteBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.deleteConversation(conversation.id);
+      });
+    }
+    
+    return item;
+  }
+  
+  private calculateConversationDuration(conversation: any): string {
+    if (!conversation || !conversation.messages || !Array.isArray(conversation.messages) || conversation.messages.length < 2) {
+      return '< 1min';
+    }
+    
+    const firstMessage = conversation.messages[0];
+    const lastMessage = conversation.messages[conversation.messages.length - 1];
+    
+    // Validate timestamps
+    const firstTimestamp = firstMessage?.timestamp || Date.now();
+    const lastTimestamp = lastMessage?.timestamp || Date.now();
+    
+    if (typeof firstTimestamp !== 'number' || typeof lastTimestamp !== 'number') {
+      return '< 1min';
+    }
+    
+    const duration = Math.abs(lastTimestamp - firstTimestamp);
+    
+    const minutes = Math.floor(duration / 60000);
+    const hours = Math.floor(duration / 3600000);
+    
+    if (hours > 0) return `${hours}h ${minutes % 60}m`;
+    if (minutes > 0) return `${minutes}m`;
+    return '< 1min';
   }
 
-  private resumeConversation(conversationId?: string) {
+  private async resumeConversation(conversationId?: string) {
     if (!conversationId) {
       this.showCustomNotification('Unable to resume conversation', 'error');
       return;
     }
 
-    // Switch to chat panel and load conversation
-    this.switchPanel('chat');
-    this.showCustomNotification('Resuming conversation...', 'info');
-    
-    // In a real implementation, this would:
-    // 1. Load conversation messages from storage
-    // 2. Populate the chat interface with previous messages
-    // 3. Set the input focus for continuing the conversation
+    try {
+      const { default: AIConversationManager } = await import('./ai-conversation-manager.ts');
+      const aiManager = AIConversationManager.getInstance();
+      
+      // Resume the conversation (this properly sets it as current)
+      const conversation = await aiManager.resumeConversation(conversationId);
+      if (!conversation) {
+        this.showCustomNotification('Conversation not found', 'error');
+        return;
+      }
+      
+      // Clear current messages
+      this.clearMessages();
+      
+      // Switch to chat panel
+      this.switchPanel('chat');
+      
+      // Restore conversation messages
+      conversation.messages.forEach(message => {
+        this.addMessage(message.role, message.content);
+      });
+      
+      // Trigger chat reveal and show header if there are messages
+      if (conversation.messages.length > 0) {
+        this.triggerChatRevealAnimation();
+        
+        // Ensure chat header is visible and stays visible
+        const chatHeader = document.getElementById('chat-header');
+        if (chatHeader) {
+          chatHeader.style.display = 'block';
+          chatHeader.style.visibility = 'visible';
+          chatHeader.style.opacity = '1';
+          chatHeader.classList.add('show');
+          chatHeader.classList.remove('hidden');
+        }
+        
+        // Mark chat as revealed
+        this.hasRevealedChat = true;
+        
+        // Ensure the chat panel shows the header permanently
+        const chatPanel = document.getElementById('panel-chat');
+        if (chatPanel) {
+          chatPanel.classList.add('chat-revealed');
+        }
+      }
+      
+      this.showCustomNotification(`Resumed: ${conversation.title}`, 'success');
+      
+      // Focus message input
+      setTimeout(() => {
+        const messageInput = document.getElementById('message-input') as HTMLTextAreaElement;
+        if (messageInput) {
+          messageInput.focus();
+        }
+      }, 500);
+      
+    } catch (error) {
+      console.error('Failed to resume conversation:', error);
+      this.showCustomNotification('Failed to resume conversation', 'error');
+    }
   }
 
-  private deleteConversation(conversationId?: string) {
+  private async deleteConversation(conversationId?: string) {
     if (!conversationId) {
       this.showCustomNotification('Unable to delete conversation', 'error');
       return;
     }
 
     // Show confirmation dialog
-  const doDelete = () => {
-      // In a real implementation, this would:
-      // 1. Remove conversation from localStorage
-      // 2. Remove the conversation item from the DOM
-      // 3. Update the history count
-      
-      this.showCustomNotification('Conversation deleted', 'success');
+    const doDelete = async () => {
+      try {
+        const { default: AIConversationManager } = await import('./ai-conversation-manager.ts');
+        const aiManager = AIConversationManager.getInstance();
+        
+        // Delete the conversation
+        await aiManager.deleteConversation(conversationId);
+        
+        // Refresh the history panel
+        await this.loadConversationHistory();
+        
+        // Refresh memories panel if it contains this conversation
+        await this.refreshMemoriesPanel();
+        
+        this.showCustomNotification('Conversation deleted', 'success');
+        
+      } catch (error) {
+        console.error('Failed to delete conversation:', error);
+        this.showCustomNotification('Failed to delete conversation', 'error');
+      }
     };
 
-  (window as any).showAppConfirm('Delete Conversation', 'Are you sure you want to delete this conversation? This action cannot be undone.', doDelete);
+    (window as any).showAppConfirm('Delete Conversation', 'Are you sure you want to delete this conversation? This action cannot be undone.', doDelete);
   }
 
   private clearHistory() {
@@ -2421,35 +2800,58 @@ class SmileApp {
 
   // Profile Panel Management
   private initProfilePanel() {
-    this.loadProfileData();
-    this.setupProfileActions();
+    try {
+      console.log('Initializing profile panel...');
+      this.loadProfileData();
+      this.setupProfileActions();
+      console.log('Profile panel initialized successfully');
+    } catch (error) {
+      console.error('Error initializing profile panel:', error);
+      // Ensure basic functionality even if there's an error
+      this.setupProfileActions();
+    }
   }
 
   private loadProfileData() {
-    // Load profile data from localStorage
-    const profileData = JSON.parse(localStorage.getItem('smile-profile-data') || '{}');
-    
-    // Populate form fields
-    const fields = [
-      'profile-name',
-      'profile-pronouns', 
-      'profile-age-range',
-      'profile-challenges',
-      'profile-triggers',
-      'profile-coping',
-      'profile-goals',
-      'profile-communication',
-      'profile-reminders'
-    ];
-
-    fields.forEach(fieldId => {
-      const element = document.getElementById(fieldId) as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
-      if (element && profileData[fieldId]) {
-        element.value = profileData[fieldId];
+    try {
+      // Load profile data from localStorage with error handling
+      let profileData = {};
+      try {
+        profileData = JSON.parse(localStorage.getItem('smile-profile-data') || '{}');
+      } catch (parseError) {
+        console.warn('Failed to parse profile data, using empty object:', parseError);
+        profileData = {};
       }
-    });
+      
+      // Populate form fields with error handling for each field
+      const fields = [
+        'profile-name',
+        'profile-pronouns', 
+        'profile-age-range',
+        'profile-challenges',
+        'profile-triggers',
+        'profile-coping',
+        'profile-goals',
+        'profile-communication',
+        'profile-reminders'
+      ];
 
-    // Profile data loaded
+      fields.forEach(fieldId => {
+        try {
+          const element = document.getElementById(fieldId) as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
+          if (element && profileData[fieldId]) {
+            element.value = profileData[fieldId];
+          }
+        } catch (fieldError) {
+          console.warn(`Failed to load data for field ${fieldId}:`, fieldError);
+        }
+      });
+
+      console.log('Profile data loaded successfully');
+    } catch (error) {
+      console.error('Error loading profile data:', error);
+      // Continue execution even if profile data loading fails
+    }
   }
 
   private setupProfileActions() {
@@ -2663,59 +3065,82 @@ class SmileApp {
   }
 
   // Security Settings Methods
-  private toggleEncryption(enabled: boolean) {
-    if (enabled) {
-      this.showPasswordModal('set');
-    } else {
-      // Confirm disabling and decrypting any secure data
-      (window as any).showAppConfirm(
-        'Disable Encryption?',
-        'This will turn off encryption for local data. You may need to enter your password to proceed.',
-        async () => {
-          try {
-            const SecureStorageModule = await import('./secure-storage.ts');
-            const secureStorage = SecureStorageModule.default.getInstance();
-
-            const proceedDisable = async () => {
-              const ok = await secureStorage.disableEncryption();
-              if (ok) {
-                // Reflect UI state
-                const setBtn = document.getElementById('set-password-btn') as HTMLButtonElement;
-                const changeBtn = document.getElementById('change-password-btn') as HTMLButtonElement;
-                const testBtn = document.getElementById('test-unlock-btn') as HTMLButtonElement;
-                if (setBtn) setBtn.style.display = '';
-                if (changeBtn) changeBtn.style.display = 'none';
-                if (testBtn) testBtn.style.display = 'none';
-                this.showCustomNotification('Encryption disabled', 'info');
-              } else {
-                this.showCustomNotification('Failed to disable encryption', 'error');
-                const encToggle = document.getElementById('encryption-enabled') as HTMLInputElement;
-                if (encToggle) encToggle.checked = true; // revert
-              }
-            };
-
-            if (!secureStorage.isStorageUnlocked() && secureStorage.isEncryptionEnabled()) {
-              const unlockModal = (window as any).securityUnlockModal;
-              if (unlockModal && unlockModal.show) {
-                unlockModal.show(async () => {
-                  await proceedDisable();
-                });
-              } else {
-                this.showCustomNotification('Unlock UI not ready yet', 'error');
-                const encToggle = document.getElementById('encryption-enabled') as HTMLInputElement;
-                if (encToggle) encToggle.checked = true; // revert
-              }
-            } else {
-              await proceedDisable();
-            }
-          } catch (err) {
-            console.error('disableEncryption error', err);
-            this.showCustomNotification('An error occurred disabling encryption', 'error');
-            const encToggle = document.getElementById('encryption-enabled') as HTMLInputElement;
-            if (encToggle) encToggle.checked = true; // revert
-          }
+  private async toggleEncryption(enabled: boolean) {
+    try {
+      const SecureStorageModule = await import('./secure-storage.ts');
+      const secureStorage = SecureStorageModule.default.getInstance();
+      
+      if (enabled) {
+        // Check if encryption is already enabled
+        if (secureStorage.isEncryptionEnabled()) {
+          this.showCustomNotification('Encryption is already enabled', 'info');
+          return;
         }
-      );
+        
+        // Show password modal to enable encryption
+        this.showPasswordModal('set');
+      } else {
+        // Check if encryption is actually enabled
+        if (!secureStorage.isEncryptionEnabled()) {
+          this.showCustomNotification('Encryption is already disabled', 'info');
+          return;
+        }
+        
+        // Get data overview for user
+        const dataKeys = secureStorage.getStoredDataKeys();
+        const encryptedCount = dataKeys.encrypted.length;
+        
+        // Confirm disabling and decrypting any secure data
+        (window as any).showAppConfirm(
+          'Disable Encryption?',
+          `This will decrypt and store ${encryptedCount} encrypted data items as regular data. You may need to enter your password to proceed. This action cannot be undone.`,
+          async () => {
+            try {
+              this.showCustomNotification('Decrypting data...', 'info');
+              
+              const proceedDisable = async () => {
+                const ok = await secureStorage.disableEncryption();
+                if (ok) {
+                  // Reflect UI state
+                  const setBtn = document.getElementById('set-password-btn') as HTMLButtonElement;
+                  const changeBtn = document.getElementById('change-password-btn') as HTMLButtonElement;
+                  if (setBtn) setBtn.style.display = '';
+                  if (changeBtn) changeBtn.style.display = 'none';
+                  
+                  this.showCustomNotification(`Encryption disabled. ${encryptedCount} items decrypted.`, 'success');
+                } else {
+                  this.showCustomNotification('Failed to disable encryption', 'error');
+                  const encToggle = document.getElementById('encryption-enabled') as HTMLInputElement;
+                  if (encToggle) encToggle.checked = true; // revert
+                }
+              };
+
+              if (!secureStorage.isStorageUnlocked() && secureStorage.isEncryptionEnabled()) {
+                const unlockModal = (window as any).securityUnlockModal;
+                if (unlockModal && unlockModal.show) {
+                  unlockModal.show(async () => {
+                    await proceedDisable();
+                  });
+                } else {
+                  this.showCustomNotification('Please unlock storage first', 'error');
+                  const encToggle = document.getElementById('encryption-enabled') as HTMLInputElement;
+                  if (encToggle) encToggle.checked = true; // revert
+                }
+              } else {
+                await proceedDisable();
+              }
+            } catch (err) {
+              console.error('disableEncryption error', err);
+              this.showCustomNotification('An error occurred disabling encryption', 'error');
+              const encToggle = document.getElementById('encryption-enabled') as HTMLInputElement;
+              if (encToggle) encToggle.checked = true; // revert
+            }
+          }
+        );
+      }
+    } catch (err) {
+      console.error('toggleEncryption error', err);
+      this.showCustomNotification('Failed to toggle encryption', 'error');
     }
   }
 
@@ -2802,36 +3227,8 @@ class SmileApp {
     }
   }
 
-  private async testUnlock() {
-    try {
-      const StorageModule = await import('./secure-storage.ts');
-      const storage = StorageModule.default.getInstance();
-
-      if (!storage.isEncryptionAvailable()) {
-        this.showCustomNotification('Encryption not available in this browser', 'error');
-        return;
-      }
-      if (!storage.isEncryptionEnabled()) {
-        this.showCustomNotification('Encryption is disabled. Enable it first.', 'info');
-        return;
-      }
-      if (storage.isStorageUnlocked()) {
-        this.showCustomNotification('Storage is already unlocked', 'success');
-        return;
-      }
-      const unlockModal = (window as any).securityUnlockModal;
-      if (unlockModal && unlockModal.show) {
-        unlockModal.show(() => {
-          this.showCustomNotification('Unlock successful ✔', 'success');
-        });
-      } else {
-        this.showCustomNotification('Unlock UI not ready yet', 'error');
-      }
-    } catch (err) {
-      console.error('testUnlock error:', err);
-      this.showCustomNotification('An error occurred testing unlock', 'error');
-    }
-  }
+  // Test unlock method removed - was confusing and not needed
+  // Users can test unlock by simply using the app when locked
 }
 
 // Global functions for Security Modal
@@ -3004,12 +3401,8 @@ if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
     const app = new SmileApp();
     (window as any).smileApp = app;
-    // Expose debug mode toggle globally
-    (window as any).toggleDebugMode = () => app['toggleDebugMode']();
   });
 } else {
   const app = new SmileApp();
   (window as any).smileApp = app;
-  // Expose debug mode toggle globally
-  (window as any).toggleDebugMode = () => app['toggleDebugMode']();
 }

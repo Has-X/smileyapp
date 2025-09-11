@@ -135,7 +135,7 @@ class SecureStorage {
   }
 
   /**
-   * Enable encryption with password and better session setup
+   * Enable encryption with password and migrate existing data
    */
   async enableEncryption(password: string): Promise<boolean> {
     if (!this.isEncryptionAvailable()) {
@@ -158,12 +158,16 @@ class SecureStorage {
       // Store the encrypted test and salt for future validation
       localStorage.setItem('smile-encryption-test', JSON.stringify(encrypted));
       
-      // Update settings
-      this.updateSecuritySettings({ encryptionEnabled: true });
-      
-      // Set up unlocked state
+      // Set up unlocked state first
       this.cryptoKey = key;
       this.isUnlocked = true;
+      
+      // Migrate existing unencrypted data to encrypted storage
+      await this.migrateExistingDataToEncrypted();
+      
+      // Update settings after migration
+      this.updateSecuritySettings({ encryptionEnabled: true });
+      
       this.createSession(password);
       this.setupAutoLock();
 
@@ -321,9 +325,14 @@ class SecureStorage {
   async setItem(key: string, value: any): Promise<void> {
     const dataToStore = JSON.stringify(value);
     
-    if (!this.isEncryptionEnabled() || !this.isStorageUnlocked()) {
+    if (!this.isEncryptionEnabled()) {
+      // Store as regular localStorage if encryption is disabled
       localStorage.setItem(key, dataToStore);
       return;
+    }
+    
+    if (!this.isStorageUnlocked()) {
+      throw new Error('Storage is locked. Please unlock first.');
     }
 
     try {
@@ -394,6 +403,27 @@ class SecureStorage {
    */
   needsUnlock(): boolean {
     return this.isEncryptionEnabled() && !this.isStorageUnlocked();
+  }
+
+  /**
+   * Get all stored data keys (for debugging/management)
+   */
+  getStoredDataKeys(): { encrypted: string[], unencrypted: string[] } {
+    const keys = Object.keys(localStorage);
+    const encrypted: string[] = [];
+    const unencrypted: string[] = [];
+    
+    keys.forEach(key => {
+      if (key.startsWith('smile-')) {
+        if (key.startsWith('smile-encrypted-')) {
+          encrypted.push(key.replace('smile-encrypted-', ''));
+        } else if (key !== 'smile-encryption-test' && key !== 'smile-security-settings') {
+          unencrypted.push(key);
+        }
+      }
+    });
+    
+    return { encrypted, unencrypted };
   }
 
   /**
@@ -732,6 +762,49 @@ class SecureStorage {
         }
         
         localStorage.removeItem(key);
+      }
+    }
+  }
+
+  /**
+   * Migrate existing unencrypted data to encrypted storage
+   */
+  private async migrateExistingDataToEncrypted(): Promise<void> {
+    const keys = Object.keys(localStorage);
+    const dataToMigrate: Record<string, any> = {};
+    
+    // Find all smile-related data that isn't already encrypted or system data
+    for (const key of keys) {
+      if (key.startsWith('smile-') && 
+          !key.startsWith('smile-encrypted-') && 
+          key !== 'smile-encryption-test' && 
+          key !== 'smile-security-settings' &&
+          key !== 'smile-onboarding' &&
+          key !== 'smile-journal-draft') {
+        try {
+          const value = localStorage.getItem(key);
+          if (value) {
+            // Try to parse as JSON, if it fails store as string
+            try {
+              dataToMigrate[key] = JSON.parse(value);
+            } catch {
+              dataToMigrate[key] = value;
+            }
+          }
+        } catch (error) {
+          console.warn(`Failed to migrate data for key: ${key}`, error);
+        }
+      }
+    }
+    
+    // Encrypt and store the migrated data
+    for (const [key, value] of Object.entries(dataToMigrate)) {
+      try {
+        await this.setItem(key, value);
+        // Remove the original unencrypted version
+        localStorage.removeItem(key);
+      } catch (error) {
+        console.error(`Failed to encrypt data for key: ${key}`, error);
       }
     }
   }

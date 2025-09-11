@@ -1,0 +1,222 @@
+---
+// SOS Embed Component - Small inline card with crisis support link
+---
+
+<div id="sos-embed" class="sos-embed hidden">
+  <div class="sos-card">
+    <div class="sos-icon">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.268 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+      </svg>
+    </div>
+    <div class="sos-content">
+      <h4 class="sos-title">Crisis Support Available</h4>
+      <p class="sos-description">You're not alone - immediate help is available</p>
+    </div>
+    <a href="https://findahelpline.com" target="_blank" class="sos-link-btn">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+      </svg>
+      Get Help
+    </a>
+  </div>
+</div>
+
+<style>
+  .sos-embed {
+    @apply mt-3 mb-2;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  
+  .sos-embed.show {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  
+  .sos-card {
+    @apply flex items-center gap-3 p-4 rounded-xl;
+    @apply max-w-md mx-auto;
+    background: linear-gradient(135deg, 
+      rgba(var(--md-error-container), 0.8), 
+      rgba(var(--md-surface-container), 0.8));
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(var(--md-error), 0.3);
+    box-shadow: 
+      0 4px 12px rgba(var(--md-error), 0.15),
+      0 1px 3px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+  }
+  
+  .sos-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 
+      0 6px 16px rgba(var(--md-error), 0.2),
+      0 2px 6px rgba(0, 0, 0, 0.08);
+  }
+  
+  .sos-icon {
+    @apply w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0;
+    background: linear-gradient(135deg, rgb(var(--md-error)), rgba(var(--md-error), 0.8));
+    color: rgb(var(--md-on-error));
+    box-shadow: 0 2px 6px rgba(var(--md-error), 0.4);
+    animation: sosIconPulse 2s ease-in-out infinite;
+  }
+  
+  @keyframes sosIconPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); box-shadow: 0 4px 8px rgba(var(--md-error), 0.5); }
+  }
+  
+  .sos-content {
+    @apply flex-1 min-w-0;
+  }
+  
+  .sos-title {
+    @apply text-sm font-semibold mb-1;
+    color: rgb(var(--md-error));
+  }
+  
+  .sos-description {
+    @apply text-xs leading-relaxed;
+    color: rgb(var(--md-on-error-container));
+  }
+  
+  .sos-link-btn {
+    @apply flex items-center gap-2 px-3 py-2 rounded-lg flex-shrink-0;
+    @apply font-medium text-sm transition-all duration-200 hover:scale-105;
+    background: linear-gradient(135deg, rgb(var(--md-error)), rgba(var(--md-error), 0.9));
+    color: rgb(var(--md-on-error));
+    text-decoration: none;
+    box-shadow: 0 2px 6px rgba(var(--md-error), 0.3);
+  }
+  
+  .sos-link-btn:hover {
+    box-shadow: 0 4px 12px rgba(var(--md-error), 0.4);
+  }
+  
+  /* Dark theme adjustments */
+  [data-theme="dark"] .sos-card,
+  [data-theme$="-dark"] .sos-card {
+    background: linear-gradient(135deg, 
+      rgba(var(--md-error-container), 0.6), 
+      rgba(var(--md-surface-container), 0.6));
+    border-color: rgba(var(--md-error), 0.4);
+    box-shadow: 
+      0 4px 12px rgba(var(--md-error), 0.2),
+      0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  [data-theme="dark"] .sos-card:hover,
+  [data-theme$="-dark"] .sos-card:hover {
+    box-shadow: 
+      0 6px 16px rgba(var(--md-error), 0.3),
+      0 2px 6px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Responsive design */
+  @media (max-width: 480px) {
+    .sos-card {
+      @apply mx-2 p-3;
+    }
+    
+    .sos-icon {
+      @apply w-8 h-8;
+    }
+    
+    .sos-link-btn {
+      @apply px-2 py-1 text-xs;
+    }
+  }
+</style>
+
+<script>
+  class SOSEmbed {
+    private embed: HTMLElement | null = null;
+    
+    constructor() {
+      this.init();
+    }
+    
+    private init() {
+      this.embed = document.getElementById('sos-embed');
+      this.setupCustomEventListeners();
+    }
+    
+    private setupCustomEventListeners() {
+      window.addEventListener('smile:show-sos', () => {
+        this.showSOS();
+      });
+    }
+    
+    public showSOS() {
+      this.embed?.classList.remove('hidden');
+      setTimeout(() => {
+        this.embed?.classList.add('show');
+      }, 10);
+      
+      // Track that SOS was shown (for analytics/safety)
+      this.logSOSEvent();
+      
+      // Auto-hide after 10 seconds
+      setTimeout(() => {
+        this.hideEmbed();
+      }, 10000);
+    }
+    
+    private hideEmbed() {
+      this.embed?.classList.remove('show');
+      setTimeout(() => {
+        this.embed?.classList.add('hidden');
+      }, 300);
+    }
+    
+    private logSOSEvent() {
+      // Log SOS event for safety monitoring (anonymized)
+      try {
+        const event = {
+          type: 'sos_shown',
+          timestamp: Date.now(),
+          sessionId: this.generateSessionId()
+        };
+        
+        // Store locally for potential follow-up
+        const sosEvents = JSON.parse(localStorage.getItem('sos_events') || '[]');
+        sosEvents.push(event);
+        
+        // Keep only last 10 events
+        if (sosEvents.length > 10) {
+          sosEvents.splice(0, sosEvents.length - 10);
+        }
+        
+        localStorage.setItem('sos_events', JSON.stringify(sosEvents));
+      } catch (error) {
+        console.error('Failed to log SOS event:', error);
+      }
+    }
+    
+    private generateSessionId(): string {
+      return `sos_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+    }
+  }
+  
+  // Initialize when DOM is ready
+  let sosEmbedInstance: SOSEmbed | null = null;
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      sosEmbedInstance = new SOSEmbed();
+      // Make methods globally available
+      (window as any).showSOSEmbed = () => {
+        sosEmbedInstance?.showSOS();
+      };
+    });
+  } else {
+    sosEmbedInstance = new SOSEmbed();
+    // Make methods globally available
+    (window as any).showSOSEmbed = () => {
+      sosEmbedInstance?.showSOS();
+    };
+  }
+</script>

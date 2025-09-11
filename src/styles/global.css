@@ -2,6 +2,43 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Empty State Styles */
+.empty-state-container {
+  @apply transition-all duration-300 ease-in-out;
+}
+
+.empty-state-icon {
+  @apply transform transition-transform duration-300 hover:scale-110;
+}
+
+.empty-state-title {
+  @apply font-semibold text-on-surface;
+}
+
+.empty-state-description {
+  @apply text-on-surface-variant leading-relaxed;
+}
+
+.empty-state-action {
+  @apply bg-primary text-on-primary font-medium px-6 py-3 rounded-lg;
+  @apply transition-all duration-200 hover:scale-105 hover:shadow-lg;
+  @apply focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50;
+}
+
+.dynamic-content-grid {
+  @apply space-y-4;
+}
+
+.card-actions {
+  @apply absolute top-3 right-3 z-10;
+}
+
+.delete-btn {
+  @apply p-2 rounded-full bg-error text-on-error;
+  @apply transition-all duration-200 hover:scale-110;
+  @apply focus:outline-none focus:ring-2 focus:ring-error focus:ring-opacity-50;
+}
+
 @layer base {
   :root {
     /* Material Design 3 Color System - Ocean Blue (Default) */
@@ -4086,6 +4123,30 @@
   opacity: 1 !important;
 }
 
+/* Center empty state containers */
+#memories-empty-state,
+#history-empty-state,
+#journal-empty-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  width: 100%;
+  grid-column: 1 / -1; /* Span all grid columns */
+}
+
+/* Ensure parent containers can center properly */
+.memory-grid {
+  place-items: center;
+}
+
+.journal-entries-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+}
+
 .memory-card {
   position: relative;
   overflow: hidden;
@@ -5801,6 +5862,9 @@
   /* Ensure content is always visible */
   visibility: visible !important;
   opacity: 1 !important;
+  /* Ensure full width usage */
+  width: 100%;
+  max-width: 100%;
 }
 
 .journal-entry-card {
@@ -5983,6 +6047,10 @@
     0 2px 12px rgba(0, 0, 0, 0.08),
     0 1px 4px rgba(0, 0, 0, 0.06);
   margin-bottom: 0.75rem;
+  /* Ensure full width in list view */
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 /* Dark theme enhanced cards */
@@ -6634,32 +6702,69 @@ body {
   padding: 1.25rem;
 }
 
-/* Memory Grid Styles */
+/* Memory Grid Styles - Default (Tiles/List View) */
 .memory-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 0.75rem; /* Compact spacing */
-  padding: 0.25rem 0; /* Reduced padding */
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0.25rem 0;
+}
+
+/* Grid View Override */
+.view-grid .memory-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
+  gap: 1rem !important;
 }
 
 /* History Panel Specific - Reduced gap for conversation list */
 #panel-history .memory-grid {
-  gap: 0.5rem; /* Tighter spacing for history conversations */
+  gap: 0.5rem;
+}
+
+#panel-history.view-grid .memory-grid {
+  gap: 1rem !important;
+}
+
+/* Fix for grid mode cards - ensure proper sizing */
+.view-grid .memory-card {
+  width: auto !important;
+  max-width: none !important;
+  flex-shrink: 1 !important;
 }
 
 .memory-card {
   background: rgba(var(--md-surface-container), 0.9);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(var(--md-outline-variant), 0.15);
-  border-radius: 1.25rem;
+  border-radius: 0.75rem;
   overflow: hidden;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   position: relative;
+  padding: 0.75rem;
+  min-height: auto;
   /* Enhanced light theme shadows */
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.08),
+    0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+/* Grid View - Larger cards */
+.view-grid .memory-card {
+  min-height: 180px;
+  padding: 1rem;
+  border-radius: 1rem;
   box-shadow: 
     0 4px 16px rgba(0, 0, 0, 0.1),
     0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* List View - Compact cards */
+.memory-card {
+  width: 100%;
+  max-width: 100%;
+  flex-shrink: 0;
 }
 
 /* Add accent color indicator for memory cards */
@@ -6722,19 +6827,9 @@ body {
   transform: scale(1);
 }
 
-/* Optimized card padding for memory cards with delete button only */
+/* Memory card padding adjustments for delete button */
 .memory-card {
-  position: relative;
-  padding: 1rem;
-  padding-top: 1rem;
-  padding-right: 2.5rem; /* Space for delete button only */
-  background: var(--surface-container);
-  border: 1px solid var(--outline-variant);
-  border-radius: 0.75rem;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  overflow: hidden;
-  min-height: auto;
+  padding-right: 2.5rem; /* Space for delete button */
 }
 
 /* Journal Entry Actions - Optimized */
@@ -7940,6 +8035,9 @@ body {
   min-height: 200px;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .view-grid .memory-card .memory-content,
@@ -7964,13 +8062,24 @@ body {
   overflow: hidden;
 }
 
+/* Improved Grid View - Better width utilization */
+.view-grid .memory-grid,
+.view-grid .journal-entries-container,
+.view-grid .history-entries-container {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) !important;
+  gap: 1.25rem !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
 /* Responsive Grid View */
 @media (max-width: 768px) {
   .view-grid .memory-grid,
   .view-grid .journal-entries-container,
   .view-grid .history-entries-container {
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 0.75rem;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
+    gap: 1rem !important;
   }
 }
 
@@ -7978,7 +8087,8 @@ body {
   .view-grid .memory-grid,
   .view-grid .journal-entries-container,
   .view-grid .history-entries-container {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem !important;
   }
   
   .view-toggle {
@@ -7988,12 +8098,26 @@ body {
   .section-title {
     order: 1;
   }
-  
-  .panel-section-header {
+}
+
+/* Ensure tiles view (list view) uses full width */
+.journal-entries-container:not(.view-grid) {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1rem !important;
+  width: 100% !important;
+}
+
+.journal-entries-container:not(.view-grid) .journal-entry-card-enhanced {
+  width: 100% !important;
+  max-width: 100% !important;
+  flex-shrink: 0 !important;
+}
+
+.panel-section-header {
     flex-wrap: wrap;
     gap: 1rem;
   }
-}
 
 /* ================================================================
    CONFIRMATION MODAL STYLES - Material Design 3

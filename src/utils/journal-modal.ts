@@ -17,9 +17,14 @@ class JournalModal {
   private modal: HTMLElement | null = null;
   private form: HTMLFormElement | null = null;
   private isEditMode: boolean = false;
+  private currentEntryId: string | null = null;
 
   constructor() {
     this.init();
+    // Load existing journal entries when the modal system is ready
+    document.addEventListener('DOMContentLoaded', () => {
+      this.loadExistingEntries();
+    });
   }
 
   private init() {
@@ -61,6 +66,14 @@ class JournalModal {
     const newEntryBtn = document.getElementById('new-journal-btn');
     newEntryBtn?.addEventListener('click', () => this.openModal());
 
+    // Listen for custom edit events
+    document.addEventListener('open-journal-modal', (e: any) => {
+      const entryId = e.detail?.entryId;
+      if (entryId) {
+        this.openModal(entryId);
+      }
+    });
+
     // Edit Buttons (Journal and Memory)
     document.addEventListener('click', (e) => {
       const target = e.target as HTMLElement;
@@ -90,12 +103,7 @@ class JournalModal {
       this.saveEntry();
     });
 
-    // Save Draft Button
-    const saveDraftBtn = document.getElementById('journal-save-draft');
-    saveDraftBtn?.addEventListener('click', (e) => {
-      e.preventDefault();
-      this.saveDraft();
-    });
+
 
     // Close on backdrop click (only when clicking directly on backdrop)
     const backdrop = this.modal?.querySelector('.confirm-modal-backdrop');
@@ -120,6 +128,7 @@ class JournalModal {
     if (!contentTextarea || !charCounter) return;
 
     const updateCounter = () => {
+      if (!contentTextarea || !contentTextarea.value) return;
       const count = contentTextarea.value.length;
       charCounter.textContent = count.toString();
       
@@ -141,6 +150,7 @@ class JournalModal {
     if (!this.modal) return;
 
     this.isEditMode = !!entryId;
+    this.currentEntryId = entryId || null;
 
     // Update modal title and button text
     const titleElement = document.getElementById('journal-modal-title');
@@ -158,7 +168,7 @@ class JournalModal {
 
     // Load entry data if editing
     if (this.isEditMode && entryId) {
-      this.loadEntryData(entryId);
+      this.loadEntryDataFromStorage(entryId);
     } else {
       this.resetForm();
     }
@@ -219,29 +229,7 @@ class JournalModal {
   this.resetForm();
   }
 
-  private loadEntryData(entryId: string) {
-    // In a real app, this would fetch from a database or API
-    // For now, we'll extract data from the DOM
-    const entryCard = document.querySelector(`[data-journal-id="${entryId}"]`)?.closest('.journal-entry-card-enhanced');
-    
-    if (!entryCard) return;
 
-    const title = entryCard.querySelector('.journal-entry-title')?.textContent?.trim() || '';
-    const content = entryCard.querySelector('.journal-entry-content')?.textContent?.trim() || '';
-    const mood = entryCard.querySelector('.journal-entry-mood')?.textContent?.trim() || '😊';
-    const privacyElement = entryCard.querySelector('.journal-entry-privacy');
-    const privacy = privacyElement?.classList.contains('private') ? 'private' : 'shared';
-
-    // Populate form
-    (document.getElementById('journal-title') as HTMLInputElement).value = title;
-    (document.getElementById('journal-content') as HTMLTextAreaElement).value = content;
-    (document.getElementById('journal-mood') as HTMLSelectElement).value = mood;
-    (document.getElementById('journal-privacy') as HTMLSelectElement).value = privacy;
-
-    // Update character counter
-    const event = new Event('input');
-    document.getElementById('journal-content')?.dispatchEvent(event);
-  }
 
   private loadMemoryData(memoryId: string) {
     // Load memory data from the DOM
@@ -282,7 +270,7 @@ class JournalModal {
       title: formData.get('journal-title') as string,
       content: formData.get('journal-content') as string,
       mood: formData.get('journal-mood') as string,
-      privacy: formData.get('journal-privacy') as 'private' | 'shared',
+      privacy: 'private', // Always private since privacy field was removed
     };
 
     // Validate required fields
@@ -297,8 +285,19 @@ class JournalModal {
       const originalText = saveBtn?.textContent;
       if (saveBtn) saveBtn.textContent = 'Saving...';
 
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Create complete journal entry
+      const completeEntry: JournalEntry = {
+        id: this.isEditMode ? this.getCurrentEntryId() : `journal-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`,
+        title: entry.title!,
+        content: entry.content!,
+        mood: entry.mood || '',
+        privacy: entry.privacy || 'private',
+        date: new Date().toISOString(),
+        time: new Date().toLocaleTimeString()
+      };
+
+      // Save to secure storage
+      await this.saveToSecureStorage(completeEntry);
 
       if (this.isEditMode) {
         this.showNotification('Entry updated successfully!', 'success');
@@ -307,19 +306,20 @@ class JournalModal {
       }
 
       this.closeModal();
+      
+      // Refresh journal display
+      this.refreshJournalDisplay();
 
       // Reset button text
       if (saveBtn && originalText) saveBtn.textContent = originalText;
 
     } catch (error) {
+      console.error('Failed to save journal entry:', error);
       this.showNotification('Failed to save entry. Please try again.', 'error');
     }
   }
 
-  private async saveDraft() {
-    // Implement draft saving logic
-    this.showNotification('Draft saved locally', 'info');
-  }
+
 
   private showNotification(message: string, type: 'success' | 'error' | 'info') {
     // Create a simple notification
@@ -362,6 +362,83 @@ class JournalModal {
       }, 300);
     }, 3000);
   }
+
+  private getCurrentEntryId(): string {
+    return this.currentEntryId || `journal-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
+  }
+  
+  private async loadEntryDataFromStorage(entryId: string): Promise<void> {
+    try {
+      const { default: SecureStorage } = await import('./secure-storage.ts');
+      const storage = SecureStorage.getInstance();
+      const entries = await storage.getItem('journal-entries') || [];
+      
+      const entry = entries.find((e: JournalEntry) => e.id === entryId);
+      if (entry) {
+        // Populate form with entry data
+        (document.getElementById('journal-title') as HTMLInputElement).value = entry.title;
+        (document.getElementById('journal-content') as HTMLTextAreaElement).value = entry.content;
+        (document.getElementById('journal-mood') as HTMLSelectElement).value = entry.mood;
+        // Privacy field removed - entries are always private
+        
+        // Update character counter
+        const event = new Event('input');
+        document.getElementById('journal-content')?.dispatchEvent(event);
+      }
+    } catch (error) {
+      console.error('Failed to load entry data:', error);
+      this.showNotification('Failed to load entry data', 'error');
+    }
+  }
+  
+  private async loadExistingEntries(): Promise<void> {
+    // Load and display existing journal entries
+    (window as any).loadJournalEntries();
+  }
+  
+  private async saveToSecureStorage(entry: JournalEntry): Promise<void> {
+    try {
+      const { default: SecureStorage } = await import('./secure-storage.ts');
+      const storage = SecureStorage.getInstance();
+      
+      // Get existing entries
+      let entries: JournalEntry[] = [];
+      try {
+        entries = await storage.getItem('journal-entries') || [];
+      } catch (error) {
+        console.warn('No existing journal entries found or failed to decrypt:', error);
+        entries = [];
+      }
+      
+      if (this.isEditMode) {
+        // Update existing entry
+        const index = entries.findIndex(e => e.id === entry.id);
+        if (index !== -1) {
+          entries[index] = entry;
+        } else {
+          entries.unshift(entry); // Add as new if not found
+        }
+      } else {
+        // Add new entry at the beginning
+        entries.unshift(entry);
+      }
+      
+      // Save back to secure storage
+      await storage.setItem('journal-entries', entries);
+      
+    } catch (error) {
+      console.error('Failed to save to secure storage:', error);
+      throw error;
+    }
+  }
+  
+  private refreshJournalDisplay(): void {
+    // Trigger a refresh of the journal panel display
+    const event = new CustomEvent('journal-updated');
+    document.dispatchEvent(event);
+  }
+  
+
 }
 
 // Initialize when DOM is loaded
@@ -370,5 +447,112 @@ if (typeof document !== 'undefined') {
     new JournalModal();
   });
 }
+
+// Global functions for journal management
+(window as any).loadJournalEntries = async function() {
+  try {
+    const { default: SecureStorage } = await import('./secure-storage.ts');
+    const storage = SecureStorage.getInstance();
+    const entries = await storage.getItem('journal-entries') || [];
+    
+    const container = document.getElementById('journal-entries');
+    const emptyState = document.getElementById('journal-empty-state');
+    
+    if (!container) return;
+    
+    if (entries.length === 0) {
+      if (emptyState) emptyState.style.display = 'block';
+      container.style.display = 'none';
+    } else {
+      if (emptyState) emptyState.style.display = 'none';
+      container.style.display = 'block';
+      // Remove inline styles to let view toggle system control layout
+      container.style.gap = '';
+      container.style.flexDirection = '';
+      container.style.gridTemplateColumns = '';
+      // Ensure the container has proper class for view toggle
+      if (!container.classList.contains('journal-entries-container')) {
+        container.classList.add('journal-entries-container');
+      }
+      
+      // Render entries
+      container.innerHTML = entries.map((entry: JournalEntry) => `
+        <div class="journal-entry-card-enhanced group relative" data-entry-id="${entry.id}">
+          <div class="journal-entry-actions">
+            <button class="journal-edit-btn" onclick="editJournalEntry('${entry.id}')" title="Edit entry">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-5m-1.414-9.414a2 2 0 1 1 2.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+              </svg>
+            </button>
+            <button class="journal-delete-btn" onclick="deleteJournalEntry('${entry.id}')" title="Delete entry">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0 1 16.138 21H7.862a2 2 0 0 1-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v3M4 7h16"/>
+              </svg>
+            </button>
+          </div>
+          <div class="journal-entry-header">
+            <div class="journal-entry-date-bg">
+              <div class="journal-date-day">${new Date(entry.date).getDate()}</div>
+              <div class="journal-date-month">${new Date(entry.date).toLocaleDateString('en', { month: 'short' })}</div>
+            </div>
+            <div class="journal-entry-meta">
+              <h4 class="journal-entry-title">${entry.title}</h4>
+              <div class="journal-entry-info">
+                <span class="journal-entry-time">${new Date(entry.date).toLocaleTimeString('en', { hour: '2-digit', minute: '2-digit' })}</span>
+                ${entry.mood ? `<span class="journal-entry-mood">${entry.mood}</span>` : ''}
+                <span class="journal-entry-privacy">${entry.privacy}</span>
+              </div>
+            </div>
+          </div>
+          <div class="journal-entry-content">${entry.content}</div>
+        </div>
+      `).join('');
+    }
+    
+    // Update count
+    const countElement = document.getElementById('journal-count');
+    if (countElement) countElement.textContent = entries.length.toString();
+    
+  } catch (error) {
+    console.error('Failed to load journal entries:', error);
+  }
+};
+
+(window as any).editJournalEntry = async function(entryId: string) {
+  try {
+    // Get the journal modal instance and open it for editing
+    const modal = document.getElementById('journal-modal');
+    if (modal) {
+      // Trigger the modal opening with the entry ID
+      const event = new CustomEvent('open-journal-modal', { detail: { entryId } });
+      document.dispatchEvent(event);
+    }
+  } catch (error) {
+    console.error('Failed to edit journal entry:', error);
+  }
+};
+
+(window as any).deleteJournalEntry = async function(entryId: string) {
+  try {
+    const { default: SecureStorage } = await import('./secure-storage.ts');
+    const storage = SecureStorage.getInstance();
+    
+    let entries = await storage.getItem('journal-entries') || [];
+    entries = entries.filter((entry: JournalEntry) => entry.id !== entryId);
+    
+    await storage.setItem('journal-entries', entries);
+    
+    // Refresh display
+    (window as any).loadJournalEntries();
+    
+  } catch (error) {
+    console.error('Failed to delete journal entry:', error);
+  }
+};
+
+// Listen for journal updates
+document.addEventListener('journal-updated', () => {
+  (window as any).loadJournalEntries();
+});
 
 export default JournalModal;

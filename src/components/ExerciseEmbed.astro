@@ -1,0 +1,238 @@
+---
+// Exercise Embed Component - Small inline card that triggers exercises from the main panel
+---
+
+<div id="exercise-embed" class="exercise-embed hidden">
+  <div class="exercise-card">
+    <div class="exercise-icon">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+      </svg>
+    </div>
+    <div class="exercise-content">
+      <h4 class="exercise-title" id="exercise-title">Breathing Exercise</h4>
+      <p class="exercise-description" id="exercise-description">Take a moment to center yourself with guided breathing</p>
+    </div>
+    <button class="exercise-start-btn" id="exercise-start">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      </svg>
+      Start
+    </button>
+  </div>
+</div>
+
+<style>
+  .exercise-embed {
+    @apply mt-3 mb-2;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  
+  .exercise-embed.show {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  
+  .exercise-card {
+    @apply flex items-center gap-3 p-4 rounded-xl;
+    @apply max-w-md mx-auto;
+    background: rgba(var(--md-surface-container), 0.8);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(var(--md-outline-variant), 0.2);
+    box-shadow: 
+      0 4px 12px rgba(0, 0, 0, 0.08),
+      0 1px 3px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+  }
+  
+  .exercise-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 
+      0 6px 16px rgba(0, 0, 0, 0.12),
+      0 2px 6px rgba(0, 0, 0, 0.08);
+  }
+  
+  .exercise-icon {
+    @apply w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0;
+    background: linear-gradient(135deg, rgb(var(--md-primary)), rgba(var(--md-primary), 0.8));
+    color: rgb(var(--md-on-primary));
+    box-shadow: 0 2px 6px rgba(var(--md-primary), 0.3);
+  }
+  
+  .exercise-content {
+    @apply flex-1 min-w-0;
+  }
+  
+  .exercise-title {
+    @apply text-sm font-semibold text-on-surface mb-1;
+  }
+  
+  .exercise-description {
+    @apply text-xs text-on-surface-variant leading-relaxed;
+  }
+  
+  .exercise-start-btn {
+    @apply flex items-center gap-2 px-3 py-2 rounded-lg flex-shrink-0;
+    @apply bg-primary text-on-primary font-medium text-sm;
+    @apply transition-all duration-200 hover:scale-105;
+    box-shadow: 0 2px 6px rgba(var(--md-primary), 0.3);
+  }
+  
+  .exercise-start-btn:hover {
+    box-shadow: 0 4px 12px rgba(var(--md-primary), 0.4);
+  }
+  
+  /* Dark theme adjustments */
+  [data-theme="dark"] .exercise-card,
+  [data-theme$="-dark"] .exercise-card {
+    background: rgba(var(--md-surface-container), 0.6);
+    border-color: rgba(var(--md-outline), 0.15);
+    box-shadow: 
+      0 4px 12px rgba(0, 0, 0, 0.2),
+      0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  [data-theme="dark"] .exercise-card:hover,
+  [data-theme$="-dark"] .exercise-card:hover {
+    box-shadow: 
+      0 6px 16px rgba(0, 0, 0, 0.3),
+      0 2px 6px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Responsive design */
+  @media (max-width: 480px) {
+    .exercise-card {
+      @apply mx-2 p-3;
+    }
+    
+    .exercise-icon {
+      @apply w-8 h-8;
+    }
+    
+    .exercise-start-btn {
+      @apply px-2 py-1 text-xs;
+    }
+  }
+</style>
+
+<script>
+  class ExerciseEmbed {
+    private embed: HTMLElement | null = null;
+    private startBtn: HTMLElement | null = null;
+    private title: HTMLElement | null = null;
+    private description: HTMLElement | null = null;
+    private currentExerciseType: string = 'BREATH_4_7_8';
+    
+    private exercises = {
+      'BREATH_4_7_8': {
+        title: '4-7-8 Breathing',
+        description: 'A powerful technique to activate your parasympathetic nervous system. Inhale for 4, hold for 7, exhale for 8 counts.',
+        panelExercise: '4-7-8'
+      },
+      'BOX': {
+        title: 'Box Breathing',
+        description: 'Equal counts for inhale, hold, exhale, and hold. Perfect for building concentration and reducing stress.',
+        panelExercise: 'box'
+      },
+      'BODY_SCAN': {
+        title: 'Body Scan Meditation',
+        description: 'Focus on different parts of your body, releasing tension as you breathe.',
+        panelExercise: 'body-scan'
+      },
+      'GROUND_5_4_3_2_1': {
+        title: '5-4-3-2-1 Grounding',
+        description: 'Sensory grounding technique for anxiety relief. Notice 5 things you see, 4 you touch, 3 you hear.',
+        panelExercise: '5-4-3-2-1'
+      }
+    };
+    
+    constructor() {
+      this.init();
+    }
+    
+    private init() {
+      this.embed = document.getElementById('exercise-embed');
+      this.startBtn = document.getElementById('exercise-start');
+      this.title = document.getElementById('exercise-title');
+      this.description = document.getElementById('exercise-description');
+      
+      this.setupEventListeners();
+      this.setupCustomEventListeners();
+    }
+    
+    private setupEventListeners() {
+      this.startBtn?.addEventListener('click', () => this.openExercisesPanel());
+    }
+    
+    private setupCustomEventListeners() {
+      window.addEventListener('smile:show-exercise', (event: any) => {
+        const { exerciseType } = event.detail;
+        this.showExercise(exerciseType);
+      });
+    }
+    
+    public showExercise(exerciseType: string) {
+      this.currentExerciseType = exerciseType;
+      const exercise = this.exercises[exerciseType as keyof typeof this.exercises] || this.exercises['BREATH_4_7_8'];
+      
+      if (this.title) this.title.textContent = exercise.title;
+      if (this.description) this.description.textContent = exercise.description;
+      
+      this.embed?.classList.remove('hidden');
+      setTimeout(() => {
+        this.embed?.classList.add('show');
+      }, 10);
+    }
+    
+    private openExercisesPanel() {
+      const exercise = this.exercises[this.currentExerciseType as keyof typeof this.exercises];
+      
+      // Switch to exercises panel
+      const app = (window as any).smileApp;
+      if (app && typeof app.switchPanel === 'function') {
+        app.switchPanel('exercises');
+        
+        // Wait for panel to load, then trigger the specific exercise
+        setTimeout(() => {
+          const exerciseBtn = document.querySelector(`[data-exercise="${exercise.panelExercise}"] .meditation-start-btn`);
+          if (exerciseBtn && (window as any).openRelaxationModal) {
+            (window as any).openRelaxationModal(exercise.panelExercise);
+          }
+        }, 500);
+      }
+      
+      // Hide the embed after opening panel
+      setTimeout(() => {
+        this.hideEmbed();
+      }, 300);
+    }
+    
+    private hideEmbed() {
+      this.embed?.classList.remove('show');
+      setTimeout(() => {
+        this.embed?.classList.add('hidden');
+      }, 300);
+    }
+  }
+  
+  // Initialize when DOM is ready
+  let exerciseEmbedInstance: ExerciseEmbed | null = null;
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      exerciseEmbedInstance = new ExerciseEmbed();
+      // Make methods globally available
+      (window as any).showExerciseEmbed = (exerciseType: string) => {
+        exerciseEmbedInstance?.showExercise(exerciseType);
+      };
+    });
+  } else {
+    exerciseEmbedInstance = new ExerciseEmbed();
+    // Make methods globally available
+    (window as any).showExerciseEmbed = (exerciseType: string) => {
+      exerciseEmbedInstance?.showExercise(exerciseType);
+    };
+  }
+</script>

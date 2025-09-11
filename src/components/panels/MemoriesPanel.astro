@@ -14,121 +14,22 @@ import ViewToggle from '../ViewToggle.astro';
           Memories
         </div>
         <div class="section-count-island">
-          <span class="section-count">9</span>
+          <span class="section-count" id="memories-count">0</span>
         </div>
       </div>
       <ViewToggle panelId="panel-memories" />
     </div>
     
     <div class="memory-grid" id="memories-container">
-      <!-- Compact memory cards -->
-      
-      <div class="memory-card" data-date="2025-08-23">
-        <div class="memory-card-actions">
-          <button class="memory-delete-btn" data-memory-id="mem-1" title="Delete memory">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H8a1 1 0 00-1 1v3M4 7h16"/>
-            </svg>
-          </button>
+      <div id="memories-empty" style="display: none;">
+        <div class="text-center py-12">
+          <svg class="w-16 h-16 text-on-surface-variant mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+          </svg>
+          <h3 class="text-lg font-semibold text-on-surface mb-2">No Memories Saved Yet</h3>
+          <p class="text-on-surface-variant mb-4">Your AI companion will save important moments and insights here.</p>
+          <button class="btn-primary" onclick="(window as any).smileApp?.switchPanel('chat')">Start Chatting</button>
         </div>
-        <div class="memory-date">2 hours ago</div>
-        <p class="memory-excerpt">We talked about your morning anxiety and how 4-7-8 breathing has been helping you start the day more calmly. You mentioned it works especially well when you do it before getting out of bed.</p>
-      </div>
-
-      <div class="memory-card" data-date="2025-08-22">
-        <div class="memory-card-actions">
-          <button class="memory-delete-btn" data-memory-id="mem-2" title="Delete memory">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H8a1 1 0 00-1 1v3M4 7h16"/>
-            </svg>
-          </button>
-        </div>
-        <div class="memory-date">Yesterday</div>
-        <p class="memory-excerpt">You shared that your new evening routine is working well - reading for 20 minutes and doing light stretches has helped you fall asleep faster. You're sleeping about 30 minutes earlier now.</p>
-      </div>
-
-      <div class="memory-card" data-date="2025-08-20">
-        <div class="memory-card-actions">
-          <button class="memory-delete-btn" data-memory-id="mem-3" title="Delete memory">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H8a1 1 0 00-1 1v3M4 7h16"/>
-            </svg>
-          </button>
-        </div>
-        <div class="memory-date">3 days ago</div>
-        <p class="memory-excerpt">You mentioned feeling guilty about saying no to extra work requests, even though it's affecting your mental health. We discussed strategies for setting clearer boundaries without feeling selfish.</p>
-      </div>
-
-      <div class="memory-card" data-date="2025-08-18">
-        <div class="memory-card-actions">
-          <button class="memory-delete-btn" data-memory-id="mem-4" title="Delete memory">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H8a1 1 0 00-1 1v3M4 7h16"/>
-            </svg>
-          </button>
-        </div>
-        <div class="memory-date">5 days ago</div>
-        <p class="memory-excerpt">You were excited to share that you completed your first full 10-minute meditation session without getting distracted. You said it felt like a real accomplishment after weeks of practice.</p>
-      </div>
-
-      <div class="memory-card" data-date="2025-08-15">
-        <div class="memory-card-actions">
-          <button class="memory-delete-btn" data-memory-id="mem-5" title="Delete memory">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H8a1 1 0 00-1 1v3M4 7h16"/>
-            </svg>
-          </button>
-        </div>
-        <div class="memory-date">1 week ago</div>
-        <p class="memory-excerpt">You told me about your weekend visit with family and how you practiced the grounding techniques we discussed when feeling overwhelmed during dinner conversations.</p>
-      </div>
-
-      <div class="memory-card" data-date="2025-08-12">
-        <div class="memory-card-actions">
-          <button class="memory-delete-btn" data-memory-id="mem-6" title="Delete memory">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H8a1 1 0 00-1 1v3M4 7h16"/>
-            </svg>
-          </button>
-        </div>
-        <div class="memory-date">11 days ago</div>
-        <p class="memory-excerpt">You noticed that your weekend hikes consistently improve your mood and energy levels. You said being in nature makes you feel more like yourself and less anxious about social situations.</p>
-      </div>
-
-      <div class="memory-card" data-date="2025-08-10">
-        <div class="memory-card-actions">
-          <button class="memory-delete-btn" data-memory-id="mem-7" title="Delete memory">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H8a1 1 0 00-1 1v3M4 7h16"/>
-            </svg>
-          </button>
-        </div>
-        <div class="memory-date">2 weeks ago</div>
-        <p class="memory-excerpt">You shared your frustration about procrastination and we explored how perfectionism might be the root cause. You realized that "done is better than perfect" resonates with you.</p>
-      </div>
-
-      <div class="memory-card" data-date="2025-08-05">
-        <div class="memory-card-actions">
-          <button class="memory-delete-btn" data-memory-id="mem-8" title="Delete memory">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H8a1 1 0 00-1 1v3M4 7h16"/>
-            </svg>
-          </button>
-        </div>
-        <div class="memory-date">3 weeks ago</div>
-        <p class="memory-excerpt">We discussed your social anxiety before the team meeting. You tried the visualization technique and said it helped you feel more confident speaking up during discussions.</p>
-      </div>
-
-      <div class="memory-card" data-date="2025-08-01">
-        <div class="memory-card-actions">
-          <button class="memory-delete-btn" data-memory-id="mem-9" title="Delete memory">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H8a1 1 0 00-1 1v3M4 7h16"/>
-            </svg>
-          </button>
-        </div>
-        <div class="memory-date">4 weeks ago</div>
-        <p class="memory-excerpt">You mentioned starting a gratitude journal after our conversation about mindfulness. You were surprised how focusing on small positive moments shifted your daily perspective.</p>
       </div>
     </div>
   </div>
