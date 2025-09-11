@@ -972,7 +972,7 @@ class SmileApp {
     this.triggerChatRevealAnimation();
 
     // Add user message to UI (handles empty-state animation)
-    const userMessageId = this.addMessage('user', message);
+    this.addMessage('user', message);
 
     // Add assistant placeholder with empty content for streaming
     const assistantMessageId = this.addMessage('assistant', '');
@@ -983,8 +983,9 @@ class SmileApp {
       const aiManager = AIConversationManager.getInstance();
       
       // Set up streaming message listener before sending
-      const streamingListener = (event: CustomEvent) => {
-        const { messageId, content } = event.detail;
+      const streamingListener = (event: Event) => {
+        const customEvent = event as CustomEvent;
+        const { messageId, content } = customEvent.detail;
         this.updateMessage(messageId, content);
       };
       
@@ -1214,40 +1215,7 @@ class SmileApp {
     }
   }
 
-  private animateStreamingText(bubble: HTMLElement, fullContent: string, startIndex: number) {
-    // Clear existing content and rebuild with character spans
-    bubble.innerHTML = '';
-    
-    // Add characters with spans for animation
-    for (let i = 0; i < fullContent.length; i++) {
-      const char = fullContent[i];
-      const span = document.createElement('span');
-      span.textContent = char === ' ' ? '\u00A0' : char; // Use non-breaking space
-      span.className = 'stream-char';
-      
-      if (i < startIndex) {
-        // Characters that were already revealed
-        span.classList.add('revealed');
-      } else {
-        // New characters that need animation
-        span.style.opacity = '0';
-        span.style.transform = 'translateY(10px) scale(0.8)';
-        span.style.filter = 'blur(3px)';
-        span.style.transition = 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-        
-        // Trigger animation with staggered delay
-        const delay = (i - startIndex) * 30; // 30ms delay between characters
-        setTimeout(() => {
-          span.style.opacity = '1';
-          span.style.transform = 'translateY(0) scale(1)';
-          span.style.filter = 'blur(0)';
-          span.classList.add('revealed');
-        }, delay);
-      }
-      
-      bubble.appendChild(span);
-    }
-  }
+  // animateStreamingText method removed - unused
 
   private clearMessages() {
     const messagesContainer = document.getElementById('messages-container');
@@ -1704,7 +1672,7 @@ class SmileApp {
       }
       
       // Render memory cards
-      await this.renderMemoryCards(memories, conversations);
+      await this.renderMemoryCards(memories);
       
       // Show/hide empty state
       const emptyState = document.getElementById('memories-empty');
@@ -1725,7 +1693,7 @@ class SmileApp {
     }
   }
   
-  private async renderMemoryCards(memories: any[], conversations: any[]) {
+  private async renderMemoryCards(memories: any[]) {
     const container = document.getElementById('memories-container');
     if (!container) return;
     
@@ -1791,105 +1759,15 @@ class SmileApp {
     }
   }
   
-  private createMemorySection(title: string, type: string): HTMLElement {
-    const section = document.createElement('div');
-    section.className = 'memory-section mb-8';
-    section.innerHTML = `
-      <h3 class="text-lg font-semibold text-on-surface mb-4 flex items-center gap-2">
-        ${this.getMemoryTypeIcon(type)}
-        ${title}
-      </h3>
-      <div class="memory-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      </div>
-    `;
-    return section.querySelector('.memory-grid')!.parentElement!;
-  }
+  // createMemorySection method removed - unused
   
-  private getMemoryTypeIcon(type: string): string {
-    switch (type) {
-      case 'conversation':
-        return '<svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>';
-      case 'insight':
-        return '<svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>';
-      case 'moment':
-        return '<svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>';
-      default:
-        return '<svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>';
-    }
-  }
+  // getMemoryTypeIcon method removed - unused
   
-  private createConversationMemoryCard(conversation: any): HTMLElement {
-    const card = document.createElement('div');
-    card.className = 'memory-card conversation-memory interactive-card p-4 cursor-pointer';
-    card.dataset.conversationId = conversation.id;
-    
-    const lastMessage = conversation.messages[conversation.messages.length - 1];
-    const preview = lastMessage?.content.slice(0, 100) + (lastMessage?.content.length > 100 ? '...' : '') || 'No messages';
-    const timeAgo = this.formatTimeAgo(conversation.updatedAt);
-    
-    card.innerHTML = `
-      <div class="memory-header flex items-start justify-between mb-3">
-        <div class="memory-title font-semibold text-on-surface">${conversation.title}</div>
-        <div class="memory-time text-xs text-on-surface-variant">${timeAgo}</div>
-      </div>
-      <div class="memory-excerpt text-sm text-on-surface-variant leading-relaxed">${preview}</div>
-      <div class="memory-tags flex gap-2 mt-3">
-        <span class="memory-tag px-2 py-1 text-xs rounded-full bg-primary/10 text-primary">
-          ${conversation.messages.length} messages
-        </span>
-      </div>
-    `;
-    
-    card.addEventListener('click', () => {
-      this.resumeConversation(conversation.id);
-    });
-    
-    return card;
-  }
+  // createConversationMemoryCard method removed - unused
   
-  private createInsightMemoryCard(insight: any): HTMLElement {
-    const card = document.createElement('div');
-    card.className = 'memory-card insight-memory interactive-card p-4';
-    
-    const timeAgo = this.formatTimeAgo(insight.timestamp);
-    
-    card.innerHTML = `
-      <div class="memory-header flex items-start justify-between mb-3">
-        <div class="memory-title font-semibold text-on-surface">AI Insight</div>
-        <div class="memory-time text-xs text-on-surface-variant">${timeAgo}</div>
-      </div>
-      <div class="memory-excerpt text-sm text-on-surface-variant leading-relaxed">${insight.content}</div>
-      <div class="memory-tags flex gap-2 mt-3">
-        <span class="memory-tag px-2 py-1 text-xs rounded-full bg-secondary/10 text-secondary">
-          Importance: ${insight.importance}/10
-        </span>
-      </div>
-    `;
-    
-    return card;
-  }
+  // createInsightMemoryCard method removed - unused
   
-  private createMomentMemoryCard(moment: any): HTMLElement {
-    const card = document.createElement('div');
-    card.className = 'memory-card moment-memory interactive-card p-4';
-    
-    const timeAgo = this.formatTimeAgo(moment.timestamp);
-    
-    card.innerHTML = `
-      <div class="memory-header flex items-start justify-between mb-3">
-        <div class="memory-title font-semibold text-on-surface">Special Moment</div>
-        <div class="memory-time text-xs text-on-surface-variant">${timeAgo}</div>
-      </div>
-      <div class="memory-excerpt text-sm text-on-surface-variant leading-relaxed">${moment.content}</div>
-      <div class="memory-tags flex gap-2 mt-3">
-        ${moment.tags ? moment.tags.map(tag => 
-          `<span class="memory-tag px-2 py-1 text-xs rounded-full bg-tertiary/10 text-tertiary">${tag}</span>`
-        ).join('') : ''}
-      </div>
-    `;
-    
-    return card;
-  }
+  // createMomentMemoryCard method removed - unused
   
   private formatTimeAgo(timestamp: number): string {
     const now = Date.now();
@@ -2274,7 +2152,6 @@ class SmileApp {
     
     // Escape HTML to prevent XSS
     const safePreview = preview.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    const safeTitle = title.replace(/</g, '&lt;').replace(/>/g, '&gt;');
     
     item.innerHTML = `
       <div class="memory-card-actions">
@@ -2815,7 +2692,7 @@ class SmileApp {
   private loadProfileData() {
     try {
       // Load profile data from localStorage with error handling
-      let profileData = {};
+      let profileData: { [key: string]: any } = {};
       try {
         profileData = JSON.parse(localStorage.getItem('smile-profile-data') || '{}');
       } catch (parseError) {

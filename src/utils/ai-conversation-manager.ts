@@ -700,7 +700,7 @@ PROTOCOL
     }
   }
 
-  private async deleteMemory(memoryId: string): Promise<void> {
+  async deleteMemory(memoryId: string): Promise<void> {
     try {
       if (this.secureStorage) {
         this.secureStorage.removeItem(`memory_${memoryId}`);
