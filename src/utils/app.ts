@@ -974,18 +974,31 @@ class SmileApp {
     // Add user message to UI (handles empty-state animation)
     this.addMessage('user', message);
 
-    // Add assistant placeholder with empty content for streaming
-    const assistantMessageId = this.addMessage('assistant', '');
-
+    // Set up streaming message listener before sending
+    let assistantMessageId: string | null = null;
+    
     try {
       // Use AI Conversation Manager for enhanced functionality
       const { default: AIConversationManager } = await import('./ai-conversation-manager.ts');
       const aiManager = AIConversationManager.getInstance();
-      
-      // Set up streaming message listener before sending
       const streamingListener = (event: Event) => {
         const customEvent = event as CustomEvent;
         const { messageId, content } = customEvent.detail;
+        console.log('Streaming listener received event:', { messageId, contentLength: content.length });
+        
+        // Create assistant message on first streaming update if not exists
+        if (!assistantMessageId) {
+          console.log('Creating new assistant message for streaming');
+          assistantMessageId = this.addMessage('assistant', '');
+          // Update the DOM element ID to match the AI manager's message ID
+          const messageElement = document.getElementById(assistantMessageId);
+          if (messageElement) {
+            console.log('Updating message element ID from', assistantMessageId, 'to', messageId);
+            messageElement.id = messageId;
+          }
+        }
+        
+        console.log('Updating message with ID:', messageId, 'content length:', content.length);
         this.updateMessage(messageId, content);
       };
       
@@ -1012,6 +1025,12 @@ class SmileApp {
       
     } catch (error) {
       console.error('Error sending message:', error);
+      
+      // Create error message if no assistant message was created yet
+      if (!assistantMessageId) {
+        assistantMessageId = this.addMessage('assistant', '');
+      }
+      
       this.updateMessage(assistantMessageId, 'Sorry, I encountered an error. Please make sure Ollama is running and try again.');
       this.showCustomNotification('Connection error. Check if Ollama is running.', 'error');
       

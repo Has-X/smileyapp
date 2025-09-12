@@ -516,7 +516,8 @@ import OllamaHelper from './OllamaHelper.astro';
   .onboarding-body {
     flex: 1;
     overflow-y: auto;
-    padding-bottom: 6rem; /* Space for fixed navigation */
+    padding: 1.5rem 2rem 6rem; /* Space for fixed navigation */
+    scroll-behavior: smooth;
   }
 
 /* Progress Indicator */
@@ -832,6 +833,7 @@ import OllamaHelper from './OllamaHelper.astro';
 .step-content {
   display: none;
   animation: slideInRight 0.3s ease-out;
+  min-height: fit-content;
 }
 
 .step-content.active {
@@ -2166,7 +2168,7 @@ import OllamaHelper from './OllamaHelper.astro';
   }
   
   .onboarding-body {
-    padding: 1.5rem;
+    padding: 1.5rem 1.5rem 6rem;
   }
   
   .progress-container {

@@ -64,8 +64,7 @@ pnpm install
 ### Step 3: Build and serve
 
 ```bash
-pnpm build
-pnpm serve
+pnpm dev
 ```
 
 Open the app locally at `http://localhost:3000`.

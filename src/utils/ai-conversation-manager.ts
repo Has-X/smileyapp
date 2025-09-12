@@ -282,17 +282,21 @@ PROTOCOL
 
           for (const line of lines) {
             if (line.trim()) {
+              console.log('Processing line:', line);
               try {
                 const data = JSON.parse(line);
+                console.log('Parsed JSON data:', data);
                 
                 if (data.message && data.message.content) {
                   const newContent = data.message.content;
+                  console.log('New content received:', newContent);
                   aiResponse += newContent;
                   
                   // Update message content in real-time
                   assistantMessageObj.content = aiResponse;
                   
                   // Trigger UI update for streaming effect
+                  console.log('Triggering UI update with:', aiResponse.length, 'characters');
                   this.updateStreamingMessage(assistantMessageObj.id, aiResponse);
                 }
                 if (data.done) {
@@ -304,6 +308,8 @@ PROTOCOL
               } catch (e) {
                 console.warn('JSON parse error for line:', line, e);
               }
+            } else {
+              console.log('Empty line received');
             }
           }
         }
@@ -521,11 +527,14 @@ PROTOCOL
   }
 
   private updateStreamingMessage(messageId: string, content: string): void {
+    console.log('updateStreamingMessage called with messageId:', messageId, 'content length:', content.length);
     // Dispatch event to update UI in real-time
-    window.dispatchEvent(new CustomEvent('ai-message-update', {
+    const event = new CustomEvent('ai-message-update', {
       detail: { messageId, content },
       bubbles: true
-    }));
+    });
+    console.log('Dispatching ai-message-update event:', event.detail);
+    window.dispatchEvent(event);
   }
 
   async executeToolCall(toolCall: ToolCall): Promise<void> {
