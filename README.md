@@ -4,8 +4,6 @@
 
 **Smiley** is a privacy-first AI companion designed to support your emotional wellbeing. Running fully offline with open-source AI models, Smiley gives you a safe space to reflect, chat, and practice mindfulness — without exposing your private thoughts to servers or third parties.
 
-Try it instantly at: [**https://smiley.hasx.dev**](https://smiley.hasx.dev) ✨
-
 ---
 
 ## 🌱 Why Smiley?
@@ -27,16 +25,6 @@ Smiley is powered by **GPT-Smiley**, our custom fine-tuned version of GPT-OSS. T
 * **Privacy-First Context** — shaped to avoid unnecessary data requests and respect boundaries.
 
 This fine-tuned model is what makes Smiley different: it is not just any general-purpose AI, but one carefully adapted to act as a wellbeing companion that runs fully offline.
-
----
-
-## 🚀 Quick Start (Online)
-
-The easiest way to begin is by opening [**https://smiley.hasx.dev**](https://smiley.hasx.dev) in your browser.
-
-Smiley will walk you through a gentle onboarding: setting your theme, enabling encryption, choosing your model, and creating a personal profile. From the start, your experience feels tailored, safe, and fully yours.
-
----
 
 ## 💻 Self-Hosting (Offline Setup)
 
